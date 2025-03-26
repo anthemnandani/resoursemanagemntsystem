@@ -76,7 +76,7 @@ const EmployeeFormModal = ({
       if (employeeData) {
         // Update existing employee
         response = await axios.put(
-          `http://localhost:5000/api/employees/${employeeData._id}`,
+          `http://localhost:5000/api/resources/${employeeData._id}`,
           formDataToSend,
           {
             headers: {
@@ -87,7 +87,7 @@ const EmployeeFormModal = ({
       } else {
         // Create new employee
         response = await axios.post(
-          'http://localhost:5000/api/employees/createemployee',
+          'http://localhost:5000/api/resources/createresourse',
           formDataToSend,
           {
             headers: {
@@ -182,7 +182,7 @@ const EmployeeFormModal = ({
               onChange={handleInputChange}
               className="w-full p-2 border rounded"
               required
-              // disabled={!!employeeData} // Disable email field for edits
+            //   disabled={!!employeeData} // Disable email field for edits
             />
           </div>
 

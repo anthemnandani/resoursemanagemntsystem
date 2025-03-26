@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export const Login = () => {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -16,9 +17,9 @@ export const Login = () => {
         try {
             const response = await axios.post("http://localhost:5000/api/admin/login", formData);
             
-            // Store user data and token in session storage
-            sessionStorage.setItem("user", JSON.stringify(response.data.user));
-            sessionStorage.setItem("token", response.data.token);
+            // Store user data and token in cookies
+            Cookies.set("user", JSON.stringify(response.data.user), { expires: 1 });
+            Cookies.set("token", response.data.token, { expires: 1 });
             
             navigate("/dashboard");
         } catch (error) {
