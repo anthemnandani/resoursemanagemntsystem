@@ -20,7 +20,7 @@ export const Employee = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('https://resoursemanagemntsystem-bksn.vercel.app/api/employees');
+      const response = await axios.get('https://resoursemanagemntsystem-bksn-8wfc9hn74.vercel.app/api/employees');
       setEmployees(response.data);
     } catch (error) {
       console.error('Error fetching employees:', error);
@@ -39,7 +39,7 @@ export const Employee = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employeeToDelete._id}`);
+      await axios.delete(`https://resoursemanagemntsystem-bksn-8wfc9hn74.vercel.app/api/employees/${employeeToDelete._id}`);
       fetchEmployees();
       setDeleteModalOpen(false);
     } catch (error) {
