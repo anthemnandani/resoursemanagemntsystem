@@ -4,76 +4,72 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 export const Login = () => {
-    const [formData, setFormData] = useState({ email: "", password: "" });
-    const [error, setError] = useState("");
-    const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post("https://resoursemanagemntsystem-bksn-8wfc9hn74.vercel.app/api/admin/login", formData);
-            
-            // Store user data and token in cookies
-            Cookies.set("user", JSON.stringify(response.data.user), { expires: 1 });
-            Cookies.set("token", response.data.token, { expires: 1 });
-            
-            navigate("/dashboard");
-        } catch (error) {
-            setError(error.response?.data?.error || "Login failed. Please try again.");
-        }
-    };
+    try {
+      const { data } = await axios.post("https://resoursemanagemntsystem-bksn.vercel.app/api/admin/login", {
+        email,
+        password,
+      });
 
-    return (
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                <h2 className="text-2xl font-bold mb-6 text-center">Admin Login</h2>
-                {error && <div className="mb-4 text-red-500 text-center">{error}</div>}
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <input 
-                            name="email" 
-                            type="email" 
-                            placeholder="Email" 
-                            value={formData.email} 
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required 
-                        />
-                    </div>
-                    <div>
-                        <input 
-                            name="password" 
-                            type="password" 
-                            placeholder="Password" 
-                            value={formData.password} 
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            required 
-                        />
-                    </div>
-                    <button 
-                        type="submit" 
-                        className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition duration-200"
-                    >
-                        Login
-                    </button>
-                </form>
-                <div className="mt-4 text-center">
-                    <p className="text-gray-600">
-                        Don't have an account?{" "}
-                        <span 
-                            className="text-blue-600 cursor-pointer hover:underline"
-                            onClick={() => navigate("/register")}
-                        >
-                            Register
-                        </span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    );
+      Cookies.set("user", JSON.stringify(data.user), { expires: 1 });
+      Cookies.set("token", data.token, { expires: 1 });
+
+      navigate("/dashboard");
+    } catch (err) {
+      setError(err.response?.data?.error || "Login failed. Please try again.");
+    }
+  };
+
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="bg-white p-6 rounded-lg shadow w-full max-w-sm">
+        <h2 className="text-2xl font-bold mb-4 text-center">Admin Login</h2>
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            required
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+          >
+            Login
+          </button>
+        </form>
+
+        <p className="mt-4 text-center text-gray-600 text-sm">
+          Don’t have an account?{" "}
+          <span
+            className="text-blue-600 cursor-pointer hover:underline"
+            onClick={() => navigate("/register")}
+          >
+            Register
+          </span>
+        </p>
+      </div>
+    </div>
+  );
 };

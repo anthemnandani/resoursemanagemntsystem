@@ -23,7 +23,7 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://resoursemanagemntsystem-bksn-8wfc9hn74.vercel.app/api/admin/register", formData);
+      await axios.post("https://resoursemanagemntsystem-bksn.vercel.app/api/admin/register", formData);
       navigate("/login");
     } catch (error) {
       console.error(error.response?.data?.error);
