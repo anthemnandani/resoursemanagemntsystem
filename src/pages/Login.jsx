@@ -15,7 +15,7 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("https://resoursemanagemntsystem-bksn-8wfc9hn74.vercel.app/api/admin/login", formData);
+            const response = await axios.post("http://localhost:5000/api/admin/login", formData);
             
             // Store user data and token in cookies
             Cookies.set("user", JSON.stringify(response.data.user), { expires: 1 });
