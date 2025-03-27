@@ -14,7 +14,7 @@ export const AllocatedResouses = () => {
     <Navbar/>
       <div className="container mx-auto my-6 p-4">
         <div className="flex justify-between items-cente py-4">
-          <h2 className="text-2xl font-semibold text-center">Employee List</h2>
+          <h2 className="text-2xl font-semibold text-center">Allocated resourses</h2>
           <button className="bg-blue-900 text-white px-4 py-2 rounded cursor-pointer">
           <FaPlus />
           </button>
