@@ -9,10 +9,7 @@ const ResourceFormModal = ({
 }) => {
   const [formData, setFormData] = useState({
     name: '',
-    resourceTypeId: '',
     description: '',
-    purchaseDate: '',
-    status: 'available',
   });
   const [resourceTypes, setResourceTypes] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,7 +19,7 @@ const ResourceFormModal = ({
   useEffect(() => {
     const fetchResourceTypes = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/resourcestype');
+        const response = await axios.get('http://localhost:5000/api/resourcestypetype');
         setResourceTypes(response.data.data);
       } catch (error) {
         console.error('Error fetching resource types:', error);
@@ -36,18 +33,12 @@ const ResourceFormModal = ({
     if (resourceData) {
       setFormData({
         name: resourceData.name || '',
-        resourceTypeId: resourceData.resourceType?._id || '',
         description: resourceData.description || '',
-        purchaseDate: resourceData.purchaseDate?.split('T')[0] || '',
-        status: resourceData.status || 'available',
       });
     } else {
       setFormData({
         name: '',
-        resourceTypeId: '',
         description: '',
-        purchaseDate: '',
-        status: 'available',
       });
     }
   }, [resourceData, isOpen]);
@@ -66,22 +57,19 @@ const ResourceFormModal = ({
       let response;
       const payload = {
         name: formData.name,
-        resourceTypeId: formData.resourceTypeId,
         description: formData.description,
-        purchaseDate: formData.purchaseDate,
-        status: formData.status,
       };
 
       if (resourceData) {
         // Update existing resource
         response = await axios.put(
-          `http://localhost:5000/api/resources/updateresourse/${resourceData._id}`,
+          `http://localhost:5000/api/resourcestype/${resourceData._id}`,
           payload
         );
       } else {
         // Create new resource
         response = await axios.post(
-          'http://localhost:5000/api/resources/createresourse',
+          'http://localhost:5000/api/resourcestype',
           payload
         );
       }
@@ -130,25 +118,6 @@ const ResourceFormModal = ({
             />
           </div>
 
-          {/* Resource Type */}
-          <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Resource Type</label>
-            <select
-              name="resourceTypeId"
-              value={formData.resourceTypeId}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded"
-              required
-            >
-              <option value="">-- Select Resource Type --</option>
-              {resourceTypes.map((type) => (
-                <option key={type._id} value={type._id}>
-                  {type.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
           {/* Description */}
           <div className="mb-2">
             <label className="block text-gray-700 mb-1">Description</label>
@@ -159,33 +128,6 @@ const ResourceFormModal = ({
               className="w-full p-1 border rounded"
               rows="3"
             />
-          </div>
-
-          {/* Purchase Date */}
-          <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Purchase Date</label>
-            <input
-              type="date"
-              name="purchaseDate"
-              value={formData.purchaseDate}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded"
-            />
-          </div>
-
-          {/* Status */}
-          <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Status</label>
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded"
-            >
-              <option value="available">Available</option>
-              <option value="allocated">Allocated</option>
-              <option value="maintenance">Maintenance</option>
-            </select>
           </div>
 
           <div className="flex justify-end gap-4 mt-6">
@@ -211,7 +153,7 @@ const ResourceFormModal = ({
                   Processing...
                 </>
               ) : (
-                resourceData ? 'Update Resource' : 'Create Resource'
+                resourceData ? 'Update Resource Type' : 'Create Resource Type'
               )}
             </button>
           </div>

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import ResourceFormModal from "../components/ResourceFormModal";
-import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
-import { FaPlus } from "react-icons/fa6";
-import { CiEdit } from "react-icons/ci";
-import { MdOutlineDeleteForever } from "react-icons/md";
-import Navbar from "../components/Navbar";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import ResourceFormModal from '../components/ResourceTypeFormModal';
+import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
+import { FaPlus } from 'react-icons/fa6';
+import { CiEdit } from 'react-icons/ci';
+import { MdOutlineDeleteForever } from 'react-icons/md';
+import Navbar from '../components/Navbar';
 
-export const Resourse = () => {
+export const ResourseType = () => {
   const [resources, setResources] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentResource, setCurrentResource] = useState(null);
@@ -22,12 +22,10 @@ export const Resourse = () => {
   const fetchResources = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "http://localhost:5000/api/resources?populate=resourceType"
-      );
+      const response = await axios.get('http://localhost:5000/api/resourcestype');
       setResources(response.data.data);
     } catch (error) {
-      console.error("Error fetching resources:", error);
+      console.error('Error fetching resources:', error);
     } finally {
       setLoading(false);
     }
@@ -45,23 +43,21 @@ export const Resourse = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(
-        `http://localhost:5000/api/resources/deleteresourse/${resourceToDelete._id}`
-      );
+      await axios.delete(`http://localhost:5000/api/resourcestype/${resourceToDelete._id}`);
       fetchResources();
       setDeleteModalOpen(false);
     } catch (error) {
-      console.error("Error deleting resource:", error);
+      console.error('Error deleting resource:', error);
     }
   };
 
   return (
     <>
-      <Navbar />
+      <Navbar/>
       <div className="container mx-auto my-6 p-4">
         <div className="flex justify-between items-center py-4">
           <h2 className="text-2xl font-semibold text-center">Resources</h2>
-          <button
+          <button 
             className="bg-blue-900 text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2"
             onClick={() => {
               setCurrentResource(null);
@@ -81,57 +77,25 @@ export const Resourse = () => {
             <table className="w-full border-collapse border border-blue-900 shadow-md">
               <thead>
                 <tr className="bg-blue-900 border-blue-900 text-white">
-                  <th className="p-2 border">Resource Name</th>
-                  <th className="p-2 border">Type</th>
+                  <th className="p-2 border">Resource Type</th>
                   <th className="p-2 border">Description</th>
-                  <th className="p-2 border">Purchase Date</th>
-                  <th className="p-2 border">Status</th>
                   <th className="p-2 border">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {resources.length > 0 ? (
                   resources.map((resource) => (
-                    <tr
-                      key={resource._id}
-                      className="text-center border-b hover:bg-gray-50"
-                    >
+                    <tr key={resource._id} className="text-center border-b hover:bg-gray-50">
                       <td className="p-2 border">{resource.name}</td>
+                      <td className="p-2 border">{resource.description}</td>
                       <td className="p-2 border">
-                        {resource.resourceType?.name}
-                      </td>
-                      <td
-                        className="p-2 border max-w-[150px] truncate"
-                        title={resource.description}
-                      >
-                        {resource.description}
-                      </td>
-                      <td className="p-2 border">
-                        {resource.purchaseDate
-                          ? new Date(resource.purchaseDate).toLocaleDateString()
-                          : "N/A"}
-                      </td>
-                      <td className="p-2 border">
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs ${
-                            resource.status === "available"
-                              ? "bg-green-100 text-green-800"
-                              : resource.status === "allocated"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {resource.status}
-                        </span>
-                      </td>
-                      <td className="p-2 border">
-                        <button
+                        <button 
                           className="bg-neutral-200 text-blue-500 text-2xl px-2 py-1 rounded mr-2 cursor-pointer hover:bg-blue-100"
                           onClick={() => handleEditClick(resource)}
                         >
                           <CiEdit />
                         </button>
-                        <button
+                        <button 
                           className="bg-neutral-200 text-red-700 text-2xl px-2 py-1 rounded cursor-pointer hover:bg-red-100"
                           onClick={() => handleDeleteClick(resource)}
                         >
@@ -163,7 +127,7 @@ export const Resourse = () => {
           isOpen={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
           onConfirm={handleDeleteConfirm}
-          itemName={resourceToDelete?.name || "this resource"}
+          itemName={resourceToDelete?.name || 'this resource'}
         />
       </div>
     </>

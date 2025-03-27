@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import { Employee } from "./pages/Employee";
 import { Resourse } from "./pages/Resourse";
 import { AllocatedResouses } from "./pages/AllocatedResourses";
+import { ResourseType } from "./pages/ResourceType";
 
 function App() {
   return (
@@ -12,9 +13,10 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />}/>
           <Route path="/register" element={<Register />} /> 
-          <Route path="/employee" element={<Employee />} />
-          <Route path="/resource" element={<Resourse />} />
-          <Route path="/allocatedresource" element={<AllocatedResouses />} />
+          <Route path="/employees" element={<Employee />} />
+          <Route path="/resources" element={<Resourse />} />
+          <Route path="/resourceType" element={<ResourseType />} />
+          <Route path="/allocations" element={<AllocatedResouses />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/" element={<Dashboard />} />
         </Routes>

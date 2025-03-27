@@ -110,7 +110,7 @@ const EmployeeFormModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg w-full max-w-md">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-xl font-semibold">
@@ -118,7 +118,7 @@ const EmployeeFormModal = ({
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-gray-700 cursor-pointer"
           >
             ✕
           </button>
@@ -206,9 +206,17 @@ const EmployeeFormModal = ({
               required
             >
               <option value="">--Select option--</option>
-              <option value="developer">developer</option>
-              <option value="HR manager">HR manager</option>
-              <option value="BD">BD</option>
+              <option value="Developer">Developer</option>
+              <option value="Senior Developer">Senior Developer</option>
+              <option value="Team Lead">Team Lead</option>
+              <option value="HR Manager">HR Manager</option>
+              <option value="Recruiter">Recruiter</option>
+              <option value="Business Development Manager">Business Development Manager</option>
+              <option value="Sales Manager">Sales Manager</option>
+              <option value="Project Manager">Project Manager</option>
+              <option value="Admin">Admin</option>
+              <option value="Accountant">Accountant</option>
+              <option value="Designer">Designer</option>
               <option value="manager">manager</option>
             </select>
           </div>
@@ -223,10 +231,16 @@ const EmployeeFormModal = ({
               required
             >
               <option value="">--Select option--</option>
-              <option value="IT">IT</option>
-              <option value="recutriment">recutriment</option>
-              <option value="bussness">bussness</option>
-              <option value="management">management</option>
+              <option value="Software Development">Software Development</option>
+              <option value="Recruitment">Recruitment</option>
+              <option value="Business Development">Business Development</option>
+              <option value="Sales">Sales</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Finance">Finance</option>
+              <option value="Management">Management</option>
+              <option value="Administration">Administration</option>
+              <option value="Design">Design</option>
+              <option value="Customer Support">Customer Support</option>
             </select>
           </div>
 
@@ -234,14 +248,14 @@ const EmployeeFormModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-300 rounded"
+              className="px-4 py-2 bg-gray-300 rounded cursor-pointer"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-900 text-white rounded flex items-center gap-2"
+              className="px-4 py-2 bg-blue-900 text-white rounded flex items-center gap-2 cursor-pointer"
               disabled={loading}
             >
               {loading ? (
