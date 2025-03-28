@@ -50,7 +50,7 @@ const Dashboard = () => {
   const fetchCounts = async () => {
     try {
       const responses = await Promise.all([
-        axios.get(`${API_BASE_URL}/employees`, { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get(`${API_BASE_URL}/employees/getAllActiveEmployees`, { headers: { Authorization: `Bearer ${token}` } }),
         axios.get(`${API_BASE_URL}/resources`, { headers: { Authorization: `Bearer ${token}` } }),
         axios.get(`${API_BASE_URL}/allocations`, { headers: { Authorization: `Bearer ${token}` } })
       ]);
