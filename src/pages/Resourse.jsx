@@ -9,23 +9,54 @@ import Navbar from "../components/Navbar";
 
 export const Resourse = () => {
   const [resources, setResources] = useState([]);
+  const [filteredResources, setFilteredResources] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentResource, setCurrentResource] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [resourceToDelete, setResourceToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Client-side filtering approach
   useEffect(() => {
     fetchResources();
   }, []);
 
-  const fetchResources = async () => {
+  useEffect(() => {
+    if (activeFilter === "all") {
+      setFilteredResources(resources);
+    } else {
+      setFilteredResources(
+        resources.filter((resource) => resource.status === activeFilter)
+      );
+    }
+  }, [resources, activeFilter]);
+
+  /* 
+  // API filtering approach (uncomment to use)
+  useEffect(() => {
+    fetchResources(activeFilter);
+  }, [activeFilter]);
+  */
+
+  const fetchResources = async (status = null) => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "https://resoursemanagemntsystem-bksn.vercel.app/api/resources?populate=resourceType"
-      );
+      const params = {};
+      if (status && status !== "all") params.status = status;
+
+      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources", {
+        params: {
+          ...params,
+          populate: "resourceType"
+        }
+      });
       setResources(response.data.data);
+      
+      // Only needed for client-side filtering
+      if (status === null) {
+        setFilteredResources(response.data.data);
+      }
     } catch (error) {
       console.error("Error fetching resources:", error);
     } finally {
@@ -48,7 +79,7 @@ export const Resourse = () => {
       await axios.delete(
         `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/deleteresourse/${resourceToDelete._id}`
       );
-      fetchResources();
+      fetchResources(activeFilter === "all" ? null : activeFilter);
       setDeleteModalOpen(false);
     } catch (error) {
       console.error("Error deleting resource:", error);
@@ -71,9 +102,36 @@ export const Resourse = () => {
             <FaPlus />
             <div className="absolute z-50 hidden group-hover:block min-w-[150px] max-w-[400px] p-2 bg-white border border-gray-200 rounded-md shadow-md -top-3 right-2 -translate-x-1/5 transform translate-y-[-80%]">
               <div className="text-sm text-gray-700 max-h-[200px] overflow-y-auto">
-                Add new resourse
+                Add new resource
               </div>
             </div>
+          </button>
+        </div>
+
+        <div className="flex gap-4 mb-4">
+          <button
+            className={`py-1 px-3 rounded ${
+              activeFilter === "all" ? "bg-blue-900 text-white" : ""
+            } `}
+            onClick={() => setActiveFilter("all")}
+          >
+            All
+          </button>
+          <button
+            className={`py-1 px-3 rounded ${
+              activeFilter === "allocated" ? "bg-blue-900 text-white" : ""
+            } `}
+            onClick={() => setActiveFilter("allocated")}
+          >
+            Allocated
+          </button>
+          <button
+            className={`py-1 px-3 rounded ${
+              activeFilter === "available" ? "bg-blue-900 text-white" : ""
+            } `}
+            onClick={() => setActiveFilter("available")}
+          >
+            Available
           </button>
         </div>
 
@@ -101,17 +159,14 @@ export const Resourse = () => {
                   <th scope="col" className="px-6 py-3.5 font-medium">
                     Status
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3.5 font-medium text-center"
-                  >
+                  <th scope="col" className="px-6 py-3.5 font-medium text-center">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {resources.length > 0 ? (
-                  resources.map((resource) => (
+                {filteredResources.length > 0 ? (
+                  filteredResources.map((resource) => (
                     <tr
                       key={resource._id}
                       className="bg-white hover:bg-gray-50 transition-colors duration-150"
@@ -126,7 +181,6 @@ export const Resourse = () => {
                         <div className="truncate cursor-help">
                           {resource.description || "No description"}
                         </div>
-                        {/* Floating tooltip */}
                         <div className="absolute z-50 hidden group-hover:block min-w-[200px] max-w-[800px] p-3 bg-white border border-gray-200 rounded-md shadow-lg -top-3 right-2 -translate-x-1/5 transform translate-y-[-90%]">
                           <div className="text-sm text-gray-700 max-h-[200px] overflow-y-auto">
                             {resource.description}
@@ -187,7 +241,7 @@ export const Resourse = () => {
         <ResourceFormModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onSuccess={fetchResources}
+          onSuccess={() => fetchResources(activeFilter === "all" ? null : activeFilter)}
           resourceData={currentResource}
         />
 
