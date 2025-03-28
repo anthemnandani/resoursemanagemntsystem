@@ -12,7 +12,7 @@ export const AllocatedResouses = () => {
   return (
     <>
     <Navbar/>
-     
+     <div className="pt-10"></div>
     </>
   );
 };

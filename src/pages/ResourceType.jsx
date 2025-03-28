@@ -58,7 +58,7 @@ export const ResourseType = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-4">
+      <div className="container mx-auto my-6 p-4 pt-10">
         <div className="flex justify-between items-center py-4">
           <h2 className="text-2xl font-semibold text-center">Resources Type</h2>
           <button

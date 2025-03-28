@@ -71,8 +71,8 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
-      <div className="px-6 py-4 min-h-screen bg-gray-50">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h2>
+      <div className="px-6 py-4 min-h-screen">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 pt-18">Dashboard</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <DashboardCard 
@@ -107,9 +107,9 @@ const Dashboard = () => {
 
 const DashboardCard = ({ title, count, description, icon, color, onClick }) => {
   const colorMap = {
-    blue: { bg: "bg-white", border: "border-blue-900", text: "text-blue-600" },
-    green: { bg: "bg-white", border: "border-green-300", text: "text-green-600" },
-    purple: { bg: "bg-white", border: "border-orange-500", text: "text-purple-600" }
+    blue: { bg: "bg-gray-50", border: "border-blue-900", text: "text-blue-600" },
+    green: { bg: "bg-gray-50", border: "border-green-300", text: "text-green-600" },
+    purple: { bg: "bg-gray-50", border: "border-orange-500", text: "text-purple-600" }
   };
 
   return (
