@@ -23,7 +23,7 @@ export const Resourse = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/resources?populate=resourceType"
+        "https://resoursemanagemntsystem-bksn.vercel.app/api/resources?populate=resourceType"
       );
       setResources(response.data.data);
     } catch (error) {
@@ -46,7 +46,7 @@ export const Resourse = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/resources/deleteresourse/${resourceToDelete._id}`
+        `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/deleteresourse/${resourceToDelete._id}`
       );
       fetchResources();
       setDeleteModalOpen(false);
@@ -62,13 +62,18 @@ export const Resourse = () => {
         <div className="flex justify-between items-center py-4">
           <h2 className="text-2xl font-semibold text-center">Resources</h2>
           <button
-            className="bg-blue-900 text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2"
+            className="bg-blue-900 text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentResource(null);
               setIsModalOpen(true);
             }}
           >
             <FaPlus />
+            <div className="absolute z-50 hidden group-hover:block min-w-[150px] max-w-[400px] p-2 bg-white border border-gray-200 rounded-md shadow-md -top-3 right-2 -translate-x-1/5 transform translate-y-[-80%]">
+              <div className="text-sm text-gray-700 max-h-[200px] overflow-y-auto">
+                Add new resourse
+              </div>
+            </div>
           </button>
         </div>
 
@@ -77,72 +82,99 @@ export const Resourse = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-blue-900 shadow-md">
-              <thead>
-                <tr className="bg-blue-900 border-blue-900 text-white">
-                  <th className="p-2 border">Resource Name</th>
-                  <th className="p-2 border">Type</th>
-                  <th className="p-2 border">Description</th>
-                  <th className="p-2 border">Purchase Date</th>
-                  <th className="p-2 border">Status</th>
-                  <th className="p-2 border">Actions</th>
+          <div className="relative rounded shadow-sm border border-gray-200">
+            <table className="w-full text-sm text-left text-gray-700">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
+                    Resource Name
+                  </th>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
+                    Type
+                  </th>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
+                    Description
+                  </th>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
+                    Purchase Date
+                  </th>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
+                    Status
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3.5 font-medium text-center"
+                  >
+                    Actions
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-gray-200">
                 {resources.length > 0 ? (
                   resources.map((resource) => (
                     <tr
                       key={resource._id}
-                      className="text-center border-b hover:bg-gray-50"
+                      className="bg-white hover:bg-gray-50 transition-colors duration-150"
                     >
-                      <td className="p-2 border">{resource.name}</td>
-                      <td className="p-2 border">
-                        {resource.resourceType?.name}
+                      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        {resource.name}
                       </td>
-                      <td
-                        className="p-2 border max-w-[150px] truncate"
-                        title={resource.description}
-                      >
-                        {resource.description}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {resource.resourceType?.name || "N/A"}
                       </td>
-                      <td className="p-2 border">
+                      <td className="px-6 py-4 max-w-[200px] relative group">
+                        <div className="truncate cursor-help">
+                          {resource.description || "No description"}
+                        </div>
+                        {/* Floating tooltip */}
+                        <div className="absolute z-50 hidden group-hover:block min-w-[200px] max-w-[800px] p-3 bg-white border border-gray-200 rounded-md shadow-lg -top-3 right-2 -translate-x-1/5 transform translate-y-[-90%]">
+                          <div className="text-sm text-gray-700 max-h-[200px] overflow-y-auto">
+                            {resource.description}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         {resource.purchaseDate
                           ? new Date(resource.purchaseDate).toLocaleDateString()
                           : "N/A"}
                       </td>
-                      <td className="p-2 border">
+                      <td className="px-6 py-4">
                         <span
                           className={`px-2 py-1 rounded-full text-xs ${
                             resource.status === "available"
-                              ? "bg-green-100 text-green-800"
+                              ? "bg-green-50 text-green-800"
                               : resource.status === "allocated"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-red-100 text-red-800"
+                              ? "bg-yellow-50 text-yellow-800"
+                              : "bg-red-50 text-red-800"
                           }`}
                         >
                           {resource.status}
                         </span>
                       </td>
-                      <td className="p-2 border">
+                      <td className="px-6 py-4 flex justify-center">
                         <button
-                          className="bg-neutral-200 text-blue-500 text-2xl px-2 py-1 rounded mr-2 cursor-pointer hover:bg-blue-100"
                           onClick={() => handleEditClick(resource)}
+                          className="text-blue-600 hover:text-blue-900 transition-colors p-2 rounded hover:bg-blue-50"
+                          title="Edit"
                         >
-                          <CiEdit />
+                          <CiEdit className="w-5 h-5" />
                         </button>
                         <button
-                          className="bg-neutral-200 text-red-700 text-2xl px-2 py-1 rounded cursor-pointer hover:bg-red-100"
                           onClick={() => handleDeleteClick(resource)}
+                          className="text-red-600 hover:text-red-900 transition-colors p-2 rounded hover:bg-red-50"
+                          title="Delete"
                         >
-                          <MdOutlineDeleteForever />
+                          <MdOutlineDeleteForever className="w-5 h-5" />
                         </button>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="p-4 text-center text-gray-500">
+                    <td
+                      colSpan="6"
+                      className="px-6 py-4 text-center text-gray-500 italic"
+                    >
                       No resources found
                     </td>
                   </tr>

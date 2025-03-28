@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+// import DataTable from "./DataTable";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "https://resoursemanagemntsystem-bksn.vercel.app/api";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -56,6 +57,7 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
+      {/* <DataTable/> */}
       <div className="px-6 py-4 min-h-screen bg-gray-50">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h2>
         {loading ? (

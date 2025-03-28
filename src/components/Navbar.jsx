@@ -16,21 +16,20 @@ export const Navbar = () => {
   const navItems = [
     { path: "/", name: "Home" },
     { path: "/resources", name: "Resources" },
+    {
+      path: "/resourceType",
+      name: "Resource Type",
+    },
     { path: "/employees", name: "Employees" },
     {
       path: "/allocations",
       name: "Allocations",
     },
-    {
-      path: "/resourceType",
-      name: "Resource Type",
-    },
   ];
 
   return (
-    <nav className="flex justify-between px-6 h-16 items-center bg-blue-800 text-white shadow-md">
+    <nav className="flex justify-between px-6 h-16 items-center bg-blue-900 text-white shadow-md">
       <h1 className="text-xl font-bold">Resource Management System</h1>
-
       <ul className="flex gap-2">
         {navItems.map((item) => (
           <li
