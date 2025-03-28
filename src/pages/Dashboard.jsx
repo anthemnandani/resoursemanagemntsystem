@@ -57,7 +57,7 @@ const Dashboard = () => {
 
       setTargetCounts({
         employees: responses[0].data.count || responses[0].data.length,
-        resources: responses[1].data.count || responses[1].data.length,
+        resources: responses[1].data.data.count || responses[1].data.data.length,
         allocations: responses[2].data.count || responses[2].data.length
       });
 
