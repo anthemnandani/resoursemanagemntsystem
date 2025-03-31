@@ -105,7 +105,6 @@ const ResourceFormModal = ({
         )}
 
         <form onSubmit={handleSubmit}>
-          {/* Name */}
           <div className="mb-2">
             <label className="block text-gray-700 mb-1">Resource Name</label>
             <input
@@ -118,7 +117,6 @@ const ResourceFormModal = ({
             />
           </div>
 
-          {/* Description */}
           <div className="mb-2">
             <label className="block text-gray-700 mb-1">Description</label>
             <textarea
@@ -141,7 +139,7 @@ const ResourceFormModal = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-1"
+              className="px-4 py-2 bg-[#013a63] text-white rounded hover:bg-blue-900 flex items-center gap-1"
               disabled={loading}
             >
               {loading ? (

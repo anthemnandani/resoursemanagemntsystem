@@ -54,7 +54,8 @@ const AllocationFormModal = ({
         'https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/allocate',
         {
           employeeId: formData.employeeId,
-          resourceId: formData.resourceId
+          resourceId: formData.resourceId,
+          allocatedDate: formData.allocatedDate,
         }
       );
 
@@ -125,6 +126,17 @@ const AllocationFormModal = ({
             </select>
           </div>
 
+          <div className="mb-2">
+            <label className="block text-gray-700 mb-1">Allocated Date</label>
+            <input
+              type="date"
+              name="allocatedDate"
+              value={formData.allocatedDate}
+              onChange={handleInputChange}
+              className="w-full p-1 border rounded"
+            />
+          </div>
+
           <div className="flex justify-end gap-4 mt-6">
             <button
               type="button"
@@ -136,7 +148,7 @@ const AllocationFormModal = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
+              className="px-4 py-2 bg-[#013a63] text-white rounded hover:bg-blue-900 flex items-center gap-2"
               disabled={loading}
             >
               {loading ? (

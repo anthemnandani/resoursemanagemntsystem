@@ -44,7 +44,7 @@ export const AllocatedResouses = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/${allocationToDelete._id}`
+        `https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/return/${allocationToDelete._id}`
       );
       fetchAllocations();
       setDeleteModalOpen(false);
@@ -56,11 +56,11 @@ export const AllocatedResouses = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-4 pt-10">
+      <div className="container mx-auto my-6 p-4 pt-14">
         <div className="flex justify-between items-center py-4">
           <h2 className="text-2xl font-semibold text-center">Allocated Resources</h2>
           <button
-            className="bg-blue-900 text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
+            className="bg-[#013a63] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentAllocation(null);
               setIsModalOpen(true);
@@ -77,7 +77,7 @@ export const AllocatedResouses = () => {
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#013a63]"></div>
           </div>
         ) : (
           <div className="relative rounded-lg shadow-sm border border-gray-200 overflow-visible">
@@ -117,14 +117,14 @@ export const AllocatedResouses = () => {
                       <td className="px-6 py-4 flex justify-center space-x-3">
                         <button
                           onClick={() => handleEditClick(allocation)}
-                          className="text-blue-600 hover:text-blue-900 transition-colors p-1.5 rounded hover:bg-blue-50"
+                          className="text-[#013a63] hover:text-[#013a63] transition-colors p-1.5 rounded hover:bg-blue-50"
                           title="Edit"
                         >
                           <CiEdit className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(allocation)}
-                          className="text-red-600 hover:text-red-900 transition-colors p-1.5 rounded hover:bg-red-50"
+                          className="text-red-800 hover:text-red-700 transition-colors p-1.5 rounded hover:bg-red-50"
                           title="Delete"
                         >
                           <MdOutlineDeleteForever className="w-5 h-5" />

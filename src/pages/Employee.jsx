@@ -6,6 +6,7 @@ import axios from "axios";
 import EmployeeFormModal from "../components/EmployeeFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import Navbar from "../components/Navbar";
+import { IoMdEye } from "react-icons/io";
 
 export const Employee = () => {
   const [employees, setEmployees] = useState([]);
@@ -14,7 +15,7 @@ export const Employee = () => {
   const [currentEmployee, setCurrentEmployee] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("all"); // 'all', 'active', 'inactive'
+  const [activeFilter, setActiveFilter] = useState("all");
 
   useEffect(() => {
     fetchEmployees();
@@ -84,11 +85,11 @@ export const Employee = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-4 overflow-y-scroll pt-10">
+      <div className="container mx-auto my-6 p-4 overflow-y-scroll pt-14">
         <div className="flex justify-between items-center py-4">
           <h2 className="text-2xl font-semibold text-center">Employees</h2>
           <button
-            className="bg-blue-900 text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
+            className="bg-[#013a63] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentEmployee(null);
               setIsModalOpen(true);
@@ -105,19 +106,19 @@ export const Employee = () => {
 
         <div className="flex gap-4 mb-4">
           <button 
-            className={`py-1 px-3 rounded ${activeFilter === "all" ? "bg-blue-900 text-white" : ""}`}
+            className={`py-1 px-3 rounded ${activeFilter === "all" ? "bg-[#013a63] text-white" : ""}`}
             onClick={() => setActiveFilter("all")}
           >
             All
           </button>
           <button 
-            className={`py-1 px-3 rounded ${activeFilter === "active" ? "bg-blue-900 text-white" : ""}`}
+            className={`py-1 px-3 rounded ${activeFilter === "active" ? "bg-[#013a63] text-white" : ""}`}
             onClick={() => setActiveFilter("active")}
           >
             Active
           </button>
           <button 
-            className={`py-1 px-3 rounded ${activeFilter === "inactive" ? "bg-blue-900 text-white" : ""}`}
+            className={`py-1 px-3 rounded ${activeFilter === "inactive" ? "bg-[#013a63] text-white" : ""}`}
             onClick={() => setActiveFilter("inactive")}
           >
             Inactive
@@ -138,10 +139,10 @@ export const Employee = () => {
                   Email
                 </th>
                 <th scope="col" className="px-6 py-3.5 font-medium">
-                  Position
+                  Department
                 </th>
                 <th scope="col" className="px-6 py-3.5 font-medium">
-                  Department
+                  Position
                 </th>
                 <th scope="col" className="px-6 py-3.5 font-medium">
                   Hire Date
@@ -175,10 +176,10 @@ export const Employee = () => {
                       {employee.email}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {employee.position}
+                      {employee.department}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {employee.department}
+                      {employee.position}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {new Date(employee.hireDate).toLocaleDateString()}
@@ -198,14 +199,21 @@ export const Employee = () => {
                     <td className="px-6 py-4 flex justify-center space-x-3">
                       <button
                         onClick={() => handleEditClick(employee)}
-                        className="text-blue-600 hover:text-blue-900 transition-colors p-1.5 rounded hover:bg-blue-50"
+                        className="text-[#013a63] hover:text-[#013a63] transition-colors p-1.5 rounded hover:bg-blue-50"
+                        title="Edit"
+                      >
+                        <IoMdEye className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={() => handleEditClick(employee)}
+                        className="text-[#013a63] hover:text-[#013a63] transition-colors p-1.5 rounded hover:bg-blue-50"
                         title="Edit"
                       >
                         <CiEdit className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleDeleteClick(employee)}
-                        className="text-red-600 hover:text-red-900 transition-colors p-1.5 rounded hover:bg-red-50"
+                        className="text-red-800 hover:text-red-700 transition-colors p-1.5 rounded hover:bg-red-50"
                         title="Delete"
                       >
                         <MdOutlineDeleteForever className="w-5 h-5" />

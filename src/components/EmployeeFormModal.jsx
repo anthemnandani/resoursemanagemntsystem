@@ -12,6 +12,7 @@ const EmployeeFormModal = ({
     email: "",
     position: "",
     department: "",
+    hireDate: "",
     profilePicture: null,
   });
   const [imagePreview, setImagePreview] = useState("");
@@ -26,6 +27,7 @@ const EmployeeFormModal = ({
         email: employeeData.email || "",
         position: employeeData.position || "",
         department: employeeData.department || "",
+        hireDate: employeeData.hireDate?.split('T')[0] || '',
         profilePicture: null,
       });
       setImagePreview(employeeData.profilePicture || "");
@@ -35,6 +37,7 @@ const EmployeeFormModal = ({
         email: "",
         position: "",
         department: "",
+        hireDate: "",
         profilePicture: null,
       });
       setImagePreview("");
@@ -67,6 +70,7 @@ const EmployeeFormModal = ({
       formDataToSend.append("email", formData.email);
       formDataToSend.append("position", formData.position);
       formDataToSend.append("department", formData.department);
+      formDataToSend.append("hireDate", formData.hireDate);
 
       if (formData.profilePicture) {
         formDataToSend.append("profilePicture", formData.profilePicture);
@@ -159,8 +163,8 @@ const EmployeeFormModal = ({
                   </div>
                 )}
               </div>
-              <label className="flex flex-col items-center px-4 py-2 bg-white rounded-lg border border-blue-900 cursor-pointer">
-                <span className="text-blue-900">Choose File</span>
+              <label className="flex flex-col items-center px-4 py-2 bg-white rounded-lg border border-[#013a63] cursor-pointer">
+                <span className="text-[#013a63]">Choose File</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -217,7 +221,6 @@ const EmployeeFormModal = ({
               <option value="Admin">Admin</option>
               <option value="Accountant">Accountant</option>
               <option value="Designer">Designer</option>
-              <option value="manager">manager</option>
             </select>
           </div>
 
@@ -244,6 +247,17 @@ const EmployeeFormModal = ({
             </select>
           </div>
 
+          <div className="mb-2">
+            <label className="block text-gray-700 mb-1">Hire Date</label>
+            <input
+              type="date"
+              name="hireDate"
+              value={formData.hireDate}
+              onChange={handleInputChange}
+              className="w-full p-1 border rounded"
+            />
+          </div>
+
           <div className="flex justify-end gap-2 mt-6">
             <button
               type="button"
@@ -255,7 +269,7 @@ const EmployeeFormModal = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-900 text-white rounded flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2 bg-[#013a63] text-white rounded flex items-center gap-2 cursor-pointer"
               disabled={loading}
             >
               {loading ? (

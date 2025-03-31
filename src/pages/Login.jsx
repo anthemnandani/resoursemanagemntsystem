@@ -6,12 +6,10 @@ import Cookies from "js-cookie";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
       const { data } = await axios.post("https://resoursemanagemntsystem-bksn.vercel.app/api/admin/login", {
@@ -24,7 +22,7 @@ export const Login = () => {
 
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.error || "Login failed. Please try again.");
+      console.log("Login error: ", err);
     }
   };
 

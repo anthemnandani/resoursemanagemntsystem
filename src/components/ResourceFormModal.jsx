@@ -117,21 +117,8 @@ const ResourceFormModal = ({
         )}
 
         <form onSubmit={handleSubmit}>
-          {/* Name */}
-          <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Resource Name</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded"
-              required
-            />
-          </div>
 
-          {/* Resource Type */}
-          <div className="mb-2">
+        <div className="mb-2">
             <label className="block text-gray-700 mb-1">Resource Type</label>
             <select
               name="resourceTypeId"
@@ -148,8 +135,19 @@ const ResourceFormModal = ({
               ))}
             </select>
           </div>
+          
+          <div className="mb-2">
+            <label className="block text-gray-700 mb-1">Resource Name</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              className="w-full p-1 border rounded"
+              required
+            />
+          </div>
 
-          {/* Description */}
           <div className="mb-2">
             <label className="block text-gray-700 mb-1">Description</label>
             <textarea
@@ -161,7 +159,6 @@ const ResourceFormModal = ({
             />
           </div>
 
-          {/* Purchase Date */}
           <div className="mb-2">
             <label className="block text-gray-700 mb-1">Purchase Date</label>
             <input
@@ -199,7 +196,7 @@ const ResourceFormModal = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-1"
+              className="px-4 py-2 bg-[#013a63] text-white rounded hover:bg-blue-900 flex items-center gap-1"
               disabled={loading}
             >
               {loading ? (

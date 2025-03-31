@@ -73,8 +73,8 @@ const Dashboard = () => {
       <Navbar />
       <div className="px-6 py-4 min-h-screen">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 pt-18">Dashboard</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col lg:w-1/2 sm:w-full gap-4 mb-4">
           <DashboardCard 
             title="Total Employees" 
             count={counts.employees} 
@@ -100,6 +100,12 @@ const Dashboard = () => {
             onClick={() => navigate("/allocations")}
           />
         </div>
+
+        <div className="mb-10 flex items-center justify-center lg:px-20 sm:px-1 lg:w-1/2 sm:w-full">
+          <img src="3.gif" alt="" />
+        </div>
+        
+        </div>
       </div>
     </>
   );
@@ -107,9 +113,9 @@ const Dashboard = () => {
 
 const DashboardCard = ({ title, count, description, icon, color, onClick }) => {
   const colorMap = {
-    blue: { bg: "bg-gray-50", border: "border-blue-900", text: "text-blue-600" },
-    green: { bg: "bg-gray-50", border: "border-green-300", text: "text-green-600" },
-    purple: { bg: "bg-gray-50", border: "border-orange-500", text: "text-purple-600" }
+    blue: { bg: "bg-blue-50", border: "border-[#013a63]", text: "text-blue-600" },
+    green: { bg: "bg-blue-50", border: "border-green-800", text: "text-green-600" },
+    purple: { bg: "bg-blue-50", border: "border-orange-700", text: "text-purple-600" }
   };
 
   return (
@@ -122,7 +128,7 @@ const DashboardCard = ({ title, count, description, icon, color, onClick }) => {
           <p className="text-sm font-medium text-gray-500">{title}</p>
           <p className="text-3xl font-bold text-gray-800 mt-1">{count}</p>
         </div>
-        <span className={`text-2xl ${colorMap[color].text}`}>{icon}</span>
+        <span className={`text-3xl ${colorMap[color].text}`}>{icon}</span>
       </div>
       <p className="text-xs text-gray-500 mt-2">{description}</p>
     </div>
