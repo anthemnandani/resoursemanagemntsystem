@@ -22,7 +22,7 @@ const ResourceFormModal = ({
   useEffect(() => {
     const fetchResourceTypes = async () => {
       try {
-        const response = await axios.get('https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype');
+        const response = await axios.get('http://localhost:5000/api/resourcestype');
         setResourceTypes(response.data.data);
       } catch (error) {
         console.error('Error fetching resource types:', error);
@@ -75,13 +75,13 @@ const ResourceFormModal = ({
       if (resourceData) {
         // Update existing resource
         response = await axios.put(
-          `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/updateresourse/${resourceData._id}`,
+          `http://localhost:5000/api/resources/updateresourse/${resourceData._id}`,
           payload
         );
       } else {
         // Create new resource
         response = await axios.post(
-          'https://resoursemanagemntsystem-bksn.vercel.app/api/resources/createresourse',
+          'http://localhost:5000/api/resources/createresourse',
           payload
         );
       }
@@ -171,7 +171,7 @@ const ResourceFormModal = ({
           </div>
 
           {/* Status */}
-          <div className="mb-2">
+          {/* <div className="mb-2">
             <label className="block text-gray-700 mb-1">Status</label>
             <select
               name="status"
@@ -183,7 +183,7 @@ const ResourceFormModal = ({
               <option value="allocated">Allocated</option>
               <option value="maintenance">Maintenance</option>
             </select>
-          </div>
+          </div> */}
 
           <div className="flex justify-end gap-4 mt-6">
             <button

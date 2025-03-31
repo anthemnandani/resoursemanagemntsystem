@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 
-const API_BASE_URL = "https://resoursemanagemntsystem-bksn.vercel.app/api";
+const API_BASE_URL = "http://localhost:5000/api";
 
 const Dashboard = () => {
   const navigate = useNavigate();

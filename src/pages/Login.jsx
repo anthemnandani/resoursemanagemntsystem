@@ -12,7 +12,7 @@ export const Login = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post("https://resoursemanagemntsystem-bksn.vercel.app/api/admin/login", {
+      const { data } = await axios.post("http://localhost:5000/api/admin/login", {
         email,
         password,
       });
@@ -38,7 +38,7 @@ export const Login = () => {
             value={email}
             required
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
           />
 
           <input
@@ -47,12 +47,12 @@ export const Login = () => {
             value={password}
             required
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
           />
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            className="w-full bg-[#013a63] text-white py-2 rounded-md hover:bg-blue-900 transition"
           >
             Login
           </button>
@@ -61,7 +61,7 @@ export const Login = () => {
         <p className="mt-4 text-center text-gray-600 text-sm">
           Don’t have an account?{" "}
           <span
-            className="text-blue-600 cursor-pointer hover:underline"
+            className="text-[#013a63] cursor-pointer hover:underline"
             onClick={() => navigate("/register")}
           >
             Register

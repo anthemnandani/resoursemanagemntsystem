@@ -27,7 +27,7 @@ export const Employee = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees");
+      const response = await axios.get("http://localhost:5000/api/employees");
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees:", error);
@@ -60,7 +60,7 @@ export const Employee = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employeeToDelete._id}`
+        `http://localhost:5000/api/employees/${employeeToDelete._id}`
       );
       fetchEmployees();
       setDeleteModalOpen(false);
@@ -73,7 +73,7 @@ export const Employee = () => {
     try {
       const newStatus = employee.status === "active" ? "inactive" : "active";
       await axios.patch(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employee._id}`,
+        `http://localhost:5000/api/employees/${employee._id}`,
         { status: newStatus }
       );
       fetchEmployees();
@@ -199,14 +199,14 @@ export const Employee = () => {
                     <td className="px-6 py-4 flex justify-center space-x-3">
                       <button
                         onClick={() => handleEditClick(employee)}
-                        className="text-[#013a63] hover:text-[#013a63] transition-colors p-1.5 rounded hover:bg-blue-50"
+                        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded hover:bg-blue-50"
                         title="Edit"
                       >
                         <IoMdEye className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleEditClick(employee)}
-                        className="text-[#013a63] hover:text-[#013a63] transition-colors p-1.5 rounded hover:bg-blue-50"
+                        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded hover:bg-blue-50"
                         title="Edit"
                       >
                         <CiEdit className="w-5 h-5" />

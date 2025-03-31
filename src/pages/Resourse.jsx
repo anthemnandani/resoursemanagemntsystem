@@ -45,7 +45,7 @@ export const Resourse = () => {
       const params = {};
       if (status && status !== "all") params.status = status;
 
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources", {
+      const response = await axios.get("http://localhost:5000/api/resources", {
         params: {
           ...params,
           populate: "resourceType"
@@ -77,7 +77,7 @@ export const Resourse = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/deleteresourse/${resourceToDelete._id}`
+        `http://localhost:5000/api/resources/deleteresourse/${resourceToDelete._id}`
       );
       fetchResources(activeFilter === "all" ? null : activeFilter);
       setDeleteModalOpen(false);
@@ -115,15 +115,7 @@ export const Resourse = () => {
             } `}
             onClick={() => setActiveFilter("all")}
           >
-            All
-          </button>
-          <button
-            className={`py-1 px-3 rounded ${
-              activeFilter === "allocated" ? "bg-[#013a63] text-white" : ""
-            } `}
-            onClick={() => setActiveFilter("allocated")}
-          >
-            Allocated
+            All(10)
           </button>
           <button
             className={`py-1 px-3 rounded ${
@@ -131,7 +123,15 @@ export const Resourse = () => {
             } `}
             onClick={() => setActiveFilter("available")}
           >
-            Available
+            Available(8)
+          </button>
+          <button
+            className={`py-1 px-3 rounded ${
+              activeFilter === "allocated" ? "bg-[#013a63] text-white" : ""
+            } `}
+            onClick={() => setActiveFilter("allocated")}
+          >
+            Allocated(2)
           </button>
         </div>
 

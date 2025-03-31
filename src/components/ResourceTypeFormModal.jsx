@@ -19,7 +19,7 @@ const ResourceFormModal = ({
   useEffect(() => {
     const fetchResourceTypes = async () => {
       try {
-        const response = await axios.get('https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestypetype');
+        const response = await axios.get('http://localhost:5000/api/resourcestypetype');
         setResourceTypes(response.data.data);
       } catch (error) {
         console.error('Error fetching resource types:', error);
@@ -63,13 +63,13 @@ const ResourceFormModal = ({
       if (resourceData) {
         // Update existing resource
         response = await axios.put(
-          `https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype/${resourceData._id}`,
+          `http://localhost:5000/api/resourcestype/${resourceData._id}`,
           payload
         );
       } else {
         // Create new resource
         response = await axios.post(
-          'https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype',
+          'http://localhost:5000/api/resourcestype',
           payload
         );
       }
