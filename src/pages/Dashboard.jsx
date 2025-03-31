@@ -4,68 +4,114 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 
-const API_BASE_URL = "https://resoursemanagemntsystem-bksn.vercel.app/api";
+const API_BASE_URL = "http://localhost:5000/api";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
-  const [counts, setCounts] = useState({ employees: 0, resources: 0, allocations: 0 });
-  const [targetCounts, setTargetCounts] = useState({ employees: 0, resources: 0, allocations: 0 });
+  const [counts, setCounts] = useState({ 
+    employees: 0, 
+    resources: 0, 
+    allocations: 0 
+  });
+  const [targetCounts, setTargetCounts] = useState({ 
+    employees: 0, 
+    resources: 0, 
+    allocations: 0 
+  });
+  const [loading, setLoading] = useState(true);
   const animationRef = useRef();
 
   useEffect(() => {
     if (!token) {
       navigate("/login");
-    } else {
-      fetchCounts();
+      return;
     }
-    return () => cancelAnimationFrame(animationRef.current);
+    setTargetCounts({ employees: 5, resources: 3, allocations: 2 });
+    
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [employeesRes, resourcesRes, allocationsRes] = await Promise.all([
+          axios.get(`${API_BASE_URL}/employees/getAllActiveEmployees`, { 
+            headers: { Authorization: `Bearer ${token}` } 
+          }),
+          axios.get(`${API_BASE_URL}/resources`, { 
+            headers: { Authorization: `Bearer ${token}` } 
+          }),
+          axios.get(`${API_BASE_URL}/allocations`, { 
+            headers: { Authorization: `Bearer ${token}` } 
+          })
+        ]);
+
+        setTargetCounts({
+          employees: employeesRes.data.count || employeesRes.data.length || 0,
+          resources: resourcesRes.data.data.count || resourcesRes.data.data.length || 0,
+          allocations: allocationsRes.data.count || allocationsRes.data.length || 0
+        });
+        
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+        setTargetCounts({ employees: 0, resources: 0, allocations: 0 });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
   }, [token, navigate]);
 
   useEffect(() => {
-    const animateCounts = () => {
-      setCounts(prev => ({
-        employees: incrementNumber(prev.employees, targetCounts.employees),
-        resources: incrementNumber(prev.resources, targetCounts.resources),
-        allocations: incrementNumber(prev.allocations, targetCounts.allocations)
-      }));
-      
-      if (counts.employees !== targetCounts.employees || 
-          counts.resources !== targetCounts.resources || 
-          counts.allocations !== targetCounts.allocations) {
+    let lastTime = 0;
+    const animationInterval = 16;
+
+    const animateCounts = (time) => {
+      if (time - lastTime < animationInterval) {
         animationRef.current = requestAnimationFrame(animateCounts);
+        return;
+      }
+      lastTime = time;
+
+      setCounts(prev => {
+        const newCounts = {
+          employees: incrementNumber(prev.employees, targetCounts.employees),
+          resources: incrementNumber(prev.resources, targetCounts.resources),
+          allocations: incrementNumber(prev.allocations, targetCounts.allocations)
+        };
+
+        if (newCounts.employees !== targetCounts.employees || 
+            newCounts.resources !== targetCounts.resources || 
+            newCounts.allocations !== targetCounts.allocations) {
+          animationRef.current = requestAnimationFrame(animateCounts);
+        }
+
+        return newCounts;
+      });
+    };
+
+    animationRef.current = requestAnimationFrame(animateCounts);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
     };
-    
-    animationRef.current = requestAnimationFrame(animateCounts);
-    return () => cancelAnimationFrame(animationRef.current);
   }, [targetCounts]);
 
   const incrementNumber = (current, target) => {
     if (current === target) return target;
-    const increment = Math.max(1, Math.floor(target / 30));
-    return Math.min(current + increment, target);
-  };
-
-  const fetchCounts = async () => {
-    try {
-      const responses = await Promise.all([
-        axios.get(`${API_BASE_URL}/employees/getAllActiveEmployees`, { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get(`${API_BASE_URL}/resources`, { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get(`${API_BASE_URL}/allocations`, { headers: { Authorization: `Bearer ${token}` } })
-      ]);
-
-      setTargetCounts({
-        employees: responses[0].data.count || responses[0].data.length,
-        resources: responses[1].data.data.count || responses[1].data.data.length,
-        allocations: responses[2].data.count || responses[2].data.length
-      });
-
-    } catch (error) {
-      console.error("Error fetching counts:", error);
-      // If error occurs, still animate to 0 to maintain UX consistency
-      setTargetCounts({ employees: 0, resources: 0, allocations: 0 });
-    }
+    
+    // Faster increment for larger numbers
+    const difference = target - current;
+    const increment = Math.ceil(difference / 10);
+    
+    return current + increment;
   };
 
   return (
@@ -73,39 +119,45 @@ const Dashboard = () => {
       <Navbar />
       <div className="px-6 py-4 min-h-screen">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 pt-18">Dashboard</h2>
-        <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex flex-col lg:w-1/2 sm:w-full gap-4 mb-4">
-          <DashboardCard 
-            title="Total Employees" 
-            count={counts.employees} 
-            description="Active employees in system" 
-            icon="👥"
-            color="blue"
-            onClick={() => navigate("/employees")}
-          />
-          <DashboardCard 
-            title="Total Resources" 
-            count={counts.resources} 
-            description="Available resources" 
-            icon="💻"
-            color="green"
-            onClick={() => navigate("/resources")}
-          />
-          <DashboardCard 
-            title="Active Allocations" 
-            count={counts.allocations} 
-            description="Resources in use" 
-            icon="📋"
-            color="purple"
-            onClick={() => navigate("/allocations")}
-          />
-        </div>
-
-        <div className="mb-10 flex items-center justify-center lg:px-20 sm:px-1 lg:w-1/2 sm:w-full">
-          <img src="3.gif" alt="" />
-        </div>
         
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-900"></div>
+          </div>
+        ) : (
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col lg:w-1/2 sm:w-full gap-4 mb-4">
+              <DashboardCard 
+                title="Total Employees" 
+                count={counts.employees} 
+                description="Active employees in system" 
+                icon="👥"
+                color="blue"
+                onClick={() => navigate("/employees")}
+              />
+              <DashboardCard 
+                title="Total Resources" 
+                count={counts.resources} 
+                description="Available resources" 
+                icon="💻"
+                color="green"
+                onClick={() => navigate("/resources")}
+              />
+              <DashboardCard 
+                title="Active Allocations" 
+                count={counts.allocations} 
+                description="Resources in use" 
+                icon="📋"
+                color="purple"
+                onClick={() => navigate("/allocations")}
+              />
+            </div>
+
+            <div className="mb-10 flex items-center justify-center lg:px-20 sm:px-1 lg:w-1/2 sm:w-full">
+              <img src="3.gif" alt="Dashboard visualization" />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
