@@ -7,6 +7,7 @@ import EmployeeFormModal from "../components/EmployeeFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import Navbar from "../components/Navbar";
 import { IoMdEye } from "react-icons/io";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 export const Employee = () => {
   const [employees, setEmployees] = useState([]);
@@ -16,6 +17,7 @@ export const Employee = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [counts, setCounts] = useState({ all: 0, active: 0, inactive: 0 });
 
   useEffect(() => {
     fetchEmployees();
@@ -27,8 +29,10 @@ export const Employee = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/employees");
-      setEmployees(response.data);
+      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees");
+      const data = response.data;
+      setEmployees(data);
+      updateCounts(data);
     } catch (error) {
       console.error("Error fetching employees:", error);
     }
@@ -37,10 +41,14 @@ export const Employee = () => {
   const filterEmployees = () => {
     switch (activeFilter) {
       case "active":
-        setFilteredEmployees(employees.filter(emp => emp.status === "active"));
+        setFilteredEmployees(
+          employees.filter((emp) => emp.status === "active")
+        );
         break;
       case "inactive":
-        setFilteredEmployees(employees.filter(emp => emp.status === "inactive"));
+        setFilteredEmployees(
+          employees.filter((emp) => emp.status === "inactive")
+        );
         break;
       default:
         setFilteredEmployees(employees);
@@ -57,10 +65,19 @@ export const Employee = () => {
     setDeleteModalOpen(true);
   };
 
+  const updateCounts = (data) => {
+    const allCount = data.length;
+    const activeCount = data.filter((res) => res.status === "active").length;
+    const inactiveCount = data.filter(
+      (res) => res.status === "inactive"
+    ).length;
+    setCounts({ all: allCount, active: activeCount, inactive: inactiveCount });
+  };
+
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/employees/${employeeToDelete._id}`
+        `https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employeeToDelete._id}`
       );
       fetchEmployees();
       setDeleteModalOpen(false);
@@ -72,10 +89,9 @@ export const Employee = () => {
   const toggleEmployeeStatus = async (employee) => {
     try {
       const newStatus = employee.status === "active" ? "inactive" : "active";
-      await axios.patch(
-        `http://localhost:5000/api/employees/${employee._id}`,
-        { status: newStatus }
-      );
+      await axios.patch(`https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employee._id}`, {
+        status: newStatus,
+      });
       fetchEmployees();
     } catch (error) {
       console.error("Error updating employee status:", error);
@@ -105,23 +121,29 @@ export const Employee = () => {
         </div>
 
         <div className="flex gap-4 mb-4">
-          <button 
-            className={`py-1 px-3 rounded ${activeFilter === "all" ? "bg-[#013a63] text-white" : ""}`}
+          <button
+            className={`py-1 px-3 rounded ${
+              activeFilter === "all" ? "bg-[#013a63] text-white" : ""
+            }`}
             onClick={() => setActiveFilter("all")}
           >
-            All
+            All ({counts.all})
           </button>
-          <button 
-            className={`py-1 px-3 rounded ${activeFilter === "active" ? "bg-[#013a63] text-white" : ""}`}
+          <button
+            className={`py-1 px-3 rounded ${
+              activeFilter === "active" ? "bg-[#013a63] text-white" : ""
+            }`}
             onClick={() => setActiveFilter("active")}
           >
-            Active
+            Active ({counts.active})
           </button>
-          <button 
-            className={`py-1 px-3 rounded ${activeFilter === "inactive" ? "bg-[#013a63] text-white" : ""}`}
+          <button
+            className={`py-1 px-3 rounded ${
+              activeFilter === "inactive" ? "bg-[#013a63] text-white" : ""
+            }`}
             onClick={() => setActiveFilter("inactive")}
           >
-            Inactive
+            Inactive ({counts.inactive})
           </button>
         </div>
 
@@ -129,28 +151,28 @@ export const Employee = () => {
           <table className="w-full text-sm text-left text-gray-700">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
               <tr>
-                <th scope="col" className="px-6 py-3.5 font-medium">
+                <th scope="col" className="px-4 py-3.5 font-medium">
                   Profile
                 </th>
-                <th scope="col" className="px-6 py-3.5 font-medium">
+                <th scope="col" className="px-4 py-3.5 font-medium">
                   Name
                 </th>
-                <th scope="col" className="px-6 py-3.5 font-medium">
+                <th scope="col" className="px-4 py-3.5 font-medium">
                   Email
                 </th>
-                <th scope="col" className="px-6 py-3.5 font-medium">
+                <th scope="col" className="px-4 py-3.5 font-medium">
                   Department
                 </th>
-                <th scope="col" className="px-6 py-3.5 font-medium">
+                <th scope="col" className="px-4 py-3.5 font-medium">
                   Position
                 </th>
-                <th scope="col" className="px-6 py-3.5 font-medium">
+                <th scope="col" className="px-4 py-3.5 font-medium">
                   Hire Date
                 </th>
-                <th scope="col" className="px-6 py-3.5 font-medium">
+                <th scope="col" className="px-4 py-3.5 font-medium">
                   Status
                 </th>
-                <th scope="col" className="px-6 py-3.5 font-medium text-center">
+                <th scope="col" className="px-4 py-3.5 font-medium text-center">
                   Actions
                 </th>
               </tr>
@@ -162,29 +184,29 @@ export const Employee = () => {
                     key={employee._id}
                     className="bg-white hover:bg-gray-50 transition-colors duration-150"
                   >
-                    <td className="px-6 py-4 flex justify-center">
+                    <td className="px-2 py-4 flex justify-center">
                       <img
                         src={employee.profilePicture || "/employee.jpg"}
                         alt={employee.name}
                         className="h-10 w-10 rounded-full object-cover"
                       />
                     </td>
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    <td className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap">
                       {employee.name || "N/A"}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap">
                       {employee.email}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap">
                       {employee.department}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap">
                       {employee.position}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-4 py-4 whitespace-nowrap">
                       {new Date(employee.hireDate).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <button
                         onClick={() => toggleEmployeeStatus(employee)}
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
@@ -196,27 +218,40 @@ export const Employee = () => {
                         {employee.status}
                       </button>
                     </td>
-                    <td className="px-6 py-4 flex justify-center space-x-3">
+                    <td className="px-4 py-4 flex justify-center">
                       <button
                         onClick={() => handleEditClick(employee)}
-                        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded hover:bg-blue-50"
-                        title="Edit"
+                        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded"
+                        title="View"
                       >
                         <IoMdEye className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleEditClick(employee)}
-                        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded hover:bg-blue-50"
+                        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded"
                         title="Edit"
                       >
                         <CiEdit className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleDeleteClick(employee)}
-                        className="text-red-800 hover:text-red-700 transition-colors p-1.5 rounded hover:bg-red-50"
+                        className="text-red-800 hover:text-red-700 transition-colors p-1.5 rounded"
                         title="Delete"
                       >
                         <MdOutlineDeleteForever className="w-5 h-5" />
+                      </button>
+                      <button
+                        className="text-black cursor-pointer transition-colors p-1.5 rounded relative group"
+                      >
+                        <BsThreeDotsVertical className="w-5 h-5" />
+                        <div className="absolute z-50 hidden group-focus:block rounded-md shadow-md -top-1 right-1 -translate-x-1/5 transform translate-y-[-80%]">
+                          <button
+                            className="text-sm text-white px-4 py-2 bg-blue-900 min-h-10 min-w-48 overflow-y-auto"
+                            onClick={() => handleDeleteClick(employee)}
+                          >
+                            Allocate new resource
+                          </button>
+                        </div>
                       </button>
                     </td>
                   </tr>
@@ -225,7 +260,7 @@ export const Employee = () => {
                 <tr>
                   <td
                     colSpan="8"
-                    className="px-6 py-4 text-center text-gray-500 italic"
+                    className="px-4 py-4 text-center text-gray-500 italic"
                   >
                     No employees found
                   </td>

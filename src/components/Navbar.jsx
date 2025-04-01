@@ -61,7 +61,7 @@ export const Navbar = () => {
 
               {/* Dropdown Submenu */}
               {item.submenu && dropdownOpen === index && (
-                <ul className="absolute left-0 top-10 w-48 bg-white text-[#013a63] shadow-md rounded-md py-2 z-50">
+                <ul className="absolute left-0 top-10 w-44 bg-white text-[#013a63] shadow-md rounded-md z-50">
                   {item.submenu.map((sub) => (
                     <li
                       key={sub.path}
@@ -93,7 +93,7 @@ export const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-[#013a63] shadow-md flex flex-col items-center gap-4 py-4 lg:hidden">
+        <div className="absolute top-14 left-0 w-full bg-[#013a63] shadow-md flex flex-col items-center gap-4 py-4 lg:hidden">
           <ul className="flex flex-col gap-3 text-lg w-full">
             {navItems.map((item, index) => (
               <li key={index} className="w-full text-center">

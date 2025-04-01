@@ -15,6 +15,7 @@ export const Resourse = () => {
   const [currentResource, setCurrentResource] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [resourceToDelete, setResourceToDelete] = useState(null);
+  const [counts, setCounts] = useState({ all: 0, available: 0, allocated: 0 });
   const [loading, setLoading] = useState(false);
 
   // Client-side filtering approach
@@ -32,31 +33,25 @@ export const Resourse = () => {
     }
   }, [resources, activeFilter]);
 
-  /* 
-  // API filtering approach (uncomment to use)
-  useEffect(() => {
-    fetchResources(activeFilter);
-  }, [activeFilter]);
-  */
-
   const fetchResources = async (status = null) => {
     setLoading(true);
     try {
       const params = {};
       if (status && status !== "all") params.status = status;
 
-      const response = await axios.get("http://localhost:5000/api/resources", {
+      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources", {
         params: {
           ...params,
           populate: "resourceType"
         }
       });
-      setResources(response.data.data);
       
-      // Only needed for client-side filtering
       if (status === null) {
         setFilteredResources(response.data.data);
       }
+      const data = response.data.data;
+      setResources(data);
+      updateCounts(data);
     } catch (error) {
       console.error("Error fetching resources:", error);
     } finally {
@@ -74,10 +69,17 @@ export const Resourse = () => {
     setDeleteModalOpen(true);
   };
 
+  const updateCounts = (data) => {
+    const allCount = data.length;
+    const availableCount = data.filter((res) => res.status === "available").length;
+    const allocatedCount = data.filter((res) => res.status === "allocated").length;
+    setCounts({ all: allCount, available: availableCount, allocated: allocatedCount });
+  };
+
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/resources/deleteresourse/${resourceToDelete._id}`
+        `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/deleteresourse/${resourceToDelete._id}`
       );
       fetchResources(activeFilter === "all" ? null : activeFilter);
       setDeleteModalOpen(false);
@@ -115,7 +117,7 @@ export const Resourse = () => {
             } `}
             onClick={() => setActiveFilter("all")}
           >
-            All(10)
+            All ({counts.all})
           </button>
           <button
             className={`py-1 px-3 rounded ${
@@ -123,7 +125,7 @@ export const Resourse = () => {
             } `}
             onClick={() => setActiveFilter("available")}
           >
-            Available(8)
+            Available ({counts.available})
           </button>
           <button
             className={`py-1 px-3 rounded ${
@@ -131,7 +133,7 @@ export const Resourse = () => {
             } `}
             onClick={() => setActiveFilter("allocated")}
           >
-            Allocated(2)
+            Allocated ({counts.allocated})
           </button>
         </div>
 

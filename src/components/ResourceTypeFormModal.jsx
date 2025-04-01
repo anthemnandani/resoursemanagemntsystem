@@ -11,22 +11,8 @@ const ResourceFormModal = ({
     name: '',
     description: '',
   });
-  const [resourceTypes, setResourceTypes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  // Fetch resource types when component mounts
-  useEffect(() => {
-    const fetchResourceTypes = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/resourcestypetype');
-        setResourceTypes(response.data.data);
-      } catch (error) {
-        console.error('Error fetching resource types:', error);
-      }
-    };
-    fetchResourceTypes();
-  }, []);
 
   // Initialize form data when modal opens or resourceData changes
   useEffect(() => {
@@ -63,13 +49,13 @@ const ResourceFormModal = ({
       if (resourceData) {
         // Update existing resource
         response = await axios.put(
-          `http://localhost:5000/api/resourcestype/${resourceData._id}`,
+          `https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype/${resourceData._id}`,
           payload
         );
       } else {
         // Create new resource
         response = await axios.post(
-          'http://localhost:5000/api/resourcestype',
+          'https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype',
           payload
         );
       }
