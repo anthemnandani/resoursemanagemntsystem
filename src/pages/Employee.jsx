@@ -22,6 +22,8 @@ export const Employee = () => {
   const [counts, setCounts] = useState({ all: 0, active: 0, inactive: 0 });
 
   const [activeAllocations, setActiveAllocations] = useState({});
+  const [openTooltip, setOpenTooltip] = useState(null); // Tracks which tooltip is open
+
 
   const fetchAllocations = async (employeeId) => {
     try {
@@ -36,6 +38,26 @@ export const Employee = () => {
       console.error("Error fetching allocations:", error);
     }
   };
+
+  const handleClick = (employeeId) => {
+    if (openTooltip === employeeId) {
+      setOpenTooltip(null); // Close tooltip if already open
+    } else {
+      fetchAllocations(employeeId);
+      setOpenTooltip(employeeId); // Open tooltip for clicked employee
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".tooltip-container")) {
+        setOpenTooltip(null);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     fetchEmployees();
@@ -237,54 +259,49 @@ export const Employee = () => {
                       </button>
                     </td>
                     <td className="px-4 py-4 flex justify-center">
-                      <button
-                        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded relative group"
-                        onMouseEnter={() => fetchAllocations(employee._id)}
-                        onMouseLeave={() =>
-                          setActiveAllocations((prev) => ({
-                            ...prev,
-                            [employee._id]: [],
-                          }))
-                        }
-                      >
-                        <IoMdEye className="w-5 h-5" />
+                    <div className="relative inline-block tooltip-container">
+      <button
+        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded relative"
+        onClick={() => handleClick(employee._id)}
+      >
+        <IoMdEye className="w-5 h-5" />
+      </button>
 
-                        {/* Tooltip */}
-                        {activeAllocations[employee._id]?.length > 0 && (
-                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50">
-                            <div className="text-md mb-3 font-semibold">All allocated resources</div>
-                            <hr />
-                            <div>
-                            {activeAllocations[employee._id].map(
-                              (alloc, index) => (
-                                <div
-                                  key={index}
-                                  className="border-b pb-1 mb-1 last:border-none"
-                                >
-                                  <p className="font-semibold">
-                                    {alloc.resourceName} ({alloc.resourceType})
-                                  </p>
-                                  <p className="text-gray-500 text-xs">
-                                    Status: {alloc.status} | Allocated on:{" "}
-                                    {new Date(
-                                      alloc.allocationDate
-                                    ).toLocaleDateString()}
-                                  </p>
-                                  {alloc.returnDate && (
-                                    <p className="text-gray-500 text-xs">
-                                      Return Date:{" "}
-                                      {new Date(
-                                        alloc.returnDate
-                                      ).toLocaleDateString()}
-                                    </p>
-                                  )}
-                                </div>
-                              )
-                            )}
-                            </div>
-                          </div>
-                        )}
-                      </button>
+      {/* Tooltip (Shows on Click) */}
+      {openTooltip === employee._id &&
+        activeAllocations[employee._id]?.length > 0 && (
+          <div
+            className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50"
+          >
+            <div className="text-md mb-3 font-semibold">
+              All Allocated Resources
+            </div>
+            <hr />
+            <div>
+              {activeAllocations[employee._id].map((alloc, index) => (
+                <div
+                  key={index}
+                  className="border-b pb-1 mb-1 last:border-none"
+                >
+                  <p className="font-semibold">
+                    {alloc.resourceName} ({alloc.resourceType})
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    Status: {alloc.status} | Allocated on:{" "}
+                    {new Date(alloc.allocationDate).toLocaleDateString()}
+                  </p>
+                  {alloc.returnDate && (
+                    <p className="text-gray-500 text-xs">
+                      Return Date:{" "}
+                      {new Date(alloc.returnDate).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+    </div>
 
                       <button
                         onClick={() => handleEditClick(employee)}

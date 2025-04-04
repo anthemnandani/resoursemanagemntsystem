@@ -68,9 +68,7 @@ const Dashboard = () => {
         <h2 className="text-3xl font-bold text-gray-800 mb-6 pt-18">Dashboard</h2>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex flex-col lg:w-1/2 sm:w-full gap-4 mb-4">
-            {!isLoading &&
-              dashboardCards.map((card, index) => <DashboardCard key={index} {...card} />)
-            }
+          {dashboardCards.map((card, index) => <DashboardCard key={index} {...card} />)}
           </div>
           <div className="mb-10 flex items-center justify-center lg:px-10 sm:px-1 lg:w-1/2 sm:w-full">
             <img src="https://res.cloudinary.com/dmyq2ymj9/image/upload/v1743745859/HR-Challenges-2024_4x-1536x927-1-1024x618_pbrsvs.webp" alt="Dashboard visualization" />
