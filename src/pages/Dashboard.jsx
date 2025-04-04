@@ -72,8 +72,8 @@ const Dashboard = () => {
               dashboardCards.map((card, index) => <DashboardCard key={index} {...card} />)
             }
           </div>
-          <div className="mb-10 flex items-center justify-center lg:px-20 sm:px-1 lg:w-1/2 sm:w-full">
-            <img src="3.gif" alt="Dashboard visualization" />
+          <div className="mb-10 flex items-center justify-center lg:px-10 sm:px-1 lg:w-1/2 sm:w-full">
+            <img src="https://res.cloudinary.com/dmyq2ymj9/image/upload/v1743745859/HR-Challenges-2024_4x-1536x927-1-1024x618_pbrsvs.webp" alt="Dashboard visualization" />
           </div>
         </div>
       </div>
