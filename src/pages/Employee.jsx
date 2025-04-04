@@ -7,7 +7,7 @@ import EmployeeFormModal from "../components/EmployeeFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import Navbar from "../components/Navbar";
 import { IoMdEye } from "react-icons/io";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { SiTicktick } from "react-icons/si";
 import { useNavigate } from "react-router-dom";
 
 export const Employee = () => {
@@ -18,10 +18,10 @@ export const Employee = () => {
   const [currentEmployee, setCurrentEmployee] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [counts, setCounts] = useState({ all: 0, active: 0, inactive: 0 });
+  const [ActiveFilter, setActiveFilter] = useState("all");
+  const [counts, setCounts] = useState({ all: 0, Active: 0, Inactive: 0 });
 
-  const [activeAllocations, setActiveAllocations] = useState({});
+  const [ActiveAllocations, setActiveAllocations] = useState({});
   const [openTooltip, setOpenTooltip] = useState(null); // Tracks which tooltip is open
 
   const fetchAllocations = async (employeeId) => {
@@ -64,7 +64,7 @@ export const Employee = () => {
 
   useEffect(() => {
     filterEmployees();
-  }, [employees, activeFilter]);
+  }, [employees, ActiveFilter]);
 
   const fetchEmployees = async () => {
     try {
@@ -78,15 +78,15 @@ export const Employee = () => {
   };
 
   const filterEmployees = () => {
-    switch (activeFilter) {
-      case "active":
+    switch (ActiveFilter) {
+      case "Active":
         setFilteredEmployees(
-          employees.filter((emp) => emp.status === "active")
+          employees.filter((emp) => emp.status === "Active")
         );
         break;
-      case "inactive":
+      case "Inactive":
         setFilteredEmployees(
-          employees.filter((emp) => emp.status === "inactive")
+          employees.filter((emp) => emp.status === "Inactive")
         );
         break;
       default:
@@ -106,11 +106,11 @@ export const Employee = () => {
 
   const updateCounts = (data) => {
     const allCount = data.length;
-    const activeCount = data.filter((res) => res.status === "active").length;
-    const inactiveCount = data.filter(
-      (res) => res.status === "inactive"
+    const ActiveCount = data.filter((res) => res.status === "Active").length;
+    const InactiveCount = data.filter(
+      (res) => res.status === "Inactive"
     ).length;
-    setCounts({ all: allCount, active: activeCount, inactive: inactiveCount });
+    setCounts({ all: allCount, Active: ActiveCount, Inactive: InactiveCount });
   };
 
   const handleDeleteConfirm = async () => {
@@ -127,7 +127,7 @@ export const Employee = () => {
 
   const toggleEmployeeStatus = async (employee) => {
     try {
-      const newStatus = employee.status === "active" ? "inactive" : "active";
+      const newStatus = employee.status === "Active" ? "Inactive" : "Active";
       await axios.patch(`https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employee._id}`, {
         status: newStatus,
       });
@@ -162,7 +162,7 @@ export const Employee = () => {
         <div className="flex gap-4 mb-4">
           <button
             className={`py-1 px-3 rounded ${
-              activeFilter === "all" ? "bg-[#013a63] text-white" : ""
+              ActiveFilter === "all" ? "bg-[#013a63] text-white" : ""
             }`}
             onClick={() => setActiveFilter("all")}
           >
@@ -170,19 +170,19 @@ export const Employee = () => {
           </button>
           <button
             className={`py-1 px-3 rounded ${
-              activeFilter === "active" ? "bg-[#013a63] text-white" : ""
+              ActiveFilter === "Active" ? "bg-[#013a63] text-white" : ""
             }`}
-            onClick={() => setActiveFilter("active")}
+            onClick={() => setActiveFilter("Active")}
           >
-            Active ({counts.active})
+            Active ({counts.Active})
           </button>
           <button
             className={`py-1 px-3 rounded ${
-              activeFilter === "inactive" ? "bg-[#013a63] text-white" : ""
+              ActiveFilter === "Inactive" ? "bg-[#013a63] text-white" : ""
             }`}
-            onClick={() => setActiveFilter("inactive")}
+            onClick={() => setActiveFilter("Inactive")}
           >
-            Inactive ({counts.inactive})
+            Inactive ({counts.Inactive})
           </button>
         </div>
 
@@ -204,6 +204,9 @@ export const Employee = () => {
                 </th>
                 <th scope="col" className="px-4 py-3.5 font-medium">
                   Position
+                </th>
+                <th scope="col" className="px-4 py-3.5 font-medium">
+                  Allocated resources
                 </th>
                 <th scope="col" className="px-4 py-3.5 font-medium">
                   Hire Date
@@ -242,40 +245,25 @@ export const Employee = () => {
                     <td className="px-4 py-4 whitespace-nowrap">
                       {employee.position}
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
-                      {new Date(employee.hireDate).toLocaleDateString()}
-                    </td>
-                    <td className="px-4 py-4">
-                      <button
-                        onClick={() => toggleEmployeeStatus(employee)}
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
-                          employee.status === "active"
-                            ? "bg-green-50 text-green-800 hover:bg-green-100"
-                            : "bg-red-50 text-red-800 hover:bg-red-100"
-                        }`}
-                      >
-                        {employee.status}
-                      </button>
-                    </td>
                     <td className="px-4 py-4 flex justify-center">
                       <div className="relative inline-block tooltip-container">
                         <button
                           className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
                           onClick={() => handleClick(employee._id)}
                         >
-                          <IoMdEye className="w-5 h-5" />
+                           {employee.allocatedResourceCount}
                         </button>
 
                         {/* Tooltip (Shows on Click) */}
                         {openTooltip === employee._id &&
-                          activeAllocations[employee._id]?.length > 0 && (
+                          ActiveAllocations[employee._id]?.length > 0 && (
                             <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50">
                               <div className="text-md mb-3 font-semibold">
                                 All Allocated Resources
                               </div>
                               <hr />
                               <div>
-                                {activeAllocations[employee._id].map(
+                                {ActiveAllocations[employee._id].map(
                                   (alloc, index) => (
                                     <div
                                       key={index}
@@ -306,6 +294,71 @@ export const Employee = () => {
                             </div>
                           )}
                       </div>
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      {new Date(employee.hireDate).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-4">
+                      <button
+                        onClick={() => toggleEmployeeStatus(employee)}
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
+                          employee.status === "Active"
+                            ? "bg-green-50 text-green-800 hover:bg-green-100"
+                            : "bg-red-50 text-red-800 hover:bg-red-100"
+                        }`}
+                      >
+                        {employee.status}
+                      </button>
+                    </td>
+                    <td className="px-4 py-4 flex justify-center">
+                      <div className="relative inline-block tooltip-container">
+                        {/* <button
+                          className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          onClick={() => handleClick(employee._id)}
+                        >
+                          <IoMdEye className="w-5 h-5" />
+                        </button> */}
+
+                        {/* Tooltip (Shows on Click) */}
+                        {/* {openTooltip === employee._id &&
+                          ActiveAllocations[employee._id]?.length > 0 && (
+                            <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50">
+                              <div className="text-md mb-3 font-semibold">
+                                All Allocated Resources
+                              </div>
+                              <hr />
+                              <div>
+                                {ActiveAllocations[employee._id].map(
+                                  (alloc, index) => (
+                                    <div
+                                      key={index}
+                                      className="border-b pb-1 mb-1 last:border-none"
+                                    >
+                                      <p className="font-semibold">
+                                        {alloc.resourceName} (
+                                        {alloc.resourceType})
+                                      </p>
+                                      <p className="text-gray-500 text-xs">
+                                        Status: {alloc.status} | Allocated on:{" "}
+                                        {new Date(
+                                          alloc.allocationDate
+                                        ).toLocaleDateString()}
+                                      </p>
+                                      {alloc.returnDate && (
+                                        <p className="text-gray-500 text-xs">
+                                          Return Date:{" "}
+                                          {new Date(
+                                            alloc.returnDate
+                                          ).toLocaleDateString()}
+                                        </p>
+                                      )}
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          )} */}
+                      </div>
 
                       <button
                         onClick={() => handleEditClick(employee)}
@@ -322,8 +375,8 @@ export const Employee = () => {
                         <MdOutlineDeleteForever className="w-5 h-5" />
                       </button>
                       <button className="text-black cursor-pointer transition-colors p-1.5 rounded relative group">
-                        <BsThreeDotsVertical
-                          className="w-5 h-5"
+                        <SiTicktick
+                          className="w-4 h-4"
                           onClick={() => navigate("/allocations")}
                         />
                         <div className="absolute z-50 hidden group-hover:block rounded-md shadow-md -top-10 right-1 -translate-x-1/5 transform translate-y-[-0%]">

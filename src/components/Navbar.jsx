@@ -28,16 +28,15 @@ export const Navbar = () => {
       name: "Employees",
       submenu: [
         { path: "/employees", name: "Employees" },
-        { path: "/allocations", name: "Allocated" },
+        { path: "/allocations", name: "Allocations" },
       ],
     },
   ];
 
   return (
     <nav className="flex justify-between fixed top-0 w-full z-50 pl-2 pr-8 h-16 items-center text-white bg-[#013a63] shadow-md">
-      {/* LOGO */}
       <div className="p-4">
-        <img src="./logoo.png" className="h-12" alt="Logo" />
+        <img src="./logoo.png" alt="Logo" className="h-12 cursor-pointer" onClick={() => navigate('/')} />
       </div>
 
       {/* Desktop Navbar */}

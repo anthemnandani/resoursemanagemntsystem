@@ -14,7 +14,7 @@ export const AllocatedResouses = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [allocationToDelete, setAllocationToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [ActiveFilter, setActiveFilter] = useState("all");
 
   useEffect(() => {
     fetchAllocations();
@@ -35,15 +35,15 @@ export const AllocatedResouses = () => {
   // Memoize counts calculation for efficiency
   const counts = useMemo(() => {
     const allCount = allocations.length;
-    const activeCount = allocations.filter((res) => res.status === "active").length;
-    const returnedCount = allocations.filter((res) => res.status === "returned").length;
-    return { all: allCount, active: activeCount, returned: returnedCount };
+    const ActiveCount = allocations.filter((res) => res.status === "Active").length;
+    const ReturnedCount = allocations.filter((res) => res.status === "Returned").length;
+    return { all: allCount, Active: ActiveCount, Returned: ReturnedCount };
   }, [allocations]);
 
   const filteredAllocations = useMemo(() => {
-    if (activeFilter === "all") return allocations;
-    return allocations.filter((allocation) => allocation.status === activeFilter);
-  }, [allocations, activeFilter]);
+    if (ActiveFilter === "all") return allocations;
+    return allocations.filter((allocation) => allocation.status === ActiveFilter);
+  }, [allocations, ActiveFilter]);
 
   const handleDeleteConfirm = async () => {
     if (!allocationToDelete) return;
@@ -78,10 +78,10 @@ export const AllocatedResouses = () => {
 
         {/* Filter Buttons */}
         <div className="flex gap-4 mb-4">
-          {["all", "active", "returned"].map((filter) => (
+          {["all", "Active", "Returned"].map((filter) => (
             <button
               key={filter}
-              className={`py-1 px-3 rounded ${activeFilter === filter ? "bg-[#013a63] text-white" : ""}`}
+              className={`py-1 px-3 rounded ${ActiveFilter === filter ? "bg-[#013a63] text-white" : ""}`}
               onClick={() => setActiveFilter(filter)}
             >
               {filter.charAt(0).toUpperCase() + filter.slice(1)} ({counts[filter]})
@@ -119,14 +119,14 @@ export const AllocatedResouses = () => {
                         <div className="text-sm text-gray-500">{allocation.employee?.position || ""}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {new Date(allocation.allocatedDate).toLocaleDateString()}
+                        {new Date(allocation.AllocatedDate).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {allocation.returnDate ? new Date(allocation.returnDate).toLocaleDateString() : "Not returned yet"}
+                        {allocation.returnDate ? new Date(allocation.returnDate).toLocaleDateString() : "Not Returned yet"}
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          allocation.status === "active" ? "bg-green-50 text-green-800" : "bg-yellow-50 text-yellow-800"
+                          allocation.status === "Active" ? "bg-green-50 text-green-800" : "bg-yellow-50 text-yellow-800"
                         }`}>
                           {allocation.status}
                         </span>

@@ -16,7 +16,7 @@ const AllocationFormModal = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Fetch employees and available resources when component mounts
+  // Fetch employees and Available resources when component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,7 +55,7 @@ const AllocationFormModal = ({
         {
           employeeId: formData.employeeId,
           resourceId: formData.resourceId,
-          allocatedDate: formData.allocatedDate,
+          AllocatedDate: formData.AllocatedDate,
         }
       );
 
@@ -130,8 +130,8 @@ const AllocationFormModal = ({
             <label className="block text-gray-700 mb-1">Allocated Date</label>
             <input
               type="date"
-              name="allocatedDate"
-              value={formData.allocatedDate}
+              name="AllocatedDate"
+              value={formData.AllocatedDate}
               onChange={handleInputChange}
               className="w-full p-1 border rounded"
             />

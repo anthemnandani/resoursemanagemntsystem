@@ -10,12 +10,12 @@ import Navbar from "../components/Navbar";
 export const Resourse = () => {
   const [resources, setResources] = useState([]);
   const [filteredResources, setFilteredResources] = useState([]);
-  const [activeFilter, setActiveFilter] = useState("all");
+  const [ActiveFilter, setActiveFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentResource, setCurrentResource] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [resourceToDelete, setResourceToDelete] = useState(null);
-  const [counts, setCounts] = useState({ all: 0, available: 0, allocated: 0 });
+  const [counts, setCounts] = useState({ all: 0, Available: 0, Allocated: 0 });
   const [loading, setLoading] = useState(false);
 
   // Client-side filtering approach
@@ -24,14 +24,14 @@ export const Resourse = () => {
   }, []);
 
   useEffect(() => {
-    if (activeFilter === "all") {
+    if (ActiveFilter === "all") {
       setFilteredResources(resources);
     } else {
       setFilteredResources(
-        resources.filter((resource) => resource.status === activeFilter)
+        resources.filter((resource) => resource.status === ActiveFilter)
       );
     }
-  }, [resources, activeFilter]);
+  }, [resources, ActiveFilter]);
 
   const fetchResources = async (status = null) => {
     setLoading(true);
@@ -71,9 +71,9 @@ export const Resourse = () => {
 
   const updateCounts = (data) => {
     const allCount = data.length;
-    const availableCount = data.filter((res) => res.status === "available").length;
-    const allocatedCount = data.filter((res) => res.status === "allocated").length;
-    setCounts({ all: allCount, available: availableCount, allocated: allocatedCount });
+    const AvailableCount = data.filter((res) => res.status === "Available").length;
+    const AllocatedCount = data.filter((res) => res.status === "Allocated").length;
+    setCounts({ all: allCount, Available: AvailableCount, Allocated: AllocatedCount });
   };
 
   const handleDeleteConfirm = async () => {
@@ -81,7 +81,7 @@ export const Resourse = () => {
       await axios.delete(
         `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/deleteresourse/${resourceToDelete._id}`
       );
-      fetchResources(activeFilter === "all" ? null : activeFilter);
+      fetchResources(ActiveFilter === "all" ? null : ActiveFilter);
       setDeleteModalOpen(false);
     } catch (error) {
       console.error("Error deleting resource:", error);
@@ -113,7 +113,7 @@ export const Resourse = () => {
         <div className="flex gap-4 mb-4">
           <button
             className={`py-1 px-3 rounded ${
-              activeFilter === "all" ? "bg-[#013a63] text-white" : ""
+              ActiveFilter === "all" ? "bg-[#013a63] text-white" : ""
             } `}
             onClick={() => setActiveFilter("all")}
           >
@@ -121,19 +121,19 @@ export const Resourse = () => {
           </button>
           <button
             className={`py-1 px-3 rounded ${
-              activeFilter === "available" ? "bg-[#013a63] text-white" : ""
+              ActiveFilter === "Available" ? "bg-[#013a63] text-white" : ""
             } `}
-            onClick={() => setActiveFilter("available")}
+            onClick={() => setActiveFilter("Available")}
           >
-            Available ({counts.available})
+            Available ({counts.Available})
           </button>
           <button
             className={`py-1 px-3 rounded ${
-              activeFilter === "allocated" ? "bg-[#013a63] text-white" : ""
+              ActiveFilter === "Allocated" ? "bg-[#013a63] text-white" : ""
             } `}
-            onClick={() => setActiveFilter("allocated")}
+            onClick={() => setActiveFilter("Allocated")}
           >
-            Allocated ({counts.allocated})
+            Allocated ({counts.Allocated})
           </button>
         </div>
 
@@ -189,7 +189,7 @@ export const Resourse = () => {
                         <div className="truncate cursor-help">
                           {resource.description || "No description"}
                         </div>
-                        <div className="absolute z-50 hidden group-hover:block min-w-[200px] max-w-[800px] p-3 bg-white border border-gray-200 rounded-md shadow-lg -top-3 right-2 -translate-x-1/5 transform translate-y-[-90%]">
+                        <div className="absolute z-50 hidden group-hover:block min-w-[500px] p-3 bg-white border border-gray-200 rounded-md shadow-lg top-full -translate-x-1/5 transform translate-y-[-90%]">
                           <div className="text-sm text-gray-700 max-h-[200px] overflow-y-auto">
                             {resource.description}
                           </div>
@@ -209,9 +209,9 @@ export const Resourse = () => {
                       <td className="px-6 py-4">
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            resource.status === "available"
+                            resource.status === "Available"
                               ? "bg-green-50 text-green-800 hover:bg-green-100"
-                              : resource.status === "allocated"
+                              : resource.status === "Allocated"
                               ? "bg-yellow-50 text-yellow-800 hover:bg-yellow-100"
                               : "bg-red-50 text-red-800 hover:bg-red-100"
                           }`}
@@ -255,7 +255,7 @@ export const Resourse = () => {
         <ResourceFormModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onSuccess={() => fetchResources(activeFilter === "all" ? null : activeFilter)}
+          onSuccess={() => fetchResources(ActiveFilter === "all" ? null : ActiveFilter)}
           resourceData={currentResource}
         />
 

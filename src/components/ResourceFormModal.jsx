@@ -14,7 +14,7 @@ const ResourceFormModal = ({
     totalResourceCount: '',
     avaliableResourceCount: '',
     purchaseDate: '',
-    status: 'available',
+    status: 'Available',
   });
   const [resourceTypes, setResourceTypes] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const ResourceFormModal = ({
         totalResourceCount: resourceData.totalResourceCount || '',
         avaliableResourceCount: resourceData.avaliableResourceCount || '',
         purchaseDate: resourceData.purchaseDate?.split('T')[0] || '',
-        status: resourceData.status || 'available',
+        status: resourceData.status || 'Available',
       });
     } else {
       setFormData({
@@ -53,7 +53,7 @@ const ResourceFormModal = ({
         totalResourceCount: '',
         avaliableResourceCount: '',
         purchaseDate: '',
-        status: 'available',
+        status: 'Available',
       });
     }
   }, [resourceData, isOpen]);
@@ -211,8 +211,8 @@ const ResourceFormModal = ({
               onChange={handleInputChange}
               className="w-full p-1 border rounded"
             >
-              <option value="available">Available</option>
-              <option value="allocated">Allocated</option>
+              <option value="Available">Available</option>
+              <option value="Allocated">Allocated</option>
               <option value="maintenance">Maintenance</option>
             </select>
           </div> */}
