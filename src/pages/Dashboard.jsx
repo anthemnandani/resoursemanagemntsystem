@@ -30,28 +30,38 @@ const Dashboard = () => {
     const fetchCounts = async () => {
       try {
         const headers = { headers: { Authorization: `Bearer ${token}` } };
-        const responses = await Promise.all([
-          axios.get(endpoints[0], headers),
-          axios.get(endpoints[1], headers),
-          axios.get(endpoints[2], headers)
-        ]);
-
-        // Update counts immediately
-        setCounts({
-          employees: responses[0].data.count || responses[0].data.length || 0,
-          resources: responses[1].data.data?.count || responses[1].data.data?.length || responses[1].data.length || 0,
-          allocations: responses[2].data.count || responses[2].data.length || 0
+  
+        // Each API call separately
+        axios.get(endpoints[0], headers).then((res) => {
+          setCounts((prev) => ({
+            ...prev,
+            employees: res.data.count || res.data.length || 0
+          }));
         });
-
+  
+        axios.get(endpoints[1], headers).then((res) => {
+          setCounts((prev) => ({
+            ...prev,
+            resources: res.data.data?.count || res.data.data?.length || res.data.length || 0
+          }));
+        });
+  
+        axios.get(endpoints[2], headers).then((res) => {
+          setCounts((prev) => ({
+            ...prev,
+            allocations: res.data.count || res.data.length || 0
+          }));
+        });
+  
       } catch (error) {
         console.error("Error fetching counts:", error);
         setCounts({ employees: 0, resources: 0, allocations: 0 });
-      } 
+      }
     };
-
+  
     fetchCounts();
   }, [endpoints, token]);
-
+  
   const dashboardCards = useMemo(() => [
     { title: "Total Employees", count: counts.employees, description: "Active employees in system", icon: "👥", color: "blue", onClick: () => navigate("/employees") },
     { title: "Total Resources", count: counts.resources, description: "Available resources", icon: "💻", color: "green", onClick: () => navigate("/resources") },
