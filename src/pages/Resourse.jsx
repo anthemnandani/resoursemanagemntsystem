@@ -142,7 +142,7 @@ export const Resourse = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#013a63]"></div>
           </div>
         ) : (
-          <div className="relative rounded shadow-sm border border-gray-200">
+          <div className="relative shadow-sm border border-gray-200">
             <table className="w-full text-sm text-left text-gray-700">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                 <tr>
@@ -222,14 +222,14 @@ export const Resourse = () => {
                       <td className="px-6 py-4 flex justify-center">
                         <button
                           onClick={() => handleEditClick(resource)}
-                          className="text-[#013a63] hover:text-[#013a63] transition-colors p-2 rounded hover:bg-blue-50"
+                          className="text-[#013a63] cursor-pointer hover:text-[#013a63] transition-colors p-2 rounded hover:bg-blue-50"
                           title="Edit"
                         >
                           <CiEdit className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(resource)}
-                          className="text-red-800 hover:text-red-700 transition-colors p-2 rounded hover:bg-red-50"
+                          className="text-red-800 cursor-pointer hover:text-red-700 transition-colors p-2 rounded hover:bg-red-50"
                           title="Delete"
                         >
                           <MdOutlineDeleteForever className="w-5 h-5" />

@@ -10,7 +10,6 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
   const [counts, setCounts] = useState({ employees: 0, resources: 0, allocations: 0 });
-  const [isLoading, setIsLoading] = useState(true);
 
   // Memoized API endpoints
   const endpoints = useMemo(() => [
@@ -47,9 +46,7 @@ const Dashboard = () => {
       } catch (error) {
         console.error("Error fetching counts:", error);
         setCounts({ employees: 0, resources: 0, allocations: 0 });
-      } finally {
-        setIsLoading(false);
-      }
+      } 
     };
 
     fetchCounts();
@@ -58,7 +55,7 @@ const Dashboard = () => {
   const dashboardCards = useMemo(() => [
     { title: "Total Employees", count: counts.employees, description: "Active employees in system", icon: "👥", color: "blue", onClick: () => navigate("/employees") },
     { title: "Total Resources", count: counts.resources, description: "Available resources", icon: "💻", color: "green", onClick: () => navigate("/resources") },
-    { title: "Active Allocations", count: counts.allocations, description: "Resources in use", icon: "📋", color: "purple", onClick: () => navigate("/allocations") }
+    { title: "Total Allocations", count: counts.allocations, description: "Resources in use", icon: "📋", color: "purple", onClick: () => navigate("/allocations") }
   ], [counts, navigate]);
 
   return (

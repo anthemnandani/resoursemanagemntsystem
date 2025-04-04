@@ -34,7 +34,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="flex justify-between fixed top-0 w-full z-50 px-6 h-16 items-center text-white bg-[#013a63] shadow-md">
+    <nav className="flex justify-between fixed top-0 w-full z-50 pl-2 pr-8 h-16 items-center text-white bg-[#013a63] shadow-md">
       {/* LOGO */}
       <div className="p-4">
         <img src="./logoo.png" className="h-12" alt="Logo" />

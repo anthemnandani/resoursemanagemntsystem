@@ -24,7 +24,6 @@ export const Employee = () => {
   const [activeAllocations, setActiveAllocations] = useState({});
   const [openTooltip, setOpenTooltip] = useState(null); // Tracks which tooltip is open
 
-
   const fetchAllocations = async (employeeId) => {
     try {
       const response = await axios.get(
@@ -187,7 +186,7 @@ export const Employee = () => {
           </button>
         </div>
 
-        <div className="relative rounded shadow-sm border border-gray-200">
+        <div className="relative shadow-sm border border-gray-200">
           <table className="w-full text-sm text-left text-gray-700">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
               <tr>
@@ -259,60 +258,65 @@ export const Employee = () => {
                       </button>
                     </td>
                     <td className="px-4 py-4 flex justify-center">
-                    <div className="relative inline-block tooltip-container">
-      <button
-        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded relative"
-        onClick={() => handleClick(employee._id)}
-      >
-        <IoMdEye className="w-5 h-5" />
-      </button>
+                      <div className="relative inline-block tooltip-container">
+                        <button
+                          className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          onClick={() => handleClick(employee._id)}
+                        >
+                          <IoMdEye className="w-5 h-5" />
+                        </button>
 
-      {/* Tooltip (Shows on Click) */}
-      {openTooltip === employee._id &&
-        activeAllocations[employee._id]?.length > 0 && (
-          <div
-            className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50"
-          >
-            <div className="text-md mb-3 font-semibold">
-              All Allocated Resources
-            </div>
-            <hr />
-            <div>
-              {activeAllocations[employee._id].map((alloc, index) => (
-                <div
-                  key={index}
-                  className="border-b pb-1 mb-1 last:border-none"
-                >
-                  <p className="font-semibold">
-                    {alloc.resourceName} ({alloc.resourceType})
-                  </p>
-                  <p className="text-gray-500 text-xs">
-                    Status: {alloc.status} | Allocated on:{" "}
-                    {new Date(alloc.allocationDate).toLocaleDateString()}
-                  </p>
-                  {alloc.returnDate && (
-                    <p className="text-gray-500 text-xs">
-                      Return Date:{" "}
-                      {new Date(alloc.returnDate).toLocaleDateString()}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-    </div>
+                        {/* Tooltip (Shows on Click) */}
+                        {openTooltip === employee._id &&
+                          activeAllocations[employee._id]?.length > 0 && (
+                            <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50">
+                              <div className="text-md mb-3 font-semibold">
+                                All Allocated Resources
+                              </div>
+                              <hr />
+                              <div>
+                                {activeAllocations[employee._id].map(
+                                  (alloc, index) => (
+                                    <div
+                                      key={index}
+                                      className="border-b pb-1 mb-1 last:border-none"
+                                    >
+                                      <p className="font-semibold">
+                                        {alloc.resourceName} (
+                                        {alloc.resourceType})
+                                      </p>
+                                      <p className="text-gray-500 text-xs">
+                                        Status: {alloc.status} | Allocated on:{" "}
+                                        {new Date(
+                                          alloc.allocationDate
+                                        ).toLocaleDateString()}
+                                      </p>
+                                      {alloc.returnDate && (
+                                        <p className="text-gray-500 text-xs">
+                                          Return Date:{" "}
+                                          {new Date(
+                                            alloc.returnDate
+                                          ).toLocaleDateString()}
+                                        </p>
+                                      )}
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          )}
+                      </div>
 
                       <button
                         onClick={() => handleEditClick(employee)}
-                        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded"
+                        className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded"
                         title="Edit"
                       >
                         <CiEdit className="w-5 h-5" />
                       </button>
                       <button
                         onClick={() => handleDeleteClick(employee)}
-                        className="text-red-800 hover:text-red-700 transition-colors p-1.5 rounded"
+                        className="text-red-800 cursor-pointer hover:text-red-700 transition-colors p-1.5 rounded"
                         title="Delete"
                       >
                         <MdOutlineDeleteForever className="w-5 h-5" />
