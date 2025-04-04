@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -10,113 +10,55 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
   const [counts, setCounts] = useState({ employees: 0, resources: 0, allocations: 0 });
-  const [targetCounts, setTargetCounts] = useState({ employees: 0, resources: 0, allocations: 0 });
   const [isLoading, setIsLoading] = useState(true);
-  const animationRef = useRef();
 
-  // Memoized API endpoints to prevent unnecessary recalculations
+  // Memoized API endpoints
   const endpoints = useMemo(() => [
     `${API_BASE_URL}/employees/getAllActiveEmployees`,
     `${API_BASE_URL}/resources`,
     `${API_BASE_URL}/allocations`
   ], []);
 
-  // Auth check and initial data fetch
+  // Redirect if not authenticated
   useEffect(() => {
     if (!token) {
       navigate("/login");
-    } else {
-      fetchCounts();
     }
-    return () => cancelAnimationFrame(animationRef.current);
   }, [token, navigate]);
 
-  // Count animation effect
+  // Fetch counts on mount
   useEffect(() => {
-    const animateCounts = () => {
-      setCounts(prev => ({
-        employees: incrementNumber(prev.employees, targetCounts.employees),
-        resources: incrementNumber(prev.resources, targetCounts.resources),
-        allocations: incrementNumber(prev.allocations, targetCounts.allocations)
-      }));
-      
-      if (counts.employees !== targetCounts.employees || 
-          counts.resources !== targetCounts.resources || 
-          counts.allocations !== targetCounts.allocations) {
-        animationRef.current = requestAnimationFrame(animateCounts);
-      } else {
+    const fetchCounts = async () => {
+      try {
+        const headers = { headers: { Authorization: `Bearer ${token}` } };
+        const responses = await Promise.all([
+          axios.get(endpoints[0], headers),
+          axios.get(endpoints[1], headers),
+          axios.get(endpoints[2], headers)
+        ]);
+
+        // Update counts immediately
+        setCounts({
+          employees: responses[0].data.count || responses[0].data.length || 0,
+          resources: responses[1].data.data?.count || responses[1].data.data?.length || responses[1].data.length || 0,
+          allocations: responses[2].data.count || responses[2].data.length || 0
+        });
+
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+        setCounts({ employees: 0, resources: 0, allocations: 0 });
+      } finally {
         setIsLoading(false);
       }
     };
-    
-    if (!isLoading) {
-      animationRef.current = requestAnimationFrame(animateCounts);
-    }
-    return () => cancelAnimationFrame(animationRef.current);
-  }, [targetCounts, isLoading]);
 
-  const incrementNumber = (current, target) => {
-    if (current === target) return target;
-    const diff = target - current;
-    const increment = Math.ceil(Math.abs(diff) / 10); // More dynamic increment based on difference
-    return current + (diff > 0 ? increment : -increment);
-  };
+    fetchCounts();
+  }, [endpoints, token]);
 
-  const fetchCounts = async () => {
-    setIsLoading(true);
-    try {
-      const headers = { headers: { Authorization: `Bearer ${token}` } };
-      const responses = await Promise.all([
-        axios.get(endpoints[0], headers),
-        axios.get(endpoints[1], headers),
-        axios.get(endpoints[2], headers)
-      ]);
-
-      // Directly set initial counts to avoid delay
-      const newCounts = {
-        employees: responses[0].data.count || responses[0].data.length || 0,
-        resources: responses[1].data.data?.count || responses[1].data.data?.length || responses[1].data.length || 0,
-        allocations: responses[2].data.count || responses[2].data.length || 0
-      };
-
-      setCounts(newCounts);
-      setTargetCounts(newCounts);
-      
-    } catch (error) {
-      console.error("Error fetching counts:", error);
-      setCounts({ employees: 0, resources: 0, allocations: 0 });
-      setTargetCounts({ employees: 0, resources: 0, allocations: 0 });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Memoized dashboard cards to prevent unnecessary re-renders
   const dashboardCards = useMemo(() => [
-    {
-      title: "Total Employees",
-      count: counts.employees,
-      description: "Active employees in system",
-      icon: "👥",
-      color: "blue",
-      onClick: () => navigate("/employees")
-    },
-    {
-      title: "Total Resources",
-      count: counts.resources,
-      description: "Available resources",
-      icon: "💻",
-      color: "green",
-      onClick: () => navigate("/resources")
-    },
-    {
-      title: "Active Allocations",
-      count: counts.allocations,
-      description: "Resources in use",
-      icon: "📋",
-      color: "purple",
-      onClick: () => navigate("/allocations")
-    }
+    { title: "Total Employees", count: counts.employees, description: "Active employees in system", icon: "👥", color: "blue", onClick: () => navigate("/employees") },
+    { title: "Total Resources", count: counts.resources, description: "Available resources", icon: "💻", color: "green", onClick: () => navigate("/resources") },
+    { title: "Active Allocations", count: counts.allocations, description: "Resources in use", icon: "📋", color: "purple", onClick: () => navigate("/allocations") }
   ], [counts, navigate]);
 
   return (
@@ -126,11 +68,10 @@ const Dashboard = () => {
         <h2 className="text-3xl font-bold text-gray-800 mb-6 pt-18">Dashboard</h2>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex flex-col lg:w-1/2 sm:w-full gap-4 mb-4">
-            {dashboardCards.map((card, index) => (
-              <DashboardCard key={index} {...card} />
-            ))}
+            {!isLoading &&
+              dashboardCards.map((card, index) => <DashboardCard key={index} {...card} />)
+            }
           </div>
-
           <div className="mb-10 flex items-center justify-center lg:px-20 sm:px-1 lg:w-1/2 sm:w-full">
             <img src="3.gif" alt="Dashboard visualization" />
           </div>
@@ -140,7 +81,6 @@ const Dashboard = () => {
   );
 };
 
-// Memoized DashboardCard component to prevent unnecessary re-renders
 const DashboardCard = React.memo(({ title, count, description, icon, color, onClick }) => {
   const colorMap = {
     blue: { bg: "bg-blue-50", border: "border-[#013a63]", text: "text-blue-600" },

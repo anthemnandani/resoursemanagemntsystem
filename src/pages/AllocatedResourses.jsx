@@ -42,11 +42,11 @@ export const AllocatedResouses = () => {
   };
 
   const handleDeleteConfirm = async () => {
+    if (!allocationToDelete) return;
+
     try {
-      await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/return/${allocationToDelete._id}`
-      );
-      fetchAllocations();
+      await axios.delete(`https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/return/${allocationToDelete._id}`);
+      setAllocations((prev) => prev.filter((item) => item._id !== allocationToDelete._id));
       setDeleteModalOpen(false);
     } catch (error) {
       console.error("Error deleting allocation:", error);
@@ -67,7 +67,7 @@ export const AllocatedResouses = () => {
             }}
           >
             <FaPlus />
-            <div className="absolute z-50 hidden group-hover:block min-w-[150px] max-w-[400px] p-2 bg-white border border-gray-200 rounded-md shadow-md -top-3 right-2 -translate-x-1/5 transform translate-y-[-80%]">
+            <div className="absolute z-50 hidden group-hover:block min-w-[150px] max-w-[400px] p-2 bg-white border border-gray-200 rounded-md shadow-md -top-12 right-2 transform">
               <div className="text-sm text-gray-700 max-h-[200px] overflow-y-auto">
                 Allocate Resource
               </div>
@@ -84,11 +84,12 @@ export const AllocatedResouses = () => {
             <table className="w-full text-sm text-left text-gray-700">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th scope="col" className="px-6 py-3.5 font-medium">Resource</th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">Employee</th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">Allocation Date</th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">Status</th>
-                  <th scope="col" className="px-6 py-3.5 font-medium text-center">Actions</th>
+                  <th className="px-6 py-3.5 font-medium">Resource</th>
+                  <th className="px-6 py-3.5 font-medium">Employee</th>
+                  <th className="px-6 py-3.5 font-medium">Allocation Date</th>
+                  <th className="px-6 py-3.5 font-medium">Return Date</th>
+                  <th className="px-6 py-3.5 font-medium">Status</th>
+                  <th className="px-6 py-3.5 font-medium text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -104,6 +105,9 @@ export const AllocatedResouses = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {new Date(allocation.allocatedDate).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {allocation.returnDate ? new Date(allocation.returnDate).toLocaleDateString() : "Not return yet"}
                       </td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -125,7 +129,7 @@ export const AllocatedResouses = () => {
                         <button
                           onClick={() => handleDeleteClick(allocation)}
                           className="text-red-800 hover:text-red-700 transition-colors p-1.5 rounded hover:bg-red-50"
-                          title="Delete"
+                          title="Return Resource"
                         >
                           <MdOutlineDeleteForever className="w-5 h-5" />
                         </button>

@@ -201,6 +201,29 @@ const EmployeeFormModal = ({
           </div>
 
           <div className="mb-1">
+            <label className="block text-gray-700 mb-2">Department</label>
+            <select
+              name="department"
+              value={formData.department}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+              required
+            >
+              <option value="">--Select option--</option>
+              <option value="Software Development">Software Development</option>
+              <option value="Recruitment">Recruitment</option>
+              <option value="Business Development">Business Development</option>
+              <option value="Sales">Sales</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Finance">Finance</option>
+              <option value="Management">Management</option>
+              <option value="Administration">Administration</option>
+              <option value="Design">Design</option>
+              <option value="Customer Support">Customer Support</option>
+            </select>
+          </div>
+
+          <div className="mb-1">
             <label className="block text-gray-700 mb-2">Position</label>
             <select
               name="position"
@@ -221,29 +244,6 @@ const EmployeeFormModal = ({
               <option value="Admin">Admin</option>
               <option value="Accountant">Accountant</option>
               <option value="Designer">Designer</option>
-            </select>
-          </div>
-
-          <div className="mb-1">
-            <label className="block text-gray-700 mb-2">Department</label>
-            <select
-              name="department"
-              value={formData.department}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-              required
-            >
-              <option value="">--Select option--</option>
-              <option value="Software Development">Software Development</option>
-              <option value="Recruitment">Recruitment</option>
-              <option value="Business Development">Business Development</option>
-              <option value="Sales">Sales</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Finance">Finance</option>
-              <option value="Management">Management</option>
-              <option value="Administration">Administration</option>
-              <option value="Design">Design</option>
-              <option value="Customer Support">Customer Support</option>
             </select>
           </div>
 

@@ -156,6 +156,12 @@ export const Resourse = () => {
                     Description
                   </th>
                   <th scope="col" className="px-6 py-3.5 font-medium">
+                    Total Resource
+                  </th>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
+                    Avaliable Resourse
+                  </th>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
                     Purchase Date
                   </th>
                   <th scope="col" className="px-6 py-3.5 font-medium">
@@ -190,18 +196,24 @@ export const Resourse = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        {resource.totalResourceCount}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {resource.avaliableResourceCount}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         {resource.purchaseDate
                           ? new Date(resource.purchaseDate).toLocaleDateString()
                           : "N/A"}
                       </td>
                       <td className="px-6 py-4">
                         <span
-                          className={`px-2 py-1 rounded-full text-xs ${
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${
                             resource.status === "available"
-                              ? "bg-green-50 text-green-800"
+                              ? "bg-green-50 text-green-800 hover:bg-green-100"
                               : resource.status === "allocated"
-                              ? "bg-yellow-50 text-yellow-800"
-                              : "bg-red-50 text-red-800"
+                              ? "bg-yellow-50 text-yellow-800 hover:bg-yellow-100"
+                              : "bg-red-50 text-red-800 hover:bg-red-100"
                           }`}
                         >
                           {resource.status}

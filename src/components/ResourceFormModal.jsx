@@ -11,6 +11,8 @@ const ResourceFormModal = ({
     name: '',
     resourceTypeId: '',
     description: '',
+    totalResourceCount: '',
+    avaliableResourceCount: '',
     purchaseDate: '',
     status: 'available',
   });
@@ -38,6 +40,8 @@ const ResourceFormModal = ({
         name: resourceData.name || '',
         resourceTypeId: resourceData.resourceType?._id || '',
         description: resourceData.description || '',
+        totalResourceCount: resourceData.totalResourceCount || '',
+        avaliableResourceCount: resourceData.avaliableResourceCount || '',
         purchaseDate: resourceData.purchaseDate?.split('T')[0] || '',
         status: resourceData.status || 'available',
       });
@@ -46,6 +50,8 @@ const ResourceFormModal = ({
         name: '',
         resourceTypeId: '',
         description: '',
+        totalResourceCount: '',
+        avaliableResourceCount: '',
         purchaseDate: '',
         status: 'available',
       });
@@ -68,6 +74,10 @@ const ResourceFormModal = ({
         name: formData.name,
         resourceTypeId: formData.resourceTypeId,
         description: formData.description,
+        totalResourceCount: formData.totalResourceCount,
+        avaliableResourceCount: resourceData 
+        ? formData.avaliableResourceCount 
+        : formData.totalResourceCount,
         purchaseDate: formData.purchaseDate,
         status: formData.status,
       };
@@ -158,6 +168,28 @@ const ResourceFormModal = ({
               rows="3"
             />
           </div>
+
+          <div className="mb-2">
+            <label className="block text-gray-700 mb-1">Total Resource</label>
+            <input
+              type="number"
+              name="totalResourceCount"
+              value={formData.totalResourceCount}
+              onChange={handleInputChange}
+              className="w-full p-1 border rounded"
+            />
+          </div>
+
+          {/* <div className="mb-2">
+            <label className="block text-gray-700 mb-1">Avaliable Resourse</label>
+            <input
+              type="number"
+              name="avaliableResourceCount"
+              value={formData.avaliableResourceCount}
+              onChange={handleInputChange}
+              className="w-full p-1 border rounded"
+            />
+          </div> */}
 
           <div className="mb-2">
             <label className="block text-gray-700 mb-1">Purchase Date</label>

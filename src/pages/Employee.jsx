@@ -8,8 +8,10 @@ import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import Navbar from "../components/Navbar";
 import { IoMdEye } from "react-icons/io";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 export const Employee = () => {
+  const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,6 +20,22 @@ export const Employee = () => {
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
   const [activeFilter, setActiveFilter] = useState("all");
   const [counts, setCounts] = useState({ all: 0, active: 0, inactive: 0 });
+
+  const [activeAllocations, setActiveAllocations] = useState({});
+
+  const fetchAllocations = async (employeeId) => {
+    try {
+      const response = await axios.get(
+        `https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/employee/${employeeId}`
+      );
+      setActiveAllocations((prev) => ({
+        ...prev,
+        [employeeId]: response.data.allocations,
+      }));
+    } catch (error) {
+      console.error("Error fetching allocations:", error);
+    }
+  };
 
   useEffect(() => {
     fetchEmployees();
@@ -220,12 +238,54 @@ export const Employee = () => {
                     </td>
                     <td className="px-4 py-4 flex justify-center">
                       <button
-                        onClick={() => handleEditClick(employee)}
-                        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded"
-                        title="View"
+                        className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded relative group"
+                        onMouseEnter={() => fetchAllocations(employee._id)}
+                        onMouseLeave={() =>
+                          setActiveAllocations((prev) => ({
+                            ...prev,
+                            [employee._id]: [],
+                          }))
+                        }
                       >
                         <IoMdEye className="w-5 h-5" />
+
+                        {/* Tooltip */}
+                        {activeAllocations[employee._id]?.length > 0 && (
+                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50">
+                            <div className="text-md mb-3 font-semibold">All allocated resources</div>
+                            <hr />
+                            <div>
+                            {activeAllocations[employee._id].map(
+                              (alloc, index) => (
+                                <div
+                                  key={index}
+                                  className="border-b pb-1 mb-1 last:border-none"
+                                >
+                                  <p className="font-semibold">
+                                    {alloc.resourceName} ({alloc.resourceType})
+                                  </p>
+                                  <p className="text-gray-500 text-xs">
+                                    Status: {alloc.status} | Allocated on:{" "}
+                                    {new Date(
+                                      alloc.allocationDate
+                                    ).toLocaleDateString()}
+                                  </p>
+                                  {alloc.returnDate && (
+                                    <p className="text-gray-500 text-xs">
+                                      Return Date:{" "}
+                                      {new Date(
+                                        alloc.returnDate
+                                      ).toLocaleDateString()}
+                                    </p>
+                                  )}
+                                </div>
+                              )
+                            )}
+                            </div>
+                          </div>
+                        )}
                       </button>
+
                       <button
                         onClick={() => handleEditClick(employee)}
                         className="text-[#013a63] hover:text-blue-900 transition-colors p-1.5 rounded"
@@ -240,15 +300,13 @@ export const Employee = () => {
                       >
                         <MdOutlineDeleteForever className="w-5 h-5" />
                       </button>
-                      <button
-                        className="text-black cursor-pointer transition-colors p-1.5 rounded relative group"
-                      >
-                        <BsThreeDotsVertical className="w-5 h-5" />
-                        <div className="absolute z-50 hidden group-focus:block rounded-md shadow-md -top-1 right-1 -translate-x-1/5 transform translate-y-[-80%]">
-                          <button
-                            className="text-sm text-white px-4 py-2 bg-blue-900 min-h-10 min-w-48 overflow-y-auto"
-                            onClick={() => handleDeleteClick(employee)}
-                          >
+                      <button className="text-black cursor-pointer transition-colors p-1.5 rounded relative group">
+                        <BsThreeDotsVertical
+                          className="w-5 h-5"
+                          onClick={() => navigate("/allocations")}
+                        />
+                        <div className="absolute z-50 hidden group-hover:block rounded-md shadow-md -top-10 right-1 -translate-x-1/5 transform translate-y-[-0%]">
+                          <button className="text-sm text-blue-900 px-4 py-2 bg-neutral-50 font-semibold min-h-10 min-w-48 overflow-y-auto">
                             Allocate new resource
                           </button>
                         </div>
