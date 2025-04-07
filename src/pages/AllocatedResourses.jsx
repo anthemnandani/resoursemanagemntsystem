@@ -36,8 +36,8 @@ export const AllocatedResouses = () => {
   const counts = useMemo(() => {
     const allCount = allocations.length;
     const ActiveCount = allocations.filter((res) => res.status === "Active").length;
-    const ReturnedCount = allocations.filter((res) => res.status === "Returned").length;
-    return { all: allCount, Active: ActiveCount, Returned: ReturnedCount };
+    const returnedCount = allocations.filter((res) => res.status === "returned").length;
+    return { all: allCount, Active: ActiveCount, returned: returnedCount };
   }, [allocations]);
 
   const filteredAllocations = useMemo(() => {
@@ -78,7 +78,7 @@ export const AllocatedResouses = () => {
 
         {/* Filter Buttons */}
         <div className="flex gap-4 mb-4">
-          {["all", "Active", "Returned"].map((filter) => (
+          {["all", "Active", "returned"].map((filter) => (
             <button
               key={filter}
               className={`py-1 px-3 rounded ${ActiveFilter === filter ? "bg-[#013a63] text-white" : ""}`}
@@ -119,10 +119,10 @@ export const AllocatedResouses = () => {
                         <div className="text-sm text-gray-500">{allocation.employee?.position || ""}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {new Date(allocation.AllocatedDate).toLocaleDateString()}
+                        {new Date(allocation.allocatedDate).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {allocation.returnDate ? new Date(allocation.returnDate).toLocaleDateString() : "Not Returned yet"}
+                        {allocation.returnDate ? new Date(allocation.returnDate).toLocaleDateString() : "Not returned yet"}
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${

@@ -4,25 +4,26 @@ import { CiEdit } from "react-icons/ci";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import axios from "axios";
 import EmployeeFormModal from "../components/EmployeeFormModal";
+import AllocationFormModal from "../components/AllocationFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import Navbar from "../components/Navbar";
-import { IoMdEye } from "react-icons/io";
 import { SiTicktick } from "react-icons/si";
-import { useNavigate } from "react-router-dom";
+
 
 export const Employee = () => {
-  const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAllocationModalOpen, setIsAllocationModalOpen] = useState(false);
   const [currentEmployee, setCurrentEmployee] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
   const [ActiveFilter, setActiveFilter] = useState("all");
   const [counts, setCounts] = useState({ all: 0, Active: 0, Inactive: 0 });
+  const [currentEmployeeId, setCurrentEmployeeId] = useState('');
 
   const [ActiveAllocations, setActiveAllocations] = useState({});
-  const [openTooltip, setOpenTooltip] = useState(null); // Tracks which tooltip is open
+  const [openTooltip, setOpenTooltip] = useState(null);
 
   const fetchAllocations = async (employeeId) => {
     try {
@@ -40,10 +41,10 @@ export const Employee = () => {
 
   const handleClick = (employeeId) => {
     if (openTooltip === employeeId) {
-      setOpenTooltip(null); // Close tooltip if already open
+      setOpenTooltip(null); 
     } else {
       fetchAllocations(employeeId);
-      setOpenTooltip(employeeId); // Open tooltip for clicked employee
+      setOpenTooltip(employeeId);
     }
   };
 
@@ -377,7 +378,10 @@ export const Employee = () => {
                       <button className="text-black cursor-pointer transition-colors p-1.5 rounded relative group">
                         <SiTicktick
                           className="w-4 h-4"
-                          onClick={() => navigate("/allocations")}
+                          onClick={() => {
+                            setCurrentEmployeeId(employee._id); 
+                            setIsAllocationModalOpen(true);             
+                          }}
                         />
                         <div className="absolute z-50 hidden group-hover:block rounded-md shadow-md -top-10 right-1 -translate-x-1/5 transform translate-y-[-0%]">
                           <button className="text-sm text-blue-900 px-4 py-2 bg-neutral-50 font-semibold min-h-10 min-w-48 overflow-y-auto">
@@ -408,6 +412,14 @@ export const Employee = () => {
           onSuccess={fetchEmployees}
           employeeData={currentEmployee}
         />
+
+         <AllocationFormModal
+  isOpen={isAllocationModalOpen}
+  onClose={() => setIsAllocationModalOpen(false)}
+  onSuccess={fetchAllocations}
+  selectedEmployeeId={currentEmployeeId}
+/>
+
 
         <DeleteConfirmationModal
           isOpen={deleteModalOpen}
