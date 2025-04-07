@@ -19,7 +19,6 @@ const EmployeeFormModal = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Initialize form when modal opens or employeeData changes
   useEffect(() => {
     if (employeeData) {
       setFormData({

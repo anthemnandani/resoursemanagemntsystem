@@ -1,0 +1,84 @@
+import React, {useState} from "react";
+const ViewDetailsModal = ({
+  isOpen,
+  onClose,
+  data,
+  hiddenFields,
+  title = "Details",
+}) => {
+  if (!isOpen || !data) return null;
+  const [selectedImage, setSelectedImage] = useState(null);
+
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 bg-opacity-40 z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-xl max-h-[90vh] overflow-y-auto">
+        <h2 className="text-xl font-bold mb-4 text-[#013a63]">{title}</h2>
+
+        <div className="space-y-3">
+          {Object.entries(data).map(([key, value]) => {
+            if (hiddenFields.includes(key)) return null;
+
+            return (
+              <div key={key}>
+                <p className="text-sm text-gray-500 font-medium capitalize">
+                  {key.replace(/([A-Z])/g, " $1")}
+                </p>
+                <p className="text-gray-800 whitespace-pre-wrap break-words">
+                  {typeof value === "string" &&
+                  value.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+                    <img
+      src={value}
+      alt="preview"
+      onClick={() => setSelectedImage(value)}
+      className="w-32 h-32 object-cover rounded-lg border cursor-pointer hover:opacity-80"
+    />
+                  ) : typeof value === "string" &&
+                    value.match(/^\d{4}-\d{2}-\d{2}T/) ? (
+                    new Date(value).toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  ) : typeof value === "object" && value !== null ? (
+                    value.name ||
+                    value.title ||
+                    value.label ||
+                    JSON.stringify(value, null, 2)
+                  ) : (
+                    value?.toString()
+                  )}
+                </p>
+                <hr className="my-2" />
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={onClose}
+            className="bg-[#013a63] text-white px-4 py-2 rounded hover:bg-blue-800"
+          >
+            Close
+          </button>
+        </div>
+        {selectedImage && (
+  <div
+    className="fixed inset-0 z-50 bg-black/50 bg-opacity-80 flex items-center justify-center"
+    onClick={() => setSelectedImage(null)}
+  >
+    <img
+      src={selectedImage}
+      alt="Full Preview"
+      className="max-w-full max-h-full p-8 rounded-lg shadow-lg"
+    />
+  </div>
+)}
+
+      </div>
+    </div>
+  );
+};
+
+export default ViewDetailsModal;

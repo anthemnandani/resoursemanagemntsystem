@@ -8,7 +8,8 @@ import AllocationFormModal from "../components/AllocationFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import Navbar from "../components/Navbar";
 import { SiTicktick } from "react-icons/si";
-
+import { IoMdEye } from "react-icons/io";
+import ViewDetailsModal from "../components/ViewDetailsModal";
 
 export const Employee = () => {
   const [employees, setEmployees] = useState([]);
@@ -20,10 +21,18 @@ export const Employee = () => {
   const [employeeToDelete, setEmployeeToDelete] = useState(null);
   const [ActiveFilter, setActiveFilter] = useState("all");
   const [counts, setCounts] = useState({ all: 0, Active: 0, Inactive: 0 });
-  const [currentEmployeeId, setCurrentEmployeeId] = useState('');
+  const [currentEmployeeId, setCurrentEmployeeId] = useState("");
 
   const [ActiveAllocations, setActiveAllocations] = useState({});
   const [openTooltip, setOpenTooltip] = useState(null);
+
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [resourceToView, setResourceToView] = useState(null);
+  
+  const handleViewClick = (resource) => {
+    setResourceToView(resource);
+    setViewModalOpen(true);
+  };
 
   const fetchAllocations = async (employeeId) => {
     try {
@@ -41,7 +50,7 @@ export const Employee = () => {
 
   const handleClick = (employeeId) => {
     if (openTooltip === employeeId) {
-      setOpenTooltip(null); 
+      setOpenTooltip(null);
     } else {
       fetchAllocations(employeeId);
       setOpenTooltip(employeeId);
@@ -252,7 +261,7 @@ export const Employee = () => {
                           className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
                           onClick={() => handleClick(employee._id)}
                         >
-                           {employee.allocatedResourceCount}
+                          {employee.allocatedResourceCount}
                         </button>
 
                         {/* Tooltip (Shows on Click) */}
@@ -313,58 +322,19 @@ export const Employee = () => {
                     </td>
                     <td className="px-4 py-4 flex justify-center">
                       <div className="relative inline-block tooltip-container">
-                        {/* <button
+                         <button
+                          onClick={() => handleViewClick(employee)}
                           className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
-                          onClick={() => handleClick(employee._id)}
+                          title="View"
                         >
                           <IoMdEye className="w-5 h-5" />
-                        </button> */}
-
-                        {/* Tooltip (Shows on Click) */}
-                        {/* {openTooltip === employee._id &&
-                          ActiveAllocations[employee._id]?.length > 0 && (
-                            <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50">
-                              <div className="text-md mb-3 font-semibold">
-                                All Allocated Resources
-                              </div>
-                              <hr />
-                              <div>
-                                {ActiveAllocations[employee._id].map(
-                                  (alloc, index) => (
-                                    <div
-                                      key={index}
-                                      className="border-b pb-1 mb-1 last:border-none"
-                                    >
-                                      <p className="font-semibold">
-                                        {alloc.resourceName} (
-                                        {alloc.resourceType})
-                                      </p>
-                                      <p className="text-gray-500 text-xs">
-                                        Status: {alloc.status} | Allocated on:{" "}
-                                        {new Date(
-                                          alloc.allocationDate
-                                        ).toLocaleDateString()}
-                                      </p>
-                                      {alloc.returnDate && (
-                                        <p className="text-gray-500 text-xs">
-                                          Return Date:{" "}
-                                          {new Date(
-                                            alloc.returnDate
-                                          ).toLocaleDateString()}
-                                        </p>
-                                      )}
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            </div>
-                          )} */}
+                        </button>
                       </div>
 
                       <button
                         onClick={() => handleEditClick(employee)}
                         className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded"
-                        title="Edit"
+                        title="Edit Employee"
                       >
                         <CiEdit className="w-5 h-5" />
                       </button>
@@ -379,8 +349,8 @@ export const Employee = () => {
                         <SiTicktick
                           className="w-4 h-4"
                           onClick={() => {
-                            setCurrentEmployeeId(employee._id); 
-                            setIsAllocationModalOpen(true);             
+                            setCurrentEmployeeId(employee._id);
+                            setIsAllocationModalOpen(true);
                           }}
                         />
                         <div className="absolute z-50 hidden group-hover:block rounded-md shadow-md -top-10 right-1 -translate-x-1/5 transform translate-y-[-0%]">
@@ -413,19 +383,34 @@ export const Employee = () => {
           employeeData={currentEmployee}
         />
 
-         <AllocationFormModal
-  isOpen={isAllocationModalOpen}
-  onClose={() => setIsAllocationModalOpen(false)}
-  onSuccess={fetchAllocations}
-  selectedEmployeeId={currentEmployeeId}
-/>
-
+        <AllocationFormModal
+          isOpen={isAllocationModalOpen}
+          onClose={() => setIsAllocationModalOpen(false)}
+          onSuccess={fetchAllocations}
+          selectedEmployeeId={currentEmployeeId}
+        />
 
         <DeleteConfirmationModal
           isOpen={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
           onConfirm={handleDeleteConfirm}
           itemName={employeeToDelete?.name || "this employee"}
+        />
+
+        <ViewDetailsModal
+          isOpen={viewModalOpen}
+          onClose={() => setViewModalOpen(false)}
+          data={resourceToView}
+          hiddenFields={[
+            "__v",
+            "_id",
+            "createdAt",
+            "images",
+            "isDeleted",
+            "id",
+            "updatedAt",
+          ]}
+          title="Employee Details"
         />
       </div>
     </>

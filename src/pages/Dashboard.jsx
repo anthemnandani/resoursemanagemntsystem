@@ -35,6 +35,14 @@ const Dashboard = () => {
         onClick: () => navigate("/resources"),
       },
       {
+        title: "Total Resource type",
+        count: counts.resourceType,
+        description: "Available resources",
+        icon: "💻",
+        color: "green",
+        onClick: () => navigate("/resourceType"),
+      },
+      {
         title: "Total Allocations",
         count: counts.allocations,
         description: "Resources in use",

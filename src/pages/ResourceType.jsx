@@ -4,8 +4,10 @@ import ResourceFormModal from "../components/ResourceTypeFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import { FaPlus } from "react-icons/fa6";
 import { CiEdit } from "react-icons/ci";
+import { IoMdEye } from "react-icons/io";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import Navbar from "../components/Navbar";
+import ViewDetailsModal from "../components/ViewDetailsModal";
 
 export const ResourseType = () => {
   const [resources, setResources] = useState([]);
@@ -14,6 +16,14 @@ export const ResourseType = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [resourceToDelete, setResourceToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [resourceToView, setResourceToView] = useState(null);
+
+  const handleViewClick = (resource) => {
+    setResourceToView(resource);
+    setViewModalOpen(true);
+  };
 
   useEffect(() => {
     fetchResources();
@@ -82,19 +92,34 @@ export const ResourseType = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#013a63]"></div>
           </div>
         ) : (
-            <div className="relative shadow-sm border border-gray-200 overflow-visible">
+          <div className="relative shadow-sm border border-gray-200 overflow-visible">
             <table className="w-full text-sm text-left text-gray-700">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th scope="col" className="px-6 py-3.5 font-medium">Resource Type</th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">Description</th>
-                  <th scope="col" className="px-6 py-3.5 font-medium text-center">Actions</th>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
+                    Resource Type
+                  </th>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
+                    Description
+                  </th>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
+                    Unit count
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3.5 font-medium text-center"
+                  >
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {resources.length > 0 ? (
                   resources.map((resource) => (
-                    <tr key={resource._id} className="bg-white hover:bg-gray-50 transition-colors duration-150">
+                    <tr
+                      key={resource._id}
+                      className="bg-white hover:bg-gray-50 transition-colors duration-150"
+                    >
                       <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {resource.name}
                       </td>
@@ -108,7 +133,18 @@ export const ResourseType = () => {
                           </div>
                         </div>
                       </td>
+                      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        {resource.resourceCount}
+                      </td>
                       <td className="px-6 py-4 flex justify-center space-x-3">
+                        <button
+                          onClick={() => handleViewClick(resource)}
+                          className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          title="View"
+                        >
+                          <IoMdEye className="w-5 h-5" />
+                        </button>
+
                         <button
                           onClick={() => handleEditClick(resource)}
                           className="text-[#013a63] hover:text-[#013a63] cursor-pointer transition-colors p-1.5 rounded hover:bg-blue-50"
@@ -128,7 +164,10 @@ export const ResourseType = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3" className="px-6 py-4 text-center text-gray-500 italic">
+                    <td
+                      colSpan="3"
+                      className="px-6 py-4 text-center text-gray-500 italic"
+                    >
                       No resources found
                     </td>
                   </tr>
@@ -150,6 +189,14 @@ export const ResourseType = () => {
           onClose={() => setDeleteModalOpen(false)}
           onConfirm={handleDeleteConfirm}
           itemName={resourceToDelete?.name || "this resource"}
+        />
+
+        <ViewDetailsModal
+          isOpen={viewModalOpen}
+          onClose={() => setViewModalOpen(false)}
+          data={resourceToView}
+          hiddenFields={["__v", "_id", "createdAt", "updatedAt"]}
+          title="Resource Type Details"
         />
       </div>
     </>

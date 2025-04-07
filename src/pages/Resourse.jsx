@@ -4,8 +4,10 @@ import ResourceFormModal from "../components/ResourceFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import { FaPlus } from "react-icons/fa6";
 import { CiEdit } from "react-icons/ci";
+import { IoMdEye } from "react-icons/io";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import Navbar from "../components/Navbar";
+import ViewDetailsModal from "../components/ViewDetailsModal";
 
 export const Resourse = () => {
   const [resources, setResources] = useState([]);
@@ -17,6 +19,14 @@ export const Resourse = () => {
   const [resourceToDelete, setResourceToDelete] = useState(null);
   const [counts, setCounts] = useState({ all: 0, Available: 0, Allocated: 0 });
   const [loading, setLoading] = useState(false);
+
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [resourceToView, setResourceToView] = useState(null);
+  
+  const handleViewClick = (resource) => {
+    setResourceToView(resource);
+    setViewModalOpen(true);
+  };
 
   useEffect(() => {
     fetchResources();
@@ -41,10 +51,10 @@ export const Resourse = () => {
       const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources", {
         params: {
           ...params,
-          populate: "resourceType"
-        }
+          populate: "resourceType",
+        },
       });
-      
+
       if (status === null) {
         setFilteredResources(response.data.data);
       }
@@ -70,9 +80,17 @@ export const Resourse = () => {
 
   const updateCounts = (data) => {
     const allCount = data.length;
-    const AvailableCount = data.filter((res) => res.status === "Available").length;
-    const AllocatedCount = data.filter((res) => res.status === "Allocated").length;
-    setCounts({ all: allCount, Available: AvailableCount, Allocated: AllocatedCount });
+    const AvailableCount = data.filter(
+      (res) => res.status === "Available"
+    ).length;
+    const AllocatedCount = data.filter(
+      (res) => res.status === "Allocated"
+    ).length;
+    setCounts({
+      all: allCount,
+      Available: AvailableCount,
+      Allocated: AllocatedCount,
+    });
   };
 
   const handleDeleteConfirm = async () => {
@@ -155,10 +173,10 @@ export const Resourse = () => {
                     Description
                   </th>
                   <th scope="col" className="px-6 py-3.5 font-medium">
-                    Total Resource
+                    Total units
                   </th>
                   <th scope="col" className="px-6 py-3.5 font-medium">
-                    Avaliable Resourse
+                    Available units
                   </th>
                   <th scope="col" className="px-6 py-3.5 font-medium">
                     Purchase Date
@@ -166,7 +184,10 @@ export const Resourse = () => {
                   <th scope="col" className="px-6 py-3.5 font-medium">
                     Status
                   </th>
-                  <th scope="col" className="px-6 py-3.5 font-medium text-center">
+                  <th
+                    scope="col"
+                    className="px-6 py-3.5 font-medium text-center"
+                  >
                     Actions
                   </th>
                 </tr>
@@ -220,6 +241,13 @@ export const Resourse = () => {
                       </td>
                       <td className="px-6 py-4 flex justify-center">
                         <button
+                          onClick={() => handleViewClick(resource)}
+                          className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          title="View"
+                        >
+                          <IoMdEye className="w-5 h-5" />
+                        </button>
+                        <button
                           onClick={() => handleEditClick(resource)}
                           className="text-[#013a63] cursor-pointer hover:text-[#013a63] transition-colors p-2 rounded hover:bg-blue-50"
                           title="Edit"
@@ -254,7 +282,9 @@ export const Resourse = () => {
         <ResourceFormModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onSuccess={() => fetchResources(ActiveFilter === "all" ? null : ActiveFilter)}
+          onSuccess={() =>
+            fetchResources(ActiveFilter === "all" ? null : ActiveFilter)
+          }
           resourceData={currentResource}
         />
 
@@ -264,6 +294,14 @@ export const Resourse = () => {
           onConfirm={handleDeleteConfirm}
           itemName={resourceToDelete?.name || "this resource"}
         />
+
+<ViewDetailsModal
+  isOpen={viewModalOpen}
+  onClose={() => setViewModalOpen(false)}
+  data={resourceToView}
+  hiddenFields = {["__v", "_id", "createdAt", "images", "isDeleted", "id", "updatedAt"]}
+  title="Resource Details"
+/>
       </div>
     </>
   );

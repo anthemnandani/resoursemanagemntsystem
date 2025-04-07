@@ -4,8 +4,10 @@ import AllocationFormModal from "../components/AllocationFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import { FaPlus } from "react-icons/fa6";
 import { CiEdit } from "react-icons/ci";
+import { IoMdEye } from "react-icons/io";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import Navbar from "../components/Navbar";
+import ViewDetailsModal from "../components/ViewDetailsModal";
 
 export const AllocatedResouses = () => {
   const [allocations, setAllocations] = useState([]);
@@ -15,6 +17,15 @@ export const AllocatedResouses = () => {
   const [allocationToDelete, setAllocationToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
   const [ActiveFilter, setActiveFilter] = useState("all");
+
+  
+    const [viewModalOpen, setViewModalOpen] = useState(false);
+    const [resourceToView, setResourceToView] = useState(null);
+    
+    const handleViewClick = (resource) => {
+      setResourceToView(resource);
+      setViewModalOpen(true);
+    };
 
   useEffect(() => {
     fetchAllocations();
@@ -35,21 +46,31 @@ export const AllocatedResouses = () => {
   // Memoize counts calculation for efficiency
   const counts = useMemo(() => {
     const allCount = allocations.length;
-    const ActiveCount = allocations.filter((res) => res.status === "Active").length;
-    const ReturnedCount = allocations.filter((res) => res.status === "Returned").length;
+    const ActiveCount = allocations.filter(
+      (res) => res.status === "Active"
+    ).length;
+    const ReturnedCount = allocations.filter(
+      (res) => res.status === "Returned"
+    ).length;
     return { all: allCount, Active: ActiveCount, Returned: ReturnedCount };
   }, [allocations]);
 
   const filteredAllocations = useMemo(() => {
     if (ActiveFilter === "all") return allocations;
-    return allocations.filter((allocation) => allocation.status === ActiveFilter);
+    return allocations.filter(
+      (allocation) => allocation.status === ActiveFilter
+    );
   }, [allocations, ActiveFilter]);
 
   const handleDeleteConfirm = async () => {
     if (!allocationToDelete) return;
     try {
-      await axios.delete(`https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/return/${allocationToDelete._id}`);
-      setAllocations((prev) => prev.filter((item) => item._id !== allocationToDelete._id));
+      await axios.delete(
+        `https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/return/${allocationToDelete._id}`
+      );
+      setAllocations((prev) =>
+        prev.filter((item) => item._id !== allocationToDelete._id)
+      );
       setDeleteModalOpen(false);
     } catch (error) {
       console.error("Error deleting allocation:", error);
@@ -61,7 +82,9 @@ export const AllocatedResouses = () => {
       <Navbar />
       <div className="container mx-auto my-6 p-4 pt-14">
         <div className="flex justify-between items-center py-4">
-          <h2 className="text-2xl font-semibold text-center">Allocated Resources</h2>
+          <h2 className="text-2xl font-semibold text-center">
+            Allocated Resources
+          </h2>
           <button
             className="bg-[#013a63] text-white px-4 py-2 rounded flex items-center gap-2 relative group"
             onClick={() => {
@@ -81,10 +104,13 @@ export const AllocatedResouses = () => {
           {["all", "Active", "Returned"].map((filter) => (
             <button
               key={filter}
-              className={`py-1 px-3 rounded ${ActiveFilter === filter ? "bg-[#013a63] text-white" : ""}`}
+              className={`py-1 px-3 rounded ${
+                ActiveFilter === filter ? "bg-[#013a63] text-white" : ""
+              }`}
               onClick={() => setActiveFilter(filter)}
             >
-              {filter.charAt(0).toUpperCase() + filter.slice(1)} ({counts[filter]})
+              {filter.charAt(0).toUpperCase() + filter.slice(1)} (
+              {counts[filter]})
             </button>
           ))}
         </div>
@@ -104,38 +130,71 @@ export const AllocatedResouses = () => {
                   <th className="px-6 py-3.5 font-medium">Allocation Date</th>
                   <th className="px-6 py-3.5 font-medium">Return Date</th>
                   <th className="px-6 py-3.5 font-medium">Status</th>
-                  <th className="px-6 py-3.5 font-medium text-center">Actions</th>
+                  <th className="px-6 py-3.5 font-medium text-center">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {filteredAllocations.length > 0 ? (
                   filteredAllocations.map((allocation) => (
-                    <tr key={allocation._id} className="bg-white hover:bg-gray-50 transition-colors">
+                    <tr
+                      key={allocation._id}
+                      className="bg-white hover:bg-gray-50 transition-colors"
+                    >
                       <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                         {allocation.resource?.name || "N/A"}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="font-medium">{allocation.employee?.name || "N/A"}</div>
-                        <div className="text-sm text-gray-500">{allocation.employee?.position || ""}</div>
+                        <div className="font-medium">
+                          {allocation.employee?.name || "N/A"}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {allocation.employee?.position || ""}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {new Date(allocation.allocatedDate).toLocaleDateString()}
+                        {new Date(
+                          allocation.allocatedDate
+                        ).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {allocation.returnDate ? new Date(allocation.returnDate).toLocaleDateString() : "Not Returned yet"}
+                        {allocation.returnDate
+                          ? new Date(allocation.returnDate).toLocaleDateString()
+                          : "Not Returned yet"}
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                          allocation.status === "Active" ? "bg-green-50 text-green-800" : "bg-yellow-50 text-yellow-800"
-                        }`}>
+                        <span
+                          className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                            allocation.status === "Active"
+                              ? "bg-green-50 text-green-800"
+                              : "bg-yellow-50 text-yellow-800"
+                          }`}
+                        >
                           {allocation.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 flex justify-center space-x-3">
-                        <button onClick={() => setCurrentAllocation(allocation)} className="text-[#013a63] hover:text-blue-700 p-1.5 rounded hover:bg-blue-50">
+                         <button
+                                                  onClick={() => handleViewClick(allocation)}
+                                                  className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                                                  title="View"
+                                                >
+                                                  <IoMdEye className="w-5 h-5" />
+                                                </button>
+                        <button
+                          onClick={() => setCurrentAllocation(allocation)}
+                          className="text-[#013a63] hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
+                        >
                           <CiEdit className="w-5 h-5" />
                         </button>
-                        <button onClick={() => { setAllocationToDelete(allocation); setDeleteModalOpen(true); }} className="text-red-800 hover:text-red-700 p-1.5 rounded hover:bg-red-50">
+                        <button
+                          onClick={() => {
+                            setAllocationToDelete(allocation);
+                            setDeleteModalOpen(true);
+                          }}
+                          className="text-red-800 hover:text-red-700 p-1.5 rounded hover:bg-red-50"
+                        >
                           <MdOutlineDeleteForever className="w-5 h-5" />
                         </button>
                       </td>
@@ -143,7 +202,12 @@ export const AllocatedResouses = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="px-6 py-4 text-center text-gray-500 italic">No allocations found</td>
+                    <td
+                      colSpan="6"
+                      className="px-6 py-4 text-center text-gray-500 italic"
+                    >
+                      No allocations found
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -151,8 +215,34 @@ export const AllocatedResouses = () => {
           </div>
         )}
 
-        <AllocationFormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSuccess={fetchAllocations} allocationData={currentAllocation} />
-        <DeleteConfirmationModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} onConfirm={handleDeleteConfirm} itemName={allocationToDelete?.resource?.name || "this allocation"} />
+        <AllocationFormModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSuccess={fetchAllocations}
+          allocationData={currentAllocation}
+        />
+        <DeleteConfirmationModal
+          isOpen={deleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+          onConfirm={handleDeleteConfirm}
+          itemName={allocationToDelete?.resource?.name || "this allocation"}
+        />
+
+<ViewDetailsModal
+          isOpen={viewModalOpen}
+          onClose={() => setViewModalOpen(false)}
+          data={resourceToView}
+          hiddenFields={[
+            "__v",
+            "_id",
+            "createdAt",
+            "images",
+            "isDeleted",
+            "id",
+            "updatedAt",
+          ]}
+          title="Allocated Resource Details"
+        />
       </div>
     </>
   );
