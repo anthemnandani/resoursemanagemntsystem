@@ -189,8 +189,8 @@ export const Resourse = () => {
                         <div className="truncate cursor-help">
                           {resource.description || "No description"}
                         </div>
-                        <div className="absolute z-50 hidden group-hover:block min-w-[500px] p-3 bg-white border border-gray-200 rounded-md shadow-lg top-full -translate-x-1/5 transform translate-y-[-90%]">
-                          <div className="text-sm text-gray-700 max-h-[200px] overflow-y-auto">
+                        <div className="absolute z-50 hidden group-hover:block min-w-[500px] max-w-[90vw] p-3 bg-white border border-gray-200 rounded-md shadow-lg top-full -translate-x-1/5 transform translate-y-[-50%]">
+                          <div className="text-sm text-gray-700 max-h-[90vh] overflow-y-auto">
                             {resource.description}
                           </div>
                         </div>
