@@ -1,72 +1,50 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import axios from "axios";
 import Navbar from "../components/Navbar";
-
-const API_BASE_URL = "https://resoursemanagemntsystem-bksn.vercel.app/api";
+import { useDashboard } from "../context/DashboardContext";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
 
-  const [counts, setCounts] = useState(() => {
-    const cached = localStorage.getItem("dashboardCounts");
-    return cached ? JSON.parse(cached) : { employees: 0, resources: 0, allocations: 0 };
-  });
+  const { counts, loading } = useDashboard();
 
-  const hasFetchedRef = useRef(false);
-
-  const endpoints = useMemo(() => [
-    `${API_BASE_URL}/employees`,
-    `${API_BASE_URL}/resources`,
-    `${API_BASE_URL}/allocations`
-  ], []);
-
-  // Redirect if not authenticated
   useEffect(() => {
     if (!token) {
       navigate("/login");
     }
   }, [token, navigate]);
 
-  // Fetch fresh data and update localStorage
-  useEffect(() => {
-    const fetchCounts = async () => {
-      try {
-        const headers = { headers: { Authorization: `Bearer ${token}` } };
-
-        const [employeesRes, resourcesRes, allocationsRes] = await Promise.all([
-          axios.get(endpoints[0], headers),
-          axios.get(endpoints[1], headers),
-          axios.get(endpoints[2], headers)
-        ]);
-
-        const updatedCounts = {
-          employees: employeesRes.data.count || employeesRes.data.length || 0,
-          resources: resourcesRes.data.data?.count || resourcesRes.data.data?.length || resourcesRes.data.length || 0,
-          allocations: allocationsRes.data.count || allocationsRes.data.length || 0
-        };
-
-        setCounts(updatedCounts);
-        localStorage.setItem("dashboardCounts", JSON.stringify(updatedCounts));
-        hasFetchedRef.current = true;
-
-      } catch (error) {
-        console.error("Error fetching counts:", error);
-      }
-    };
-
-    if (!hasFetchedRef.current) {
-      fetchCounts();
-    }
-  }, [endpoints, token]);
-
-  const dashboardCards = useMemo(() => [
-    { title: "Total Employees", count: counts.employees, description: "Active employees in system", icon: "👥", color: "blue", onClick: () => navigate("/employees") },
-    { title: "Total Resources", count: counts.resources, description: "Available resources", icon: "💻", color: "green", onClick: () => navigate("/resources") },
-    { title: "Total Allocations", count: counts.allocations, description: "Resources in use", icon: "📋", color: "purple", onClick: () => navigate("/allocations") }
-  ], [counts, navigate]);
+  const dashboardCards = useMemo(
+    () => [
+      {
+        title: "Total Employees",
+        count: counts.employees,
+        description: "Active employees in system",
+        icon: "👥",
+        color: "blue",
+        onClick: () => navigate("/employees"),
+      },
+      {
+        title: "Total Resources",
+        count: counts.resources,
+        description: "Available resources",
+        icon: "💻",
+        color: "green",
+        onClick: () => navigate("/resources"),
+      },
+      {
+        title: "Total Allocations",
+        count: counts.allocations,
+        description: "Resources in use",
+        icon: "📋",
+        color: "purple",
+        onClick: () => navigate("/allocations"),
+      },
+    ],
+    [counts, navigate]
+  );
 
   return (
     <>
@@ -75,10 +53,15 @@ const Dashboard = () => {
         <h2 className="text-3xl font-bold text-gray-800 mb-6 pt-18">Dashboard</h2>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex flex-col lg:w-1/2 sm:w-full gap-4 mb-4">
-            {dashboardCards.map((card, index) => <DashboardCard key={index} {...card} />)}
+            {dashboardCards.map((card, index) => (
+              <DashboardCard key={index} {...card} loading={loading} />
+            ))}
           </div>
           <div className="mb-10 flex items-center justify-center lg:px-10 sm:px-1 lg:w-1/2 sm:w-full">
-            <img src="https://res.cloudinary.com/dmyq2ymj9/image/upload/v1743745859/HR-Challenges-2024_4x-1536x927-1-1024x618_pbrsvs.webp" alt="Dashboard visualization" />
+            <img
+              src="https://res.cloudinary.com/dmyq2ymj9/image/upload/v1743745859/HR-Challenges-2024_4x-1536x927-1-1024x618_pbrsvs.webp"
+              alt="Dashboard visualization"
+            />
           </div>
         </div>
       </div>
@@ -86,28 +69,48 @@ const Dashboard = () => {
   );
 };
 
-const DashboardCard = React.memo(({ title, count, description, icon, color, onClick }) => {
-  const colorMap = {
-    blue: { bg: "bg-blue-50", border: "border-[#013a63]", text: "text-blue-600" },
-    green: { bg: "bg-blue-50", border: "border-green-800", text: "text-green-600" },
-    purple: { bg: "bg-blue-50", border: "border-orange-700", text: "text-purple-600" }
-  };
+const DashboardCard = React.memo(
+  ({ title, count, description, icon, color, onClick, loading }) => {
+    const colorMap = {
+      blue: {
+        bg: "bg-blue-50",
+        border: "border-[#013a63]",
+        text: "text-blue-600",
+      },
+      green: {
+        bg: "bg-blue-50",
+        border: "border-green-800",
+        text: "text-green-600",
+      },
+      purple: {
+        bg: "bg-blue-50",
+        border: "border-orange-700",
+        text: "text-purple-600",
+      },
+    };
 
-  return (
-    <div 
-      className={`p-6 rounded-lg border-l-4 ${colorMap[color].border} ${colorMap[color].bg} hover:shadow-md transition-shadow cursor-pointer`}
-      onClick={onClick}
-    >
-      <div className="flex justify-between items-center">
-        <div>
-          <p className="text-sm font-medium text-gray-500">{title}</p>
-          <p className="text-3xl font-bold text-gray-800 mt-1">{count}</p>
+    return (
+      <div
+        className={`p-6 rounded-lg border-l-4 ${colorMap[color].border} ${colorMap[color].bg} hover:shadow-md transition-shadow cursor-pointer`}
+        onClick={onClick}
+      >
+        <div className="flex justify-between items-center">
+          <div>
+            <p className="text-sm font-medium text-gray-500">{title}</p>
+            <p className="text-3xl font-bold text-gray-800 mt-1">
+              {loading ? (
+                <span className="animate-pulse text-gray-400">Loading...</span>
+              ) : (
+                count
+              )}
+            </p>
+          </div>
+          <span className={`text-3xl ${colorMap[color].text}`}>{icon}</span>
         </div>
-        <span className={`text-3xl ${colorMap[color].text}`}>{icon}</span>
+        <p className="text-xs text-gray-500 mt-2">{description}</p>
       </div>
-      <p className="text-xs text-gray-500 mt-2">{description}</p>
-    </div>
-  );
-});
+    );
+  }
+);
 
 export default Dashboard;
