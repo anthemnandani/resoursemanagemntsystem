@@ -100,11 +100,10 @@ export const ResourseType = () => {
                       </td>
                       <td className="px-6 py-4 max-w-[200px] relative group">
                         <div className="truncate cursor-help">
-                          {resource.description || 'No description'}
+                          {resource.description || "No description"}
                         </div>
-                        {/* Floating tooltip */}
-                        <div className="absolute z-50 hidden group-hover:block min-w-[200px] max-w-[400px] p-3 bg-white border border-gray-200 rounded-md shadow-lg -top-2 left-1/2 -translate-x-1/2 transform translate-y-[-100%]">
-                          <div className="text-sm text-gray-700 max-h-[200px] overflow-y-auto">
+                        <div className="absolute z-50 hidden group-hover:block min-w-[500px] max-w-[90vw] p-3 bg-white border border-gray-200 rounded-md shadow-lg top-full -translate-x-1/5 transform translate-y-[-50%]">
+                          <div className="text-sm text-gray-700 max-h-[90vh] overflow-y-auto">
                             {resource.description}
                           </div>
                         </div>

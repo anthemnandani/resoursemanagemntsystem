@@ -18,7 +18,6 @@ export const Resourse = () => {
   const [counts, setCounts] = useState({ all: 0, Available: 0, Allocated: 0 });
   const [loading, setLoading] = useState(false);
 
-  // Client-side filtering approach
   useEffect(() => {
     fetchResources();
   }, []);
