@@ -23,7 +23,7 @@ export const AllocatedResouses = () => {
   const fetchAllocations = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/api/allocations");
+      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/allocations");
       setAllocations(response.data);
     } catch (error) {
       console.error("Error fetching allocations:", error);
@@ -48,7 +48,7 @@ export const AllocatedResouses = () => {
   const handleDeleteConfirm = async () => {
     if (!allocationToDelete) return;
     try {
-      await axios.delete(`http://localhost:5000/api/allocations/return/${allocationToDelete._id}`);
+      await axios.delete(`https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/return/${allocationToDelete._id}`);
       setAllocations((prev) => prev.filter((item) => item._id !== allocationToDelete._id));
       setDeleteModalOpen(false);
     } catch (error) {

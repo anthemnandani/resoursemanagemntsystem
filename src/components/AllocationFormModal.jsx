@@ -22,8 +22,8 @@ const AllocationFormModal = ({
     const fetchData = async () => {
       try {
         const [employeesRes, resourcesRes] = await Promise.all([
-          axios.get('http://localhost:5000/api/employees'),
-          axios.get('http://localhost:5000/api/resources/getAvaliableResources')
+          axios.get('https://resoursemanagemntsystem-bksn.vercel.app/api/employees'),
+          axios.get('https://resoursemanagemntsystem-bksn.vercel.app/api/resources/getAvaliableResources')
         ]);
         
         setEmployees(employeesRes.data);
@@ -55,7 +55,7 @@ const AllocationFormModal = ({
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/allocations/allocate',
+        'https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/allocate',
         {
           employeeId: formData.employeeId,
           resourceId: formData.resourceId,

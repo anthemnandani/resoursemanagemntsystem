@@ -39,7 +39,7 @@ export const Resourse = () => {
       const params = {};
       if (status && status !== "all") params.status = status;
 
-      const response = await axios.get("http://localhost:5000/api/resources", {
+      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources", {
         params: {
           ...params,
           populate: "resourceType"
@@ -79,7 +79,7 @@ export const Resourse = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/resources/deleteresourse/${resourceToDelete._id}`
+        `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/deleteresourse/${resourceToDelete._id}`
       );
       fetchResources(ActiveFilter === "all" ? null : ActiveFilter);
       setDeleteModalOpen(false);
