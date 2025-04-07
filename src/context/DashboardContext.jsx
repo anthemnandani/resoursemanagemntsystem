@@ -1,4 +1,3 @@
-// src/context/DashboardContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -20,12 +19,10 @@ export const DashboardProvider = ({ children }) => {
 
       setLoading(true);
       try {
-        const headers = { headers: { Authorization: `Bearer ${token}` } };
-
         const [employeesRes, resourcesRes, allocationsRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/employees`, headers),
-          axios.get(`${API_BASE_URL}/resources`, headers),
-          axios.get(`${API_BASE_URL}/allocations`, headers)
+          axios.get(`${API_BASE_URL}/employees`),
+          axios.get(`${API_BASE_URL}/resources`),
+          axios.get(`${API_BASE_URL}/allocations`)
         ]);
 
         setCounts({
