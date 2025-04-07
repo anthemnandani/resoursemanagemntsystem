@@ -10,7 +10,11 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
 
-  const [counts, setCounts] = useState({ employees: 0, resources: 0, allocations: 0 });
+  const [counts, setCounts] = useState(() => {
+    const cached = localStorage.getItem("dashboardCounts");
+    return cached ? JSON.parse(cached) : { employees: 0, resources: 0, allocations: 0 };
+  });
+
   const hasFetchedRef = useRef(false);
 
   const endpoints = useMemo(() => [
@@ -19,12 +23,14 @@ const Dashboard = () => {
     `${API_BASE_URL}/allocations`
   ], []);
 
+  // Redirect if not authenticated
   useEffect(() => {
     if (!token) {
       navigate("/login");
     }
   }, [token, navigate]);
 
+  // Fetch fresh data and update localStorage
   useEffect(() => {
     const fetchCounts = async () => {
       try {
@@ -36,17 +42,18 @@ const Dashboard = () => {
           axios.get(endpoints[2], headers)
         ]);
 
-        setCounts({
+        const updatedCounts = {
           employees: employeesRes.data.count || employeesRes.data.length || 0,
           resources: resourcesRes.data.data?.count || resourcesRes.data.data?.length || resourcesRes.data.length || 0,
           allocations: allocationsRes.data.count || allocationsRes.data.length || 0
-        });
+        };
 
-        hasFetchedRef.current = true; // ✅ Mark as fetched
+        setCounts(updatedCounts);
+        localStorage.setItem("dashboardCounts", JSON.stringify(updatedCounts));
+        hasFetchedRef.current = true;
 
       } catch (error) {
         console.error("Error fetching counts:", error);
-        setCounts({ employees: 0, resources: 0, allocations: 0 });
       }
     };
 
