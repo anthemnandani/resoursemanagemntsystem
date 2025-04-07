@@ -12,7 +12,7 @@ export const Login = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post("https://resoursemanagemntsystem-bksn.vercel.app/api/admin/login", {
+      const { data } = await axios.post("http://localhost:5000/api/admin/login", {
         email,
         password,
       });

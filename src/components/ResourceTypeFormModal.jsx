@@ -49,13 +49,13 @@ const ResourceFormModal = ({
       if (resourceData) {
         // Update existing resource
         response = await axios.put(
-          `https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype/${resourceData._id}`,
+          `http://localhost:5000/api/resourcestype/${resourceData._id}`,
           payload
         );
       } else {
         // Create new resource
         response = await axios.post(
-          'https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype',
+          'http://localhost:5000/api/resourcestype',
           payload
         );
       }

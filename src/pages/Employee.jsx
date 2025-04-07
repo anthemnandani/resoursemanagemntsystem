@@ -28,7 +28,7 @@ export const Employee = () => {
   const fetchAllocations = async (employeeId) => {
     try {
       const response = await axios.get(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/employee/${employeeId}`
+        `http://localhost:5000/api/allocations/employee/${employeeId}`
       );
       setActiveAllocations((prev) => ({
         ...prev,
@@ -69,7 +69,7 @@ export const Employee = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees");
+      const response = await axios.get("http://localhost:5000/api/employees");
       const data = response.data;
       setEmployees(data);
       updateCounts(data);
@@ -117,7 +117,7 @@ export const Employee = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employeeToDelete._id}`
+        `http://localhost:5000/api/employees/${employeeToDelete._id}`
       );
       fetchEmployees();
       setDeleteModalOpen(false);
@@ -129,7 +129,7 @@ export const Employee = () => {
   const toggleEmployeeStatus = async (employee) => {
     try {
       const newStatus = employee.status === "Active" ? "Inactive" : "Active";
-      await axios.patch(`https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employee._id}`, {
+      await axios.patch(`http://localhost:5000/api/employees/${employee._id}`, {
         status: newStatus,
       });
       fetchEmployees();

@@ -23,7 +23,7 @@ export const AllocatedResouses = () => {
   const fetchAllocations = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/allocations");
+      const response = await axios.get("http://localhost:5000/api/allocations");
       setAllocations(response.data);
     } catch (error) {
       console.error("Error fetching allocations:", error);
@@ -36,8 +36,8 @@ export const AllocatedResouses = () => {
   const counts = useMemo(() => {
     const allCount = allocations.length;
     const ActiveCount = allocations.filter((res) => res.status === "Active").length;
-    const returnedCount = allocations.filter((res) => res.status === "returned").length;
-    return { all: allCount, Active: ActiveCount, returned: returnedCount };
+    const ReturnedCount = allocations.filter((res) => res.status === "Returned").length;
+    return { all: allCount, Active: ActiveCount, Returned: ReturnedCount };
   }, [allocations]);
 
   const filteredAllocations = useMemo(() => {
@@ -48,7 +48,7 @@ export const AllocatedResouses = () => {
   const handleDeleteConfirm = async () => {
     if (!allocationToDelete) return;
     try {
-      await axios.delete(`https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/return/${allocationToDelete._id}`);
+      await axios.delete(`http://localhost:5000/api/allocations/return/${allocationToDelete._id}`);
       setAllocations((prev) => prev.filter((item) => item._id !== allocationToDelete._id));
       setDeleteModalOpen(false);
     } catch (error) {
@@ -78,7 +78,7 @@ export const AllocatedResouses = () => {
 
         {/* Filter Buttons */}
         <div className="flex gap-4 mb-4">
-          {["all", "Active", "returned"].map((filter) => (
+          {["all", "Active", "Returned"].map((filter) => (
             <button
               key={filter}
               className={`py-1 px-3 rounded ${ActiveFilter === filter ? "bg-[#013a63] text-white" : ""}`}
@@ -122,7 +122,7 @@ export const AllocatedResouses = () => {
                         {new Date(allocation.allocatedDate).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {allocation.returnDate ? new Date(allocation.returnDate).toLocaleDateString() : "Not returned yet"}
+                        {allocation.returnDate ? new Date(allocation.returnDate).toLocaleDateString() : "Not Returned yet"}
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
