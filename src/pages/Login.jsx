@@ -22,7 +22,7 @@ export const Login = () => {
       Cookies.set("user", JSON.stringify(data.user), { expires: 1 });
       Cookies.set("token", data.token, { expires: 1 });
 
-      navigate("/dashboard");
+      navigate("/");
     } catch (err) {
       console.log("Login error: ", err);
       setError(err.response?.data?.error || "Operation failed");
