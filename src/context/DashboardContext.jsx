@@ -11,11 +11,13 @@ export const DashboardProvider = ({ children }) => {
   const token = Cookies.get("token");
 
   const [counts, setCounts] = useState(() => {
-    const cached = sessionStorage.getItem("dashboardCounts");
-    return cached ? JSON.parse(cached) : { employees: 0, resources: 0, allocations: 0, resourceType: 0 };
+    const cached = localStorage.getItem("dashboardCounts");
+    return cached
+      ? JSON.parse(cached)
+      : { employees: 0, resources: 0, allocations: 0, resourceType: 0 };
   });
 
-  const [loading, setLoading] = useState(!sessionStorage.getItem("dashboardCounts"));
+  const [loading, setLoading] = useState(() => !localStorage.getItem("dashboardCounts"));
 
   useEffect(() => {
     const fetchCounts = async () => {
@@ -39,12 +41,10 @@ export const DashboardProvider = ({ children }) => {
         };
 
         setCounts(newCounts);
-        console.log("new counts: ", newCounts);
-        sessionStorage.setItem("dashboardCounts", JSON.stringify(newCounts));
+        localStorage.setItem("dashboardCounts", JSON.stringify(newCounts));
       } catch (err) {
         console.error("Error loading dashboard data", err);
       } finally {
-        // Prevent spinner lasting too long (fallback after 1 sec)
         setTimeout(() => setLoading(false), 1000);
       }
     };
