@@ -238,7 +238,7 @@ export const Employee = () => {
                   >
                     <td className="px-2 py-4 flex justify-center">
                       <img
-                        src={employee.profilePicture || "/employee.jpg"}
+                        src={employee.profilePicture.url || "/user.png"}
                         alt={employee.name}
                         className="h-10 w-10 rounded-full object-cover"
                       />

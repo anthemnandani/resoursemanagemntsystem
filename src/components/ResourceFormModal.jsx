@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const ResourceFormModal = ({
   isOpen,
@@ -8,26 +8,48 @@ const ResourceFormModal = ({
   resourceData = null,
 }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    resourceTypeId: '',
-    description: '',
-    totalResourceCount: '',
-    avaliableResourceCount: '',
-    purchaseDate: '',
-    status: 'Available',
+    name: "",
+    resourceTypeId: "",
+    description: "",
+    totalResourceCount: "",
+    avaliableResourceCount: "",
+    purchaseDate: "",
+    status: "Available",
+    images: null,
   });
   const [resourceTypes, setResourceTypes] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [imagePreviews, setImagePreviews] = useState([]);
+
+  const handleRemoveImage = (indexToRemove) => {
+    const updatedPreviews = imagePreviews.filter(
+      (_, idx) => idx !== indexToRemove
+    );
+    const updatedFiles = Array.from(formData.images).filter(
+      (_, idx) => idx !== indexToRemove
+    );
+
+    setImagePreviews(updatedPreviews);
+    setFormData({ ...formData, images: updatedFiles });
+  };
+
+  useEffect(() => {
+    return () => {
+      imagePreviews.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [imagePreviews]);
 
   // Fetch resource types when component mounts
   useEffect(() => {
     const fetchResourceTypes = async () => {
       try {
-        const response = await axios.get('https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype');
+        const response = await axios.get(
+          "https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"
+        );
         setResourceTypes(response.data.data);
       } catch (error) {
-        console.error('Error fetching resource types:', error);
+        console.error("Error fetching resource types:", error);
       }
     };
     fetchResourceTypes();
@@ -37,23 +59,23 @@ const ResourceFormModal = ({
   useEffect(() => {
     if (resourceData) {
       setFormData({
-        name: resourceData.name || '',
-        resourceTypeId: resourceData.resourceType?._id || '',
-        description: resourceData.description || '',
-        totalResourceCount: resourceData.totalResourceCount || '',
-        avaliableResourceCount: resourceData.avaliableResourceCount || '',
-        purchaseDate: resourceData.purchaseDate?.split('T')[0] || '',
-        status: resourceData.status || 'Available',
+        name: resourceData.name || "",
+        resourceTypeId: resourceData.resourceType?._id || "",
+        description: resourceData.description || "",
+        totalResourceCount: resourceData.totalResourceCount || "",
+        avaliableResourceCount: resourceData.avaliableResourceCount || "",
+        purchaseDate: resourceData.purchaseDate?.split("T")[0] || "",
+        status: resourceData.status || "Available",
       });
     } else {
       setFormData({
-        name: '',
-        resourceTypeId: '',
-        description: '',
-        totalResourceCount: '',
-        avaliableResourceCount: '',
-        purchaseDate: '',
-        status: 'Available',
+        name: "",
+        resourceTypeId: "",
+        description: "",
+        totalResourceCount: "",
+        avaliableResourceCount: "",
+        purchaseDate: "",
+        status: "Available",
       });
     }
   }, [resourceData, isOpen]);
@@ -66,41 +88,61 @@ const ResourceFormModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       let response;
-      const payload = {
-        name: formData.name,
-        resourceTypeId: formData.resourceTypeId,
-        description: formData.description,
-        totalResourceCount: formData.totalResourceCount,
-        avaliableResourceCount: resourceData 
-        ? formData.avaliableResourceCount 
-        : formData.totalResourceCount,
-        purchaseDate: formData.purchaseDate,
-        status: formData.status,
+
+      const payload = new FormData();
+      payload.append("name", formData.name);
+      payload.append("resourceTypeId", formData.resourceTypeId);
+      payload.append("description", formData.description);
+      payload.append("totalResourceCount", formData.totalResourceCount);
+      payload.append(
+        "avaliableResourceCount",
+        resourceData
+          ? formData.avaliableResourceCount
+          : formData.totalResourceCount
+      );
+      payload.append("purchaseDate", formData.purchaseDate);
+      payload.append("status", formData.status);
+
+      // Append images if available
+      if (formData.images) {
+        for (let i = 0; i < formData.images.length; i++) {
+          payload.append("images", formData.images[i]);
+        }
+      }
+
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       };
 
       if (resourceData) {
         // Update existing resource
         response = await axios.put(
           `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/updateresourse/${resourceData._id}`,
-          payload
+          payload,
+          config
         );
       } else {
         // Create new resource
         response = await axios.post(
-          'https://resoursemanagemntsystem-bksn.vercel.app/api/resources/createresourse',
-          payload
+          "https://resoursemanagemntsystem-bksn.vercel.app/api/resources/createresourse",
+          payload,
+          config
         );
       }
 
       onSuccess(response.data);
       onClose();
     } catch (error) {
-      console.error('Error:', error);
-      setError(error.response?.data?.error || 'failded to create please try again');
+      console.error("Error:", error);
+      setError(
+        error.response?.data?.error || "Failed to create, please try again"
+      );
     } finally {
       setLoading(false);
     }
@@ -110,12 +152,15 @@ const ResourceFormModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg w-full max-w-md">
+  <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-2xl font-semibold">
-            {resourceData ? 'Edit Resource' : 'Add Resource'}
+            {resourceData ? "Edit Resource" : "Add Resource"}
           </h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
             ✕
           </button>
         </div>
@@ -127,8 +172,7 @@ const ResourceFormModal = ({
         )}
 
         <form onSubmit={handleSubmit}>
-
-        <div className="mb-2">
+          <div className="mb-2">
             <label className="block text-gray-700 mb-1">Resource Type</label>
             <select
               name="resourceTypeId"
@@ -145,7 +189,7 @@ const ResourceFormModal = ({
               ))}
             </select>
           </div>
-          
+
           <div className="mb-2">
             <label className="block text-gray-700 mb-1">Resource Name</label>
             <input
@@ -178,6 +222,57 @@ const ResourceFormModal = ({
               onChange={handleInputChange}
               className="w-full p-1 border rounded"
             />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-800 font-semibold mb-2">
+              Upload Images
+            </label>
+
+            <div className="relative border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50">
+              <input
+                type="file"
+                name="images"
+                accept="image/*"
+                multiple
+                onChange={(e) => {
+                  setFormData({ ...formData, images: e.target.files });
+
+                  const previews = Array.from(e.target.files).map((file) =>
+                    URL.createObjectURL(file)
+                  );
+                  setImagePreviews(previews);
+                }}
+                className="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
+                 file:rounded-full file:border-0 file:text-sm file:font-semibold
+                 file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                required={!resourceData}
+              />
+            </div>
+
+            {imagePreviews?.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
+                {imagePreviews.map((src, index) => (
+                  <div
+                    key={index}
+                    className="relative rounded-lg overflow-hidden border shadow-sm hover:shadow-md transition-shadow duration-200"
+                  >
+                    <img
+                      src={src}
+                      alt={`Preview ${index}`}
+                      className="w-full h-20 object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute text-sm top-1 right-1 h-6 w-6 bg-white rounded-full shadow text-red-600 hover:bg-red-100"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* <div className="mb-2">
@@ -233,14 +328,32 @@ const ResourceFormModal = ({
             >
               {loading ? (
                 <>
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                   Processing...
                 </>
+              ) : resourceData ? (
+                "Update Resource"
               ) : (
-                resourceData ? 'Update Resource' : 'Create Resource'
+                "Create Resource"
               )}
             </button>
           </div>

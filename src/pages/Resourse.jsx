@@ -370,7 +370,6 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
             "__v",
             "_id",
             "createdAt",
-            "images",
             "isDeleted",
             "id",
             "updatedAt",

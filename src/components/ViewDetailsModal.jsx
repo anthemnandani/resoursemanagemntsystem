@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 const ViewDetailsModal = ({
   isOpen,
   onClose,
@@ -8,7 +8,6 @@ const ViewDetailsModal = ({
 }) => {
   if (!isOpen || !data) return null;
   const [selectedImage, setSelectedImage] = useState(null);
-
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 bg-opacity-40 z-50">
@@ -25,27 +24,45 @@ const ViewDetailsModal = ({
                   {key.replace(/([A-Z])/g, " $1")}
                 </p>
                 <p className="text-gray-800 whitespace-pre-wrap break-words">
+                  {/* 🎯 Handle single image URL */}
                   {typeof value === "string" &&
                   value.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
                     <img
-      src={value}
-      alt="preview"
-      onClick={() => setSelectedImage(value)}
-      className="w-32 h-32 object-cover rounded-lg border cursor-pointer hover:opacity-80"
-    />
+                      src={value}
+                      alt="preview"
+                      onClick={() => setSelectedImage(value)}
+                      className="w-32 h-32 object-cover rounded-lg border cursor-pointer hover:opacity-80"
+                    />
+                  ) : Array.isArray(value) && value[0]?.url ? (
+                    // 🎯 Handle array of image objects
+                    <div className="flex flex-wrap gap-2">
+                      {value.map((imgObj, idx) => (
+                        <img
+                          key={idx}
+                          src={imgObj.url}
+                          alt={`image-${idx}`}
+                          onClick={() => setSelectedImage(imgObj.url)}
+                          className="w-24 h-24 object-cover rounded border cursor-pointer hover:opacity-80"
+                        />
+                      ))}
+                    </div>
                   ) : typeof value === "string" &&
                     value.match(/^\d{4}-\d{2}-\d{2}T/) ? (
+                    // 🎯 Format ISO Date
                     new Date(value).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
                     })
                   ) : typeof value === "object" && value !== null ? (
+                    // 🎯 Handle nested object (like resourceType)
                     value.name ||
                     value.title ||
+                    value.url ||
                     value.label ||
                     JSON.stringify(value, null, 2)
                   ) : (
+                    // 🎯 Fallback for everything else
                     value?.toString()
                   )}
                 </p>
@@ -64,18 +81,17 @@ const ViewDetailsModal = ({
           </button>
         </div>
         {selectedImage && (
-  <div
-    className="fixed inset-0 z-50 bg-black/50 bg-opacity-80 flex items-center justify-center"
-    onClick={() => setSelectedImage(null)}
-  >
-    <img
-      src={selectedImage}
-      alt="Full Preview"
-      className="max-w-full max-h-full p-8 rounded-lg shadow-lg"
-    />
-  </div>
-)}
-
+          <div
+            className="fixed inset-0 z-50 bg-black/50 bg-opacity-80 flex items-center justify-center"
+            onClick={() => setSelectedImage(null)}
+          >
+            <img
+              src={selectedImage}
+              alt="Full Preview"
+              className="max-w-full max-h-full p-8 rounded-lg shadow-lg"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

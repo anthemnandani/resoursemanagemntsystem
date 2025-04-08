@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-   const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -14,10 +14,13 @@ export const Login = () => {
     setError("");
 
     try {
-      const { data } = await axios.post("https://resoursemanagemntsystem-bksn.vercel.app/api/admin/login", {
-        email,
-        password,
-      });
+      const { data } = await axios.post(
+        "https://resoursemanagemntsystem-bksn.vercel.app/api/admin/login",
+        {
+          email,
+          password,
+        }
+      );
 
       Cookies.set("user", JSON.stringify(data.user), { expires: 1 });
       Cookies.set("token", data.token, { expires: 1 });
@@ -56,7 +59,7 @@ export const Login = () => {
             value={password}
             required
             minLength={5}
-  maxLength={20}
+            maxLength={20}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
           />

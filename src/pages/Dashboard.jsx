@@ -37,7 +37,7 @@ const Dashboard = () => {
       count: counts.resourceType,
       description: "Available resource types",
       icon: "🗂️",
-      color: "green",
+      color: "yellow",
       path: "/resourceType",
     },
     {
@@ -45,7 +45,7 @@ const Dashboard = () => {
       count: counts.allocations,
       description: "Resources in use",
       icon: "📋",
-      color: "purple",
+      color: "red",
       path: "/allocations",
     },
   ];
@@ -65,6 +65,8 @@ const Dashboard = () => {
                     ? "border-[#013a63] bg-blue-50 text-blue-600"
                     : card.color === "green"
                     ? "border-green-800 bg-blue-50 text-green-600"
+                    : card.color === "yellow"
+                    ? "border-yellow-400 bg-blue-50 text-yellow-300"
                     : "border-orange-700 bg-blue-50 text-purple-600"
                 } hover:shadow-md transition-shadow cursor-pointer`}
                 onClick={() => navigate(card.path)}

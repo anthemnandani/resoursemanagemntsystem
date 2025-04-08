@@ -41,6 +41,7 @@ export const DashboardProvider = ({ children }) => {
         };
 
         setCounts(newCounts);
+        console.log("new count: ", newCounts);
         localStorage.setItem("dashboardCounts", JSON.stringify(newCounts));
       } catch (err) {
         console.error("Error loading dashboard data", err);
