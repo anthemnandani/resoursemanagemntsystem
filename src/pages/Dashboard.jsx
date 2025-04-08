@@ -7,7 +7,6 @@ import { useDashboard } from "../context/DashboardContext";
 const Dashboard = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
-
   const { counts, loading } = useDashboard();
 
   useEffect(() => {
@@ -69,6 +68,7 @@ const Dashboard = () => {
             <img
               src="https://res.cloudinary.com/dmyq2ymj9/image/upload/v1743745859/HR-Challenges-2024_4x-1536x927-1-1024x618_pbrsvs.webp"
               alt="Dashboard visualization"
+              loading="lazy"
             />
           </div>
         </div>

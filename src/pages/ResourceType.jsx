@@ -142,7 +142,7 @@ export const ResourseType = () => {
                       </td>
                       <td
                         className="px-6 py-4 font-medium text-[#013a63] cursor-pointer underline"
-                        onClick={() => handleUnitClick(resource.name)}
+                        onClick={() => handleUnitClick(resource.name)} title="Click to view related resources"
                       >
                         {resource.resourceCount}
                       </td>

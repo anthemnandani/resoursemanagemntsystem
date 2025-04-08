@@ -28,7 +28,7 @@ export const Employee = () => {
 
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [resourceToView, setResourceToView] = useState(null);
-  
+
   const handleViewClick = (resource) => {
     setResourceToView(resource);
     setViewModalOpen(true);
@@ -258,7 +258,7 @@ export const Employee = () => {
                     <td className="px-4 py-4 flex justify-center">
                       <div className="relative inline-block tooltip-container">
                         <button
-                          className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          className="text-[#013a63] cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded relative"
                           onClick={() => handleClick(employee._id)}
                         >
                           {employee.allocatedResourceCount}
@@ -321,44 +321,48 @@ export const Employee = () => {
                       </button>
                     </td>
                     <td className="px-4 py-4 flex justify-center">
-                      <div className="relative inline-block tooltip-container">
-                         <button
-                          onClick={() => handleViewClick(employee)}
-                          className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
-                          title="View"
-                        >
-                          <IoMdEye className="w-5 h-5" />
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => handleViewClick(employee)}
+                        className="text-[#013a63] cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded"
+                        title="View"
+                      >
+                        <IoMdEye className="w-5 h-5" />
+                      </button>
 
-                      <button
-                        onClick={() => handleEditClick(employee)}
-                        className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded"
-                        title="Edit Employee"
-                      >
-                        <CiEdit className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteClick(employee)}
-                        className="text-red-800 cursor-pointer hover:text-red-700 transition-colors p-1.5 rounded"
-                        title="Delete"
-                      >
-                        <MdOutlineDeleteForever className="w-5 h-5" />
-                      </button>
-                      <button className="text-black cursor-pointer transition-colors p-1.5 rounded relative group">
-                        <SiTicktick
-                          className="w-4 h-4"
-                          onClick={() => {
-                            setCurrentEmployeeId(employee._id);
-                            setIsAllocationModalOpen(true);
-                          }}
-                        />
-                        <div className="absolute z-50 hidden group-hover:block rounded-md shadow-md -top-10 right-1 -translate-x-1/5 transform translate-y-[-0%]">
-                          <button className="text-sm text-blue-900 px-4 py-2 bg-neutral-50 font-semibold min-h-10 min-w-48 overflow-y-auto">
-                            Allocate new resource
+                      {employee.status === "Active" && (
+                        <>
+                          <button
+                            onClick={() => handleEditClick(employee)}
+                            className="text-[#013a63] cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded"
+                            title="Edit Employee"
+                          >
+                            <CiEdit className="w-5 h-5" />
                           </button>
-                        </div>
-                      </button>
+                          <button
+                            onClick={() => handleDeleteClick(employee)}
+                            className="text-red-800 cursor-pointer hover:text-red-700 transition-colors p-1.5 rounded"
+                            title="Delete"
+                          >
+                            <MdOutlineDeleteForever className="w-5 h-5" />
+                          </button>
+                          <div className="relative group">
+                            <button
+                              className="text-black cursor-pointer transition-colors p-1.5 rounded"
+                              onClick={() => {
+                                setCurrentEmployeeId(employee._id);
+                                setIsAllocationModalOpen(true);
+                              }}
+                            >
+                              <SiTicktick className="w-4 h-4" />
+                            </button>
+                            <div className="absolute z-50 hidden group-hover:block rounded-md shadow-md -top-10 right-1 -translate-x-1/5 transform translate-y-[-0%]">
+                              <button className="text-sm text-blue-950 px-4 py-2 bg-neutral-50 font-semibold min-h-10 min-w-48 overflow-y-auto">
+                                Allocate new resource
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </td>
                   </tr>
                 ))
