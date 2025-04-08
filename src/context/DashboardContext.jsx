@@ -5,8 +5,6 @@ import Cookies from "js-cookie";
 const DashboardContext = createContext();
 export const useDashboard = () => useContext(DashboardContext);
 
-const API_BASE_URL = "https://resoursemanagemntsystem-bksn.vercel.app/api";
-
 export const DashboardProvider = ({ children }) => {
   const token = Cookies.get("token");
 
@@ -25,10 +23,10 @@ export const DashboardProvider = ({ children }) => {
 
       try {
         const [employeesRes, resourcesRes, allocationsRes, resourceTypeRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/employees`),
-          axios.get(`${API_BASE_URL}/resources`),
-          axios.get(`${API_BASE_URL}/allocations`),
-          axios.get(`${API_BASE_URL}/resourcestype`)
+          axios.get(`https://resoursemanagemntsystem-bksn.vercel.app/api/employees`),
+          axios.get(`https://resoursemanagemntsystem-bksn.vercel.app/api/resources`),
+          axios.get(`https://resoursemanagemntsystem-bksn.vercel.app/api/allocations`),
+          axios.get(`https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype`)
         ]);
 
         const newCounts = {
@@ -37,6 +35,8 @@ export const DashboardProvider = ({ children }) => {
           allocations: allocationsRes.data.count || allocationsRes.data.length || 0,
           resourceType: resourceTypeRes.data.count || resourceTypeRes.data.length || 0,
         };
+
+        console.log("new count: ", newCounts);
 
         setCounts(newCounts);
         sessionStorage.setItem("dashboardCounts", JSON.stringify(newCounts));
