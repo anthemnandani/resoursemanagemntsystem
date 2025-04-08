@@ -8,8 +8,10 @@ import { IoMdEye } from "react-icons/io";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import Navbar from "../components/Navbar";
 import ViewDetailsModal from "../components/ViewDetailsModal";
+import { useSearchParams } from "react-router-dom";
 
 export const Resourse = () => {
+  const [searchParams] = useSearchParams();
   const [resources, setResources] = useState([]);
   const [filteredResources, setFilteredResources] = useState([]);
   const [ActiveFilter, setActiveFilter] = useState("all");
@@ -22,25 +24,9 @@ export const Resourse = () => {
 
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [resourceToView, setResourceToView] = useState(null);
-  
-  const handleViewClick = (resource) => {
-    setResourceToView(resource);
-    setViewModalOpen(true);
-  };
 
-  useEffect(() => {
-    fetchResources();
-  }, []);
-
-  useEffect(() => {
-    if (ActiveFilter === "all") {
-      setFilteredResources(resources);
-    } else {
-      setFilteredResources(
-        resources.filter((resource) => resource.status === ActiveFilter)
-      );
-    }
-  }, [resources, ActiveFilter]);
+  const [resourceTypes, setResourceTypes] = useState([]);
+const [selectedResourceType, setSelectedResourceType] = useState("all");
 
   const fetchResources = async (status = null) => {
     setLoading(true);
@@ -68,15 +54,65 @@ export const Resourse = () => {
     }
   };
 
-  const handleEditClick = (resource) => {
-    setCurrentResource(resource);
-    setIsModalOpen(true);
+  const fetchResourceTypes = async () => {
+    try {
+      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype");
+      setResourceTypes(response.data.data || []);
+    } catch (error) {
+      console.error("Error fetching resource types:", error);
+    }
   };
 
-  const handleDeleteClick = (resource) => {
-    setResourceToDelete(resource);
-    setDeleteModalOpen(true);
-  };
+  useEffect(() => {
+    const resourceTypeFromURL = searchParams.get("resourceType");
+    if (resourceTypeFromURL && resourceTypes.length > 0) {
+      // Try to find the matching resource type by name
+      const match = resourceTypes.find(
+        (type) => type.name.toLowerCase() === resourceTypeFromURL.toLowerCase()
+      );
+      if (match) {
+        setSelectedResourceType(match._id);
+      }
+    }
+  }, [searchParams, resourceTypes]);
+  
+
+  useEffect(() => {
+    fetchResourceTypes();
+  }, []);
+
+  useEffect(() => {
+    fetchResources();
+  }, []);
+
+  useEffect(() => {
+    if (ActiveFilter === "all") {
+      setFilteredResources(resources);
+    } else {
+      setFilteredResources(
+        resources.filter((resource) => resource.status === ActiveFilter)
+      );
+    }
+  }, [resources, ActiveFilter]);
+
+  useEffect(() => {
+    let updatedResources = [...resources];
+  
+    if (ActiveFilter !== "all") {
+      updatedResources = updatedResources.filter(
+        (resource) => resource.status === ActiveFilter
+      );
+    }
+  
+    if (selectedResourceType !== "all") {
+      updatedResources = updatedResources.filter(
+        (resource) =>
+          resource.resourceType?._id === selectedResourceType
+      );
+    }
+  
+    setFilteredResources(updatedResources);
+  }, [resources, ActiveFilter, selectedResourceType]);  
 
   const updateCounts = (data) => {
     const allCount = data.length;
@@ -91,6 +127,21 @@ export const Resourse = () => {
       Available: AvailableCount,
       Allocated: AllocatedCount,
     });
+  };
+
+  const handleViewClick = (resource) => {
+    setResourceToView(resource);
+    setViewModalOpen(true);
+  };
+
+  const handleEditClick = (resource) => {
+    setCurrentResource(resource);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = (resource) => {
+    setResourceToDelete(resource);
+    setDeleteModalOpen(true);
   };
 
   const handleDeleteConfirm = async () => {
@@ -127,32 +178,48 @@ export const Resourse = () => {
           </button>
         </div>
 
-        <div className="flex gap-4 mb-4">
-          <button
-            className={`py-1 px-3 rounded ${
-              ActiveFilter === "all" ? "bg-[#013a63] text-white" : ""
-            } `}
-            onClick={() => setActiveFilter("all")}
-          >
-            All ({counts.all})
-          </button>
-          <button
-            className={`py-1 px-3 rounded ${
-              ActiveFilter === "Available" ? "bg-[#013a63] text-white" : ""
-            } `}
-            onClick={() => setActiveFilter("Available")}
-          >
-            Available ({counts.Available})
-          </button>
-          <button
-            className={`py-1 px-3 rounded ${
-              ActiveFilter === "Allocated" ? "bg-[#013a63] text-white" : ""
-            } `}
-            onClick={() => setActiveFilter("Allocated")}
-          >
-            Allocated ({counts.Allocated})
-          </button>
-        </div>
+        <div className="mb-4 flex flex-wrap gap-4 items-center">
+  <div className="flex gap-4">
+    <button
+      className={`py-1 px-3 rounded ${
+        ActiveFilter === "all" ? "bg-[#013a63] text-white" : ""
+      }`}
+      onClick={() => setActiveFilter("all")}
+    >
+      All ({counts.all})
+    </button>
+    <button
+      className={`py-1 px-3 rounded ${
+        ActiveFilter === "Available" ? "bg-[#013a63] text-white" : ""
+      }`}
+      onClick={() => setActiveFilter("Available")}
+    >
+      Available ({counts.Available})
+    </button>
+    <button
+      className={`py-1 px-3 rounded ${
+        ActiveFilter === "Allocated" ? "bg-[#013a63] text-white" : ""
+      }`}
+      onClick={() => setActiveFilter("Allocated")}
+    >
+      Allocated ({counts.Allocated})
+    </button>
+  </div>
+
+  <select
+    className="border border-gray-300 rounded px-3 py-1 outline-none"
+    value={selectedResourceType}
+    onChange={(e) => setSelectedResourceType(e.target.value)}
+  >
+    <option value="all">All Resource Types</option>
+    {resourceTypes.map((type) => (
+      <option key={type._id} value={type._id}>
+        {type.name}
+      </option>
+    ))}
+  </select>
+</div>
+
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
@@ -295,13 +362,21 @@ export const Resourse = () => {
           itemName={resourceToDelete?.name || "this resource"}
         />
 
-<ViewDetailsModal
-  isOpen={viewModalOpen}
-  onClose={() => setViewModalOpen(false)}
-  data={resourceToView}
-  hiddenFields = {["__v", "_id", "createdAt", "images", "isDeleted", "id", "updatedAt"]}
-  title="Resource Details"
-/>
+        <ViewDetailsModal
+          isOpen={viewModalOpen}
+          onClose={() => setViewModalOpen(false)}
+          data={resourceToView}
+          hiddenFields={[
+            "__v",
+            "_id",
+            "createdAt",
+            "images",
+            "isDeleted",
+            "id",
+            "updatedAt",
+          ]}
+          title="Resource Details"
+        />
       </div>
     </>
   );

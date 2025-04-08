@@ -9,7 +9,10 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 import Navbar from "../components/Navbar";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 
+import { useNavigate } from "react-router-dom";
+
 export const ResourseType = () => {
+  const navigate = useNavigate();
   const [resources, setResources] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentResource, setCurrentResource] = useState(null);
@@ -19,6 +22,10 @@ export const ResourseType = () => {
 
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [resourceToView, setResourceToView] = useState(null);
+
+  const handleUnitClick = (resourceTypeName) => {
+    navigate(`/resources?resourceType=${encodeURIComponent(resourceTypeName)}`);
+  };
 
   const handleViewClick = (resource) => {
     setResourceToView(resource);
@@ -133,9 +140,13 @@ export const ResourseType = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                      <td
+                        className="px-6 py-4 font-medium text-[#013a63] cursor-pointer underline"
+                        onClick={() => handleUnitClick(resource.name)}
+                      >
                         {resource.resourceCount}
                       </td>
+
                       <td className="px-6 py-4 flex justify-center space-x-3">
                         <button
                           onClick={() => handleViewClick(resource)}
