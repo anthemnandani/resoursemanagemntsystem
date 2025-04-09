@@ -151,10 +151,10 @@ export const Employee = () => {
     <>
       <Navbar />
       <div className="container mx-auto my-6 p-4 overflow-y-scroll pt-14">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-2">
           <h2 className="text-2xl font-semibold text-center">Employees</h2>
           <button
-            className="bg-[#013a63] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
+            className="bg-[#003cb3] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentEmployee(null);
               setIsModalOpen(true);
@@ -172,7 +172,7 @@ export const Employee = () => {
         <div className="flex gap-4 mb-4">
           <button
             className={`py-1 px-3 rounded ${
-              ActiveFilter === "all" ? "bg-[#013a63] text-white" : ""
+              ActiveFilter === "all" ? "bg-[#003cb3] text-white" : ""
             }`}
             onClick={() => setActiveFilter("all")}
           >
@@ -180,7 +180,7 @@ export const Employee = () => {
           </button>
           <button
             className={`py-1 px-3 rounded ${
-              ActiveFilter === "Active" ? "bg-[#013a63] text-white" : ""
+              ActiveFilter === "Active" ? "bg-[#003cb3] text-white" : ""
             }`}
             onClick={() => setActiveFilter("Active")}
           >
@@ -188,7 +188,7 @@ export const Employee = () => {
           </button>
           <button
             className={`py-1 px-3 rounded ${
-              ActiveFilter === "Inactive" ? "bg-[#013a63] text-white" : ""
+              ActiveFilter === "Inactive" ? "bg-[#003cb3] text-white" : ""
             }`}
             onClick={() => setActiveFilter("Inactive")}
           >
@@ -236,29 +236,29 @@ export const Employee = () => {
                     key={employee._id}
                     className="bg-white hover:bg-gray-50 transition-colors duration-150"
                   >
-                    <td className="px-2 py-4 flex justify-center">
+                    <td className="px-4 py-2 flex justify-center">
                       <img
                         src={employee.profilePicture.url || "/user.png"}
                         alt={employee.name}
                         className="h-10 w-10 rounded-full object-cover"
                       />
                     </td>
-                    <td className="px-4 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
                       {employee.name || "N/A"}
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
+                    <td className="px-4 py-2 whitespace-nowrap">
                       {employee.email}
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
+                    <td className="px-4 py-2 whitespace-nowrap">
                       {employee.department}
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
+                    <td className="px-4 py-2 whitespace-nowrap">
                       {employee.position}
                     </td>
-                    <td className="px-4 py-4 flex justify-center">
+                    <td className="px-4 py-2 flex justify-center">
                       <div className="relative inline-block tooltip-container">
                         <button
-                          className="text-[#013a63] cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded relative"
+                          className="text-black cursor-pointer font-bold hover:text-blue-950 transition-colors p-1.5 rounded relative"
                           onClick={() => handleClick(employee._id)}
                         >
                           {employee.allocatedResourceCount}
@@ -305,13 +305,13 @@ export const Employee = () => {
                           )}
                       </div>
                     </td>
-                    <td className="px-4 py-4 whitespace-nowrap">
+                    <td className="px-4 py-2 whitespace-nowrap">
                       {new Date(employee.hireDate).toLocaleDateString()}
                     </td>
-                    <td className="px-4 py-4">
+                    <td className="px-4 py-2">
                       <button
                         onClick={() => toggleEmployeeStatus(employee)}
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
+                        className={`inline-flex items-center px-4.5 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
                           employee.status === "Active"
                             ? "bg-green-50 text-green-800 hover:bg-green-100"
                             : "bg-red-50 text-red-800 hover:bg-red-100"
@@ -320,10 +320,10 @@ export const Employee = () => {
                         {employee.status}
                       </button>
                     </td>
-                    <td className="px-4 py-4 flex justify-center">
+                    <td className="px-4 py-2 flex justify-center">
                       <button
                         onClick={() => handleViewClick(employee)}
-                        className="text-[#013a63] cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded"
+                        className="text-black cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded"
                         title="View"
                       >
                         <IoMdEye className="w-5 h-5" />
@@ -333,7 +333,7 @@ export const Employee = () => {
                         <>
                           <button
                             onClick={() => handleEditClick(employee)}
-                            className="text-[#013a63] cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded"
+                            className="text-[#003cb3] cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded"
                             title="Edit Employee"
                           >
                             <CiEdit className="w-5 h-5" />
@@ -370,7 +370,7 @@ export const Employee = () => {
                 <tr>
                   <td
                     colSpan="8"
-                    className="px-4 py-4 text-center text-gray-500 italic"
+                    className="px-4 py-2 text-center text-gray-500 italic"
                   >
                     No employees found
                   </td>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { RxCross1 } from "react-icons/rx";
 
 const ResourceFormModal = ({
   isOpen,
@@ -16,6 +17,8 @@ const ResourceFormModal = ({
     purchaseDate: "",
     status: "Available",
     images: null,
+    documents: null,
+    warrantyExpiryDate: "",
   });
   const [resourceTypes, setResourceTypes] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,6 +68,8 @@ const ResourceFormModal = ({
         totalResourceCount: resourceData.totalResourceCount || "",
         avaliableResourceCount: resourceData.avaliableResourceCount || "",
         purchaseDate: resourceData.purchaseDate?.split("T")[0] || "",
+        warrantyExpiryDate:
+          resourceData.warrantyExpiryDate?.split("T")[0] || "",
         status: resourceData.status || "Available",
       });
     } else {
@@ -75,6 +80,7 @@ const ResourceFormModal = ({
         totalResourceCount: "",
         avaliableResourceCount: "",
         purchaseDate: "",
+        warrantyExpiryDate: "",
         status: "Available",
       });
     }
@@ -105,12 +111,20 @@ const ResourceFormModal = ({
           : formData.totalResourceCount
       );
       payload.append("purchaseDate", formData.purchaseDate);
+      payload.append("warrantyExpiryDate", formData.warrantyExpiryDate);
       payload.append("status", formData.status);
 
       // Append images if available
       if (formData.images) {
         for (let i = 0; i < formData.images.length; i++) {
           payload.append("images", formData.images[i]);
+        }
+      }
+
+      // Append document files if available
+      if (formData.documents) {
+        for (let i = 0; i < formData.documents.length; i++) {
+          payload.append("documents", formData.documents[i]);
         }
       }
 
@@ -152,16 +166,16 @@ const ResourceFormModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-  <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
+      <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-2xl font-semibold">
             {resourceData ? "Edit Resource" : "Add Resource"}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 text-xl hover:text-gray-700"
           >
-            ✕
+            <RxCross1 />
           </button>
         </div>
 
@@ -173,7 +187,10 @@ const ResourceFormModal = ({
 
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Resource Type</label>
+            <div className="flex">
+              <label className="block text-gray-700 mb-1">Resource Type</label>{" "}
+              <span className="text-red-600">*</span>
+            </div>
             <select
               name="resourceTypeId"
               value={formData.resourceTypeId}
@@ -191,10 +208,14 @@ const ResourceFormModal = ({
           </div>
 
           <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Resource Name</label>
+            <div className="flex">
+              <label className="block text-gray-700 mb-1">Resource Name</label>{" "}
+              <span className="text-red-600">*</span>
+            </div>
             <input
               type="text"
               name="name"
+              placeholder="Type resource name here..."
               value={formData.name}
               onChange={handleInputChange}
               className="w-full p-1 border rounded"
@@ -203,31 +224,77 @@ const ResourceFormModal = ({
           </div>
 
           <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Description</label>
+            <label className="block text-gray-700 mb-1">Total units</label>
+            <input
+              type="number"
+              name="totalResourceCount"
+              placeholder="e.g., 5"
+              value={formData.totalResourceCount}
+              onChange={handleInputChange}
+              onKeyDown={(e) => {
+                if (e.key === "e" || e.key === "+" || e.key === "-") {
+                  e.preventDefault();
+                }
+              }}
+              className="w-full p-1 border rounded"
+            />
+          </div>
+
+          {/* <div className="mb-2">
+            <label className="block text-gray-700 mb-1">Avaliable Resourse</label>
+            <input
+              type="number"
+              name="avaliableResourceCount"
+              value={formData.avaliableResourceCount}
+              onChange={handleInputChange}
+              className="w-full p-1 border rounded"
+            />
+          </div> */}
+
+          <div className="mb-2">
+            <label className="block text-gray-700 mb-1">Purchase Date</label>
+            <input
+              type="date"
+              name="purchaseDate"
+              value={formData.purchaseDate}
+              onChange={handleInputChange}
+              className="w-full p-1 border rounded"
+            />
+          </div>
+
+          <div className="mb-2">
+            <label className="block text-gray-700 mb-1">
+              Warranty Expiry Date
+            </label>
+            <input
+              type="date"
+              name="warrantyExpiryDate"
+              value={formData.warrantyExpiryDate}
+              onChange={handleInputChange}
+              className="w-full p-1 border rounded"
+            />
+          </div>
+
+          <div className="mb-2">
+            <div className="flex">
+              <label className="block text-gray-700 mb-1">Description</label>{" "}
+              <span className="text-red-600">*</span>
+            </div>
             <textarea
               name="description"
               value={formData.description}
+              placeholder="Color, style, or appearance..."
               onChange={handleInputChange}
               className="w-full p-1 border rounded"
               rows="3"
             />
           </div>
 
-          <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Total Resource</label>
-            <input
-              type="number"
-              name="totalResourceCount"
-              value={formData.totalResourceCount}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded"
-            />
-          </div>
-
           <div className="mb-4">
-            <label className="block text-gray-800 font-semibold mb-2">
-              Upload Images
-            </label>
+            <div className="flex">
+              <label className="block text-gray-700 mb-1">Upload Images</label>{" "}
+              <span className="text-red-600">*</span>
+            </div>
 
             <div className="relative border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50">
               <input
@@ -275,26 +342,31 @@ const ResourceFormModal = ({
             )}
           </div>
 
-          {/* <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Avaliable Resourse</label>
-            <input
-              type="number"
-              name="avaliableResourceCount"
-              value={formData.avaliableResourceCount}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded"
-            />
-          </div> */}
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-1">Upload Documents</label>
 
-          <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Purchase Date</label>
-            <input
-              type="date"
-              name="purchaseDate"
-              value={formData.purchaseDate}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded"
-            />
+            <div className="relative border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50">
+              <input
+                type="file"
+                name="documents"
+                accept=".pdf,.doc,.docx,.xls,.xlsx,.txt"
+                multiple
+                onChange={(e) =>
+                  setFormData({ ...formData, documents: e.target.files })
+                }
+                className="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
+       file:rounded-full file:border-0 file:text-sm file:font-semibold
+       file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+              />
+            </div>
+
+            {formData.documents?.length > 0 && (
+              <ul className="list-disc ml-5 mt-2 text-sm text-gray-600">
+                {Array.from(formData.documents).map((doc, index) => (
+                  <li key={index}>{doc.name}</li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {/* Status */}
@@ -316,14 +388,14 @@ const ResourceFormModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-300 rounded hover:bg-neutral-400"
+              className="px-4 py-2 bg-gray-300 rounded-full hover:bg-neutral-400"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#013a63] text-white rounded hover:bg-blue-900 flex items-center gap-1"
+              className="px-4 py-2 bg-[#003cb3] text-white rounded-full hover:bg-blue-900 flex items-center gap-1"
               disabled={loading}
             >
               {loading ? (

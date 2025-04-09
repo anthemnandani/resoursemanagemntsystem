@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { RxCross1 } from "react-icons/rx";
 
 const EmployeeFormModal = ({
   isOpen,
@@ -26,7 +27,7 @@ const EmployeeFormModal = ({
         email: employeeData.email || "",
         position: employeeData.position || "",
         department: employeeData.department || "",
-        hireDate: employeeData.hireDate?.split('T')[0] || '',
+        hireDate: employeeData.hireDate?.split("T")[0] || "",
         profilePicture: null,
       });
       setImagePreview(employeeData.profilePicture?.url || "");
@@ -114,16 +115,16 @@ const EmployeeFormModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-  <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
+      <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-xl font-semibold">
             {employeeData ? "Edit Employee" : "Add Employee"}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 cursor-pointer"
+            className="text-gray-500 text-xl hover:text-gray-700 cursor-pointer"
           >
-            ✕
+            <RxCross1 />
           </button>
         </div>
 
@@ -162,8 +163,8 @@ const EmployeeFormModal = ({
                   </div>
                 )}
               </div>
-              <label className="flex flex-col items-center px-4 py-2 bg-white rounded-lg border border-[#013a63] cursor-pointer">
-                <span className="text-[#013a63]">Choose File</span>
+              <label className="flex flex-col items-center px-4 py-2 bg-white rounded-lg border border-[#003cb3] cursor-pointer">
+                <span className="text-[#003cb3]">Choose File</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -175,7 +176,10 @@ const EmployeeFormModal = ({
           </div>
 
           <div className="mb-2">
-            <label className="block text-gray-700 mb-2">Name</label>
+            
+          <div className="flex">
+            <label className="block text-gray-700 mb-1">Name</label> <span className="text-red-600">*</span>
+            </div>
             <input
               type="text"
               name="name"
@@ -187,7 +191,9 @@ const EmployeeFormModal = ({
           </div>
 
           <div className="mb-2">
-            <label className="block text-gray-700 mb-2">Email</label>
+            <div className="flex">
+            <label className="block text-gray-700 mb-1">Email</label> <span className="text-red-600">*</span>
+            </div>
             <input
               type="email"
               name="email"
@@ -200,7 +206,9 @@ const EmployeeFormModal = ({
           </div>
 
           <div className="mb-1">
-            <label className="block text-gray-700 mb-2">Department</label>
+          <div className="flex">
+            <label className="block text-gray-700 mb-1">Department</label> <span className="text-red-600">*</span>
+            </div>
             <select
               name="department"
               value={formData.department}
@@ -223,7 +231,10 @@ const EmployeeFormModal = ({
           </div>
 
           <div className="mb-1">
-            <label className="block text-gray-700 mb-2">Position</label>
+            <div className="flex">
+              <label className="block text-gray-700 mb-1">Position</label>{" "}
+              <span className="text-red-600">*</span>
+            </div>
             <select
               name="position"
               value={formData.position}
@@ -237,7 +248,9 @@ const EmployeeFormModal = ({
               <option value="Team Lead">Team Lead</option>
               <option value="HR Manager">HR Manager</option>
               <option value="Recruiter">Recruiter</option>
-              <option value="Business Development Manager">Business Development Manager</option>
+              <option value="Business Development Manager">
+                Business Development Manager
+              </option>
               <option value="Sales Manager">Sales Manager</option>
               <option value="Project Manager">Project Manager</option>
               <option value="Admin">Admin</option>
@@ -261,14 +274,14 @@ const EmployeeFormModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-300 rounded cursor-pointer"
+              className="px-4 py-2 bg-gray-300 rounded-full cursor-pointer"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#013a63] text-white rounded flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2 bg-[#003cb3] text-white rounded-full flex items-center gap-2 cursor-pointer"
               disabled={loading}
             >
               {loading ? (

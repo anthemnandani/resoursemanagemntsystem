@@ -18,14 +18,13 @@ export const AllocatedResouses = () => {
   const [loading, setLoading] = useState(false);
   const [ActiveFilter, setActiveFilter] = useState("all");
 
-  
-    const [viewModalOpen, setViewModalOpen] = useState(false);
-    const [resourceToView, setResourceToView] = useState(null);
-    
-    const handleViewClick = (resource) => {
-      setResourceToView(resource);
-      setViewModalOpen(true);
-    };
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [resourceToView, setResourceToView] = useState(null);
+
+  const handleViewClick = (resource) => {
+    setResourceToView(resource);
+    setViewModalOpen(true);
+  };
 
   useEffect(() => {
     fetchAllocations();
@@ -81,12 +80,12 @@ export const AllocatedResouses = () => {
     <>
       <Navbar />
       <div className="container mx-auto my-6 p-4 pt-14">
-        <div className="flex justify-between items-center py-4">
+        <div className="flex justify-between items-center py-2">
           <h2 className="text-2xl font-semibold text-center">
             Allocated Resources
           </h2>
           <button
-            className="bg-[#013a63] text-white px-4 py-2 rounded flex items-center gap-2 relative group"
+            className="bg-[#003cb3] text-white px-4 py-2 rounded flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentAllocation(null);
               setIsModalOpen(true);
@@ -105,7 +104,7 @@ export const AllocatedResouses = () => {
             <button
               key={filter}
               className={`py-1 px-3 rounded ${
-                ActiveFilter === filter ? "bg-[#013a63] text-white" : ""
+                ActiveFilter === filter ? "bg-[#003cb3] text-white" : ""
               }`}
               onClick={() => setActiveFilter(filter)}
             >
@@ -118,7 +117,7 @@ export const AllocatedResouses = () => {
         {/* Loading Indicator */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#013a63]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#003cb3]"></div>
           </div>
         ) : (
           <div className="relative shadow-sm border border-gray-200 overflow-visible">
@@ -142,10 +141,10 @@ export const AllocatedResouses = () => {
                       key={allocation._id}
                       className="bg-white hover:bg-gray-50 transition-colors"
                     >
-                      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                      <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
                         {allocation.resource?.name || "N/A"}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-2">
                         <div className="font-medium">
                           {allocation.employee?.name || "N/A"}
                         </div>
@@ -153,17 +152,17 @@ export const AllocatedResouses = () => {
                           {allocation.employee?.position || ""}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-2 whitespace-nowrap">
                         {new Date(
                           allocation.allocatedDate
                         ).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-2 whitespace-nowrap">
                         {allocation.returnDate
                           ? new Date(allocation.returnDate).toLocaleDateString()
                           : "Not Returned yet"}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-2">
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             allocation.status === "Active"
@@ -174,17 +173,17 @@ export const AllocatedResouses = () => {
                           {allocation.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 flex justify-center space-x-3">
-                         <button
-                                                  onClick={() => handleViewClick(allocation)}
-                                                  className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
-                                                  title="View"
-                                                >
-                                                  <IoMdEye className="w-5 h-5" />
-                                                </button>
+                      <td className="px-6 py-2 flex justify-center space-x-3">
+                        <button
+                          onClick={() => handleViewClick(allocation)}
+                          className="text-black cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          title="View"
+                        >
+                          <IoMdEye className="w-5 h-5" />
+                        </button>
                         <button
                           onClick={() => setCurrentAllocation(allocation)}
-                          className="text-[#013a63] hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
+                          className="text-[#003cb3] hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
                         >
                           <CiEdit className="w-5 h-5" />
                         </button>
@@ -204,7 +203,7 @@ export const AllocatedResouses = () => {
                   <tr>
                     <td
                       colSpan="6"
-                      className="px-6 py-4 text-center text-gray-500 italic"
+                      className="px-6 py-2 text-center text-gray-500 italic"
                     >
                       No allocations found
                     </td>
@@ -228,7 +227,7 @@ export const AllocatedResouses = () => {
           itemName={allocationToDelete?.resource?.name || "this allocation"}
         />
 
-<ViewDetailsModal
+        <ViewDetailsModal
           isOpen={viewModalOpen}
           onClose={() => setViewModalOpen(false)}
           data={resourceToView}

@@ -33,7 +33,10 @@ export const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen flex-col gap-10">
+      <div>
+        <img src="/logo1.png" className="h-14 w-auto" alt="" />
+      </div>
       <div className="bg-white p-6 rounded-lg shadow w-full max-w-sm">
         <h2 className="text-2xl font-bold mb-4 text-center">Admin Login</h2>
 
@@ -66,10 +69,13 @@ export const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-[#013a63] text-white cursor-pointer py-2 rounded-md hover:bg-blue-900 transition"
+            className="w-full bg-[#003cb3] text-white cursor-pointer py-2 rounded-md hover:bg-blue-900 transition"
           >
             Login
           </button>
+          <a href="" className="text-blue-600 text-center flex items-center justify-center">
+            <button>Forgot password?</button>
+          </a>
         </form>
       </div>
     </div>

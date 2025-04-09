@@ -26,7 +26,7 @@ export const Resourse = () => {
   const [resourceToView, setResourceToView] = useState(null);
 
   const [resourceTypes, setResourceTypes] = useState([]);
-const [selectedResourceType, setSelectedResourceType] = useState("all");
+  const [selectedResourceType, setSelectedResourceType] = useState("all");
 
   const fetchResources = async (status = null) => {
     setLoading(true);
@@ -56,7 +56,9 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
 
   const fetchResourceTypes = async () => {
     try {
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype");
+      const response = await axios.get(
+        "https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"
+      );
       setResourceTypes(response.data.data || []);
     } catch (error) {
       console.error("Error fetching resource types:", error);
@@ -75,7 +77,6 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
       }
     }
   }, [searchParams, resourceTypes]);
-  
 
   useEffect(() => {
     fetchResourceTypes();
@@ -97,22 +98,21 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
 
   useEffect(() => {
     let updatedResources = [...resources];
-  
+
     if (ActiveFilter !== "all") {
       updatedResources = updatedResources.filter(
         (resource) => resource.status === ActiveFilter
       );
     }
-  
+
     if (selectedResourceType !== "all") {
       updatedResources = updatedResources.filter(
-        (resource) =>
-          resource.resourceType?._id === selectedResourceType
+        (resource) => resource.resourceType?._id === selectedResourceType
       );
     }
-  
+
     setFilteredResources(updatedResources);
-  }, [resources, ActiveFilter, selectedResourceType]);  
+  }, [resources, ActiveFilter, selectedResourceType]);
 
   const updateCounts = (data) => {
     const allCount = data.length;
@@ -160,10 +160,24 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
     <>
       <Navbar />
       <div className="container mx-auto my-6 p-4 pt-14">
-        <div className="flex justify-between items-center py-4">
-          <h2 className="text-2xl font-semibold text-center">Resources</h2>
+        <div className="flex justify-between items-center py-5">
+          <div className="flex">
+            <h2 className="text-2xl font-semibold text-center">Resources - </h2>
+            <select
+              className="bg-transparent border-b border-gray-200 text-gray-700 py-2 px-3 focus:outline-none focus:border-blue-500"
+              value={selectedResourceType}
+              onChange={(e) => setSelectedResourceType(e.target.value)}
+            >
+              <option value="all">Resource Types</option>
+              {resourceTypes.map((type) => (
+                <option key={type._id} value={type._id}>
+                  {type.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <button
-            className="bg-[#013a63] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
+            className="bg-[#003cb3] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentResource(null);
               setIsModalOpen(true);
@@ -179,51 +193,37 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
         </div>
 
         <div className="mb-4 flex flex-wrap gap-4 items-center">
-  <div className="flex gap-4">
-    <button
-      className={`py-1 px-3 rounded ${
-        ActiveFilter === "all" ? "bg-[#013a63] text-white" : ""
-      }`}
-      onClick={() => setActiveFilter("all")}
-    >
-      All ({counts.all})
-    </button>
-    <button
-      className={`py-1 px-3 rounded ${
-        ActiveFilter === "Available" ? "bg-[#013a63] text-white" : ""
-      }`}
-      onClick={() => setActiveFilter("Available")}
-    >
-      Available ({counts.Available})
-    </button>
-    <button
-      className={`py-1 px-3 rounded ${
-        ActiveFilter === "Allocated" ? "bg-[#013a63] text-white" : ""
-      }`}
-      onClick={() => setActiveFilter("Allocated")}
-    >
-      Allocated ({counts.Allocated})
-    </button>
-  </div>
-
-  <select
-    className="border border-gray-300 rounded px-3 py-1 outline-none"
-    value={selectedResourceType}
-    onChange={(e) => setSelectedResourceType(e.target.value)}
-  >
-    <option value="all">All Resource Types</option>
-    {resourceTypes.map((type) => (
-      <option key={type._id} value={type._id}>
-        {type.name}
-      </option>
-    ))}
-  </select>
-</div>
-
+          <div className="flex gap-4">
+            <button
+              className={`py-2 px-3 rounded ${
+                ActiveFilter === "all" ? "bg-[#003cb3] text-white" : ""
+              }`}
+              onClick={() => setActiveFilter("all")}
+            >
+              All ({counts.all})
+            </button>
+            <button
+              className={`py-2 px-3 rounded ${
+                ActiveFilter === "Available" ? "bg-[#003cb3] text-white" : ""
+              }`}
+              onClick={() => setActiveFilter("Available")}
+            >
+              Available ({counts.Available})
+            </button>
+            <button
+              className={`py-2 px-3 rounded ${
+                ActiveFilter === "Allocated" ? "bg-[#003cb3] text-white" : ""
+              }`}
+              onClick={() => setActiveFilter("Allocated")}
+            >
+              Allocated ({counts.Allocated})
+            </button>
+          </div>
+        </div>
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#013a63]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#003cb3]"></div>
           </div>
         ) : (
           <div className="relative shadow-sm border border-gray-200">
@@ -249,6 +249,9 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
                     Purchase Date
                   </th>
                   <th scope="col" className="px-6 py-3.5 font-medium">
+                    Warranty Expiry Date
+                  </th>
+                  <th scope="col" className="px-6 py-3.5 font-medium">
                     Status
                   </th>
                   <th
@@ -266,15 +269,17 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
                       key={resource._id}
                       className="bg-white hover:bg-gray-50 transition-colors duration-150"
                     >
-                      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        {resource.name}
+                      <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
+                        {resource.name.charAt(0).toUpperCase() +
+                          resource.name.slice(1)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-2 whitespace-nowrap">
                         {resource.resourceType?.name || "N/A"}
                       </td>
-                      <td className="px-6 py-4 max-w-[200px] relative group">
+                      <td className="px-6 py-2 max-w-[200px] relative group">
                         <div className="truncate cursor-help">
-                          {resource.description || "No description"}
+                          {resource.description.charAt(0).toUpperCase() +
+                            resource.description.slice(1) || "No description"}
                         </div>
                         <div className="absolute z-50 hidden group-hover:block min-w-[500px] max-w-[90vw] p-3 bg-white border border-gray-200 rounded-md shadow-lg top-full -translate-x-1/5 transform translate-y-[-50%]">
                           <div className="text-sm text-gray-700 max-h-[90vh] overflow-y-auto">
@@ -282,18 +287,23 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-2 whitespace-nowrap">
                         {resource.totalResourceCount}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-2 whitespace-nowrap">
                         {resource.avaliableResourceCount}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-2 whitespace-nowrap">
                         {resource.purchaseDate
                           ? new Date(resource.purchaseDate).toLocaleDateString()
                           : "N/A"}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-2 whitespace-nowrap">
+                        {resource.warrantyExpiryDate
+                          ? new Date(resource.warrantyExpiryDate).toLocaleDateString()
+                          : "N/A"}
+                      </td>
+                      <td className="px-6 py-2">
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${
                             resource.status === "Available"
@@ -306,17 +316,17 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
                           {resource.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 flex justify-center">
+                      <td className="px-6 py-2 flex justify-center">
                         <button
                           onClick={() => handleViewClick(resource)}
-                          className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          className="text-black cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
                           title="View"
                         >
                           <IoMdEye className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => handleEditClick(resource)}
-                          className="text-[#013a63] cursor-pointer hover:text-[#013a63] transition-colors p-2 rounded hover:bg-blue-50"
+                          className="text-[#003cb3] cursor-pointer hover:text-[#003cb3] transition-colors p-2 rounded hover:bg-blue-50"
                           title="Edit"
                         >
                           <CiEdit className="w-5 h-5" />
@@ -335,7 +345,7 @@ const [selectedResourceType, setSelectedResourceType] = useState("all");
                   <tr>
                     <td
                       colSpan="6"
-                      className="px-6 py-4 text-center text-gray-500 italic"
+                      className="px-6 py-2 text-center text-gray-500 italic"
                     >
                       No resources found
                     </td>

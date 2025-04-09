@@ -83,11 +83,11 @@ export const Register = () => {
           </select>
           <button
             type="submit"
-            className="w-full bg-[#013a63] cursor-pointer text-white p-2 rounded-md hover:bg-blue-700"
+            className="w-full bg-[#003cb3] cursor-pointer text-white p-2 rounded-md hover:bg-blue-700"
           >
             Register
           </button>
-          <a href="#" className="text-[#013a63] cursor-pointer text-center m-auto">
+          <a href="#" className="text-[#003cb3] cursor-pointer text-center m-auto">
             Forgot Password?
           </a>
         </form>

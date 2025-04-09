@@ -81,19 +81,21 @@ const Dashboard = () => {
     },
   ];
 
+  // #013a63
+
   return (
     <>
       <Navbar />
       <div className="px-6 py-4 min-h-screen">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 pt-18">Dashboard</h2>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex flex-col lg:w-1/2 sm:w-full gap-4 mb-4">
+        <div className="">
+          <div className="flex justify-between gap-4 mb-4">
             {dashboardCards.map((card, index) => (
               <div
                 key={index}
-                className={`p-6 rounded-lg border-l-4 ${
+                className={`p-6 w-full rounded-lg border-l-4 ${
                   card.color === "blue"
-                    ? "border-[#013a63] bg-blue-50 text-blue-600"
+                    ? "border-[#003cb3] bg-blue-50 text-blue-600"
                     : card.color === "green"
                     ? "border-green-800 bg-blue-50 text-green-600"
                     : card.color === "yellow"
@@ -121,15 +123,6 @@ const Dashboard = () => {
                 <p className="text-xs text-gray-500 mt-2">{card.description}</p>
               </div>
             ))}
-          </div>
-
-          <div className="mb-10 flex items-center justify-center lg:px-10 sm:px-1 lg:w-1/2 sm:w-full">
-            <img
-              src="https://res.cloudinary.com/dmyq2ymj9/image/upload/v1743745859/HR-Challenges-2024_4x-1536x927-1-1024x618_pbrsvs.webp"
-              alt="Dashboard visualization"
-              className="w-full h-auto"
-              loading="lazy"
-            />
           </div>
         </div>
       </div>

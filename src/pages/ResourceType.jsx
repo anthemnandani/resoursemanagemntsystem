@@ -75,11 +75,11 @@ export const ResourseType = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-4 pt-14">
+      <div className="container mx-auto my-6 p-2 pt-14">
         <div className="flex justify-between items-center py-4">
-          <h2 className="text-2xl font-semibold text-center">Resources Type</h2>
+          <h2 className="text-2xl font-semibold text-center">Resource Types</h2>
           <button
-            className="bg-[#013a63] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
+            className="bg-[#003cb3] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentResource(null);
               setIsModalOpen(true);
@@ -96,7 +96,7 @@ export const ResourseType = () => {
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#013a63]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#003cb3]"></div>
           </div>
         ) : (
           <div className="relative shadow-sm border border-gray-200 overflow-visible">
@@ -127,10 +127,10 @@ export const ResourseType = () => {
                       key={resource._id}
                       className="bg-white hover:bg-gray-50 transition-colors duration-150"
                     >
-                      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                      <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
                         {resource.name}
                       </td>
-                      <td className="px-6 py-4 max-w-[200px] relative group">
+                      <td className="px-6 py-2 max-w-[200px] relative group">
                         <div className="truncate cursor-help">
                           {resource.description || "No description"}
                         </div>
@@ -141,16 +141,16 @@ export const ResourseType = () => {
                         </div>
                       </td>
                       <td
-                        className="px-6 py-4 font-medium text-[#013a63] cursor-pointer underline"
+                        className="px-6 py-2 font-bold text-black cursor-pointer hover:underline"
                         onClick={() => handleUnitClick(resource.name)} title="Click to view related resources"
                       >
                         {resource.resourceCount}
                       </td>
 
-                      <td className="px-6 py-4 flex justify-center space-x-3">
+                      <td className="px-6 py-2 flex justify-center space-x-3">
                         <button
                           onClick={() => handleViewClick(resource)}
-                          className="text-[#013a63] cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          className="text-black cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
                           title="View"
                         >
                           <IoMdEye className="w-5 h-5" />
@@ -158,7 +158,7 @@ export const ResourseType = () => {
 
                         <button
                           onClick={() => handleEditClick(resource)}
-                          className="text-[#013a63] hover:text-[#013a63] cursor-pointer transition-colors p-1.5 rounded hover:bg-blue-50"
+                          className="text-[#003cb3] hover:text-[#003cb3] cursor-pointer transition-colors p-1.5 rounded hover:bg-blue-50"
                           title="Edit"
                         >
                           <CiEdit className="w-5 h-5" />
@@ -177,7 +177,7 @@ export const ResourseType = () => {
                   <tr>
                     <td
                       colSpan="3"
-                      className="px-6 py-4 text-center text-gray-500 italic"
+                      className="px-6 py-2 text-center text-gray-500 italic"
                     >
                       No resources found
                     </td>

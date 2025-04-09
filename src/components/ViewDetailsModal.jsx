@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { RxCross1 } from "react-icons/rx";
 const ViewDetailsModal = ({
   isOpen,
   onClose,
@@ -12,7 +13,12 @@ const ViewDetailsModal = ({
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 bg-opacity-40 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-xl max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold mb-4 text-[#013a63]">{title}</h2>
+        <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold mb-4 text-[#003cb3]">{title}</h2>
+          <button onClick={onClose} className="text-gray-500 text-xl hover:text-gray-700">
+          <RxCross1 />
+          </button>
+        </div>
 
         <div className="space-y-3">
           {Object.entries(data).map(([key, value]) => {
@@ -46,11 +52,11 @@ const ViewDetailsModal = ({
                     </div>
                   ) : typeof value === "string" &&
                     value.match(/^\d{4}-\d{2}-\d{2}T/) ? (
-                    new Date(value).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })
+                      new Date(value).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })
                   ) : typeof value === "object" && value !== null ? (
                     value.name ||
                     value.title ||
@@ -61,19 +67,10 @@ const ViewDetailsModal = ({
                     value?.toString()
                   )}
                 </p>
-                <hr className="my-2" />
+                <hr className="my-2 text-gray-100" />
               </div>
             );
           })}
-        </div>
-
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={onClose}
-            className="bg-[#013a63] text-white px-4 py-2 rounded hover:bg-blue-800"
-          >
-            Close
-          </button>
         </div>
         {selectedImage && (
           <div
