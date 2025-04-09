@@ -1,18 +1,49 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import axios from "axios";
 import Navbar from "../components/Navbar";
-import { useDashboard } from "../context/DashboardContext";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const token = Cookies.get("token");
-  const { counts, loading } = useDashboard();
+
+  const [counts, setCounts] = useState({
+    employees: 0,
+    resources: 0,
+    allocations: 0,
+    resourceType: 0,
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!token) {
       navigate("/login");
+      return;
     }
+
+    const fetchDashboardData = async () => {
+      try {
+        const res = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/dashboard", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = res.data.data;
+
+        setCounts({
+          employees: data.employeeCount || 0,
+          resources: data.resourceCount || 0,
+          allocations: data.allocationCount || 0,
+          resourceType: data.resourceTypeCount || 0,
+        });
+      } catch (err) {
+        console.error("Dashboard fetch failed", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
   }, [token, navigate]);
 
   const dashboardCards = [
@@ -76,7 +107,7 @@ const Dashboard = () => {
                     <p className="text-sm font-medium text-gray-500">{card.title}</p>
                     <p className="text-3xl font-bold text-gray-800 mt-1">
                       {loading ? (
-                        <span className="text-gray-400 animate-pulse">...</span>
+                        <span className="w-10 h-6 bg-gray-200 rounded animate-pulse inline-block" />
                       ) : (
                         card.count
                       )}
