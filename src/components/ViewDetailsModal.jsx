@@ -24,7 +24,6 @@ const ViewDetailsModal = ({
                   {key.replace(/([A-Z])/g, " $1")}
                 </p>
                 <p className="text-gray-800 whitespace-pre-wrap break-words">
-                  {/* 🎯 Handle single image URL */}
                   {typeof value === "string" &&
                   value.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
                     <img
@@ -34,7 +33,6 @@ const ViewDetailsModal = ({
                       className="w-32 h-32 object-cover rounded-lg border cursor-pointer hover:opacity-80"
                     />
                   ) : Array.isArray(value) && value[0]?.url ? (
-                    // 🎯 Handle array of image objects
                     <div className="flex flex-wrap gap-2">
                       {value.map((imgObj, idx) => (
                         <img
@@ -48,21 +46,18 @@ const ViewDetailsModal = ({
                     </div>
                   ) : typeof value === "string" &&
                     value.match(/^\d{4}-\d{2}-\d{2}T/) ? (
-                    // 🎯 Format ISO Date
                     new Date(value).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
                     })
                   ) : typeof value === "object" && value !== null ? (
-                    // 🎯 Handle nested object (like resourceType)
                     value.name ||
                     value.title ||
                     value.url ||
                     value.label ||
                     JSON.stringify(value, null, 2)
                   ) : (
-                    // 🎯 Fallback for everything else
                     value?.toString()
                   )}
                 </p>

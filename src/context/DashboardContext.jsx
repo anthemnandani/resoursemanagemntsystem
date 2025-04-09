@@ -26,25 +26,20 @@ export const DashboardProvider = ({ children }) => {
       setLoading(true);
 
       try {
-        const [employeesRes, resourcesRes, allocationsRes, resourceTypeRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/employees`),
-          axios.get(`${API_BASE_URL}/resources`),
-          axios.get(`${API_BASE_URL}/allocations`),
-          axios.get(`${API_BASE_URL}/resourcestype`)
-        ]);
+        const res = await axios.get(`${API_BASE_URL}/dashboard`);
+        const data = res.data.data;
 
         const newCounts = {
-          employees: employeesRes.data.count || employeesRes.data.length || 0,
-          resources: resourcesRes.data.data?.count || resourcesRes.data.data?.length || 0,
-          allocations: allocationsRes.data.count || allocationsRes.data.length || 0,
-          resourceType: resourceTypeRes.data.count || resourceTypeRes.data.length || 0,
+          employees: data.employeeCount || 0,
+          resources: data.resourceCount || 0,
+          allocations: data.allocationCount || 0,
+          resourceType: data.resourceTypeCount || 0,
         };
 
         setCounts(newCounts);
-        console.log("new count: ", newCounts);
         localStorage.setItem("dashboardCounts", JSON.stringify(newCounts));
       } catch (err) {
-        console.error("Error loading dashboard data", err);
+        console.error("Error loading dashboard summary", err);
       } finally {
         setTimeout(() => setLoading(false), 1000);
       }

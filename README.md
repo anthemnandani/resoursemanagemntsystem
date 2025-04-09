@@ -1,3 +1,3 @@
 # Resourse management system
 
-[resourse management system frontend url: ](https://resoursemanagemntsystem.vercel.app )
+[resourse management system frontend url: ](http://localhost:5173 )
