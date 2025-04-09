@@ -107,7 +107,7 @@ const Dashboard = () => {
                     <p className="text-sm font-medium text-gray-500">{card.title}</p>
                     <p className="text-3xl font-bold text-gray-800 mt-1">
                       {loading ? (
-                        <span className="w-10 h-6 bg-gray-200 rounded animate-pulse inline-block" />
+                         <span className="text-gray-400 animate-pulse">...</span>
                       ) : (
                         card.count
                       )}
