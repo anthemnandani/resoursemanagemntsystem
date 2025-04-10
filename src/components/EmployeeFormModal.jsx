@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
+import { toast, ToastContainer } from "react-toastify";
 
 const EmployeeFormModal = ({
   isOpen,
@@ -18,7 +19,6 @@ const EmployeeFormModal = ({
   });
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     if (employeeData) {
@@ -62,7 +62,6 @@ const EmployeeFormModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
       const formDataToSend = new FormData();
@@ -100,12 +99,15 @@ const EmployeeFormModal = ({
           }
         );
       }
+      toast.success(response.data.message);
 
-      onSuccess(response.data);
-      onClose();
+      setTimeout(() => {
+        onSuccess(response.data); 
+        onClose();
+      }, 2000);
     } catch (error) {
       console.error("Error:", error);
-      setError(error.response?.data?.error || "Operation failed");
+      toast.error(error.response?.data?.error || "Operation failed");
     } finally {
       setLoading(false);
     }
@@ -127,13 +129,6 @@ const EmployeeFormModal = ({
             <RxCross1 />
           </button>
         </div>
-
-        {error && (
-          <div className="mb-2 p-2 bg-red-100 text-red-700 rounded">
-            {error}
-          </div>
-        )}
-
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
             <label className="block text-gray-700 mb-2">Profile Picture</label>
@@ -176,9 +171,9 @@ const EmployeeFormModal = ({
           </div>
 
           <div className="mb-2">
-            
-          <div className="flex">
-            <label className="block text-gray-700 mb-1">Name</label> <span className="text-red-600">*</span>
+            <div className="flex">
+              <label className="block text-gray-700 mb-1">Name</label>{" "}
+              <span className="text-red-600">*</span>
             </div>
             <input
               type="text"
@@ -192,7 +187,8 @@ const EmployeeFormModal = ({
 
           <div className="mb-2">
             <div className="flex">
-            <label className="block text-gray-700 mb-1">Email</label> <span className="text-red-600">*</span>
+              <label className="block text-gray-700 mb-1">Email</label>{" "}
+              <span className="text-red-600">*</span>
             </div>
             <input
               type="email"
@@ -206,8 +202,9 @@ const EmployeeFormModal = ({
           </div>
 
           <div className="mb-1">
-          <div className="flex">
-            <label className="block text-gray-700 mb-1">Department</label> <span className="text-red-600">*</span>
+            <div className="flex">
+              <label className="block text-gray-700 mb-1">Department</label>{" "}
+              <span className="text-red-600">*</span>
             </div>
             <select
               name="department"
@@ -317,6 +314,15 @@ const EmployeeFormModal = ({
           </div>
         </form>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnHover
+      />
     </div>
   );
 };

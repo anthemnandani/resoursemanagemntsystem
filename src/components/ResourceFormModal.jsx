@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
+import { toast, ToastContainer } from "react-toastify";
 
 const ResourceFormModal = ({
   isOpen,
@@ -22,7 +23,6 @@ const ResourceFormModal = ({
   });
   const [resourceTypes, setResourceTypes] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [imagePreviews, setImagePreviews] = useState([]);
 
   const handleRemoveImage = (indexToRemove) => {
@@ -94,7 +94,6 @@ const ResourceFormModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
       let response;
@@ -149,12 +148,15 @@ const ResourceFormModal = ({
           config
         );
       }
+      toast.success(response.data.message);
 
-      onSuccess(response.data);
-      onClose();
+      setTimeout(() => {
+        onSuccess(response.data);
+        onClose();
+      }, 2000);
     } catch (error) {
       console.error("Error:", error);
-      setError(
+      toast.error(
         error.response?.data?.error || "Failed to create, please try again"
       );
     } finally {
@@ -178,13 +180,6 @@ const ResourceFormModal = ({
             <RxCross1 />
           </button>
         </div>
-
-        {error && (
-          <div className="mb-2 p-1 bg-red-100 text-red-700 rounded">
-            {error}
-          </div>
-        )}
-
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
             <div className="flex">
@@ -349,7 +344,7 @@ const ResourceFormModal = ({
               <input
                 type="file"
                 name="documents"
-                accept=".pdf,.doc,.docx,.xls,.xlsx,.txt"
+                accept=".pdf"
                 multiple
                 onChange={(e) =>
                   setFormData({ ...formData, documents: e.target.files })
@@ -431,6 +426,15 @@ const ResourceFormModal = ({
           </div>
         </form>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnHover
+      />
     </div>
   );
 };

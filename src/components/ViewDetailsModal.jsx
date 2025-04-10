@@ -98,7 +98,6 @@ const ViewDetailsModal = ({
                     value?.toString()
                   )}
                 </p>
-
                 <hr className="my-2 text-gray-100" />
               </div>
             );

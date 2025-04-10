@@ -6,6 +6,7 @@ import { Employee } from "./pages/Employee";
 import { Resourse } from "./pages/Resourse";
 import { AllocatedResouses } from "./pages/AllocatedResourses";
 import { ResourseType } from "./pages/ResourceType";
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/" element={<Dashboard />} />
         </Routes>
+        <ToastContainer position="top-right" autoClose={3000} />
       </div>
   );
 }

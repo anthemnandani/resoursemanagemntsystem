@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
+import { toast, ToastContainer } from "react-toastify";
 
 const ResourceFormModal = ({
   isOpen,
@@ -9,23 +10,22 @@ const ResourceFormModal = ({
   resourceData = null,
 }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   // Initialize form data when modal opens or resourceData changes
   useEffect(() => {
     if (resourceData) {
       setFormData({
-        name: resourceData.name || '',
-        description: resourceData.description || '',
+        name: resourceData.name || "",
+        description: resourceData.description || "",
       });
     } else {
       setFormData({
-        name: '',
-        description: '',
+        name: "",
+        description: "",
       });
     }
   }, [resourceData, isOpen]);
@@ -38,7 +38,6 @@ const ResourceFormModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
 
     try {
       let response;
@@ -56,16 +55,21 @@ const ResourceFormModal = ({
       } else {
         // Create new resource
         response = await axios.post(
-          'https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype',
+          "https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype",
           payload
         );
       }
+      toast.success(response.data.message);
 
-      onSuccess(response.data);
-      onClose();
+      setTimeout(() => {
+        onSuccess(response.data);
+        onClose();
+      }, 2000);
     } catch (error) {
-      console.error('Error:', error);
-      setError(error.response?.data?.error || 'failded to create please try again');
+      console.error("Error:", error);
+      toast.error(
+        error.response?.data?.error || "failded to create please try again"
+      );
     } finally {
       setLoading(false);
     }
@@ -75,22 +79,18 @@ const ResourceFormModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-  <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
+      <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-2xl font-semibold">
-            {resourceData ? 'Edit Resource' : 'Add Resource'}
+            {resourceData ? "Edit Resource" : "Add Resource"}
           </h2>
-          <button onClick={onClose} className="text-gray-500 text-xl hover:text-gray-700">
-          <RxCross1 />
+          <button
+            onClick={onClose}
+            className="text-gray-500 text-xl hover:text-gray-700"
+          >
+            <RxCross1 />
           </button>
         </div>
-
-        {error && (
-          <div className="mb-2 p-1 bg-red-100 text-red-700 rounded">
-            {error}
-          </div>
-        )}
-
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
             <label className="block text-gray-700 mb-1">Resource Name</label>
@@ -131,19 +131,46 @@ const ResourceFormModal = ({
             >
               {loading ? (
                 <>
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                   Processing...
                 </>
+              ) : resourceData ? (
+                "Update Resource Type"
               ) : (
-                resourceData ? 'Update Resource Type' : 'Create Resource Type'
+                "Create Resource Type"
               )}
             </button>
           </div>
         </form>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnHover
+      />
     </div>
   );
 };
