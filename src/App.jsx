@@ -7,6 +7,8 @@ import { Resourse } from "./pages/Resourse";
 import { AllocatedResouses } from "./pages/AllocatedResourses";
 import { ResourseType } from "./pages/ResourceType";
 import { ToastContainer } from 'react-toastify';
+import ForgetPassword from "./components/ForgetPassword";
+import ResetPassword from "./components/ResetPassword";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/allocations" element={<AllocatedResouses />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/" element={<Dashboard />} />
+          <Route path="/fogotpasword" element={<ForgetPassword />} />
+          <Route path="/resetpassword" element={<ResetPassword />} />
         </Routes>
         <ToastContainer position="top-right" autoClose={3000} />
       </div>

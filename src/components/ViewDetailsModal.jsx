@@ -48,7 +48,7 @@ const ViewDetailsModal = ({
                             src={fileObj.url}
                             alt={`media-${idx}`}
                             onClick={() => setSelectedImage(fileObj.url)}
-                            className="w-24 h-24 object-cover rounded border cursor-pointer hover:opacity-80"
+                            className="w-24 h-24 object-cover roundedrder cursor-pointer hover:opacity-80"
                           />
                         ) : isPDF ? (
                           <a
@@ -73,14 +73,32 @@ const ViewDetailsModal = ({
                         );
                       })}
                     </div>
+                  ) : typeof value === "object" &&
+                    value?.url &&
+                    /\.(jpeg|jpg|gif|png|webp)$/i.test(value.url) ? (
+                    <img
+                      src={value.url}
+                      alt="media"
+                      onClick={() => setSelectedImage(value.url)}
+                      className="w-24 h-24 object-cover rounded border cursor-pointer hover:opacity-80"
+                    />
                   ) : typeof value === "string" &&
-                    value.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+                    /\.(jpeg|jpg|gif|png|webp)$/i.test(value) ? (
                     <img
                       src={value}
                       alt="preview"
                       onClick={() => setSelectedImage(value)}
-                      className="w-32 h-32 object-cover rounded-lg border cursor-pointer hover:opacity-80"
+                      className="w-24 h-24 object-cover rounded border cursor-pointer hover:opacity-80"
                     />
+                  ) : typeof value === "string" && /\.pdf$/i.test(value) ? (
+                    <a
+                      href={value}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 underline text-sm font-medium"
+                    >
+                      📄 View PDF
+                    </a>
                   ) : typeof value === "string" &&
                     value.match(/^\d{4}-\d{2}-\d{2}T/) ? (
                     new Date(value).toLocaleDateString("en-GB", {
@@ -91,8 +109,8 @@ const ViewDetailsModal = ({
                   ) : typeof value === "object" && value !== null ? (
                     value.name ||
                     value.title ||
-                    value.url ||
                     value.label ||
+                    value.url ||
                     JSON.stringify(value, null, 2)
                   ) : (
                     value?.toString()

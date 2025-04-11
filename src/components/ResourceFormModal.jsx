@@ -48,7 +48,7 @@ const ResourceFormModal = ({
     const fetchResourceTypes = async () => {
       try {
         const response = await axios.get(
-          "https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"
+          "http://localhost:5000/api/resourcestype"
         );
         setResourceTypes(response.data.data);
       } catch (error) {
@@ -136,14 +136,14 @@ const ResourceFormModal = ({
       if (resourceData) {
         // Update existing resource
         response = await axios.put(
-          `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/updateresourse/${resourceData._id}`,
+          `http://localhost:5000/api/resources/updateresourse/${resourceData._id}`,
           payload,
           config
         );
       } else {
         // Create new resource
         response = await axios.post(
-          "https://resoursemanagemntsystem-bksn.vercel.app/api/resources/createresourse",
+          "http://localhost:5000/api/resources/createresourse",
           payload,
           config
         );
@@ -224,10 +224,17 @@ const ResourceFormModal = ({
               type="number"
               name="totalResourceCount"
               placeholder="e.g., 5"
+              min={1}
+              step={1}
               value={formData.totalResourceCount}
-              onChange={handleInputChange}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^\d*$/.test(value)) {
+                  handleInputChange(e);
+                }
+              }}
               onKeyDown={(e) => {
-                if (e.key === "e" || e.key === "+" || e.key === "-") {
+                if (["e", "E", "+", "-", "."].includes(e.key)) {
                   e.preventDefault();
                 }
               }}
@@ -295,7 +302,7 @@ const ResourceFormModal = ({
               <input
                 type="file"
                 name="images"
-                accept="image/*"
+                accept=".png,.jpg,.jpeg"
                 multiple
                 onChange={(e) => {
                   setFormData({ ...formData, images: e.target.files });

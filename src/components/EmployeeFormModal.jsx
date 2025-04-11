@@ -79,7 +79,7 @@ const EmployeeFormModal = ({
       if (employeeData) {
         // Update existing employee
         response = await axios.put(
-          `https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employeeData._id}`,
+          `http://localhost:5000/api/employees/${employeeData._id}`,
           formDataToSend,
           {
             headers: {
@@ -90,7 +90,7 @@ const EmployeeFormModal = ({
       } else {
         // Create new employee
         response = await axios.post(
-          "https://resoursemanagemntsystem-bksn.vercel.app/api/employees/createemployee",
+          "http://localhost:5000/api/employees/createemployee",
           formDataToSend,
           {
             headers: {
@@ -162,7 +162,7 @@ const EmployeeFormModal = ({
                 <span className="text-[#003cb3]">Choose File</span>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept=".png,.jpg,.jpeg"
                   onChange={handleFileChange}
                   className="hidden"
                 />

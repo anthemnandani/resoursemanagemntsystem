@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+import { Footer } from "../components/Footer";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Dashboard = () => {
 
     const fetchDashboardData = async () => {
       try {
-        const res = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/dashboard", {
+        const res = await axios.get("http://localhost:5000/api/dashboard", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -126,6 +127,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

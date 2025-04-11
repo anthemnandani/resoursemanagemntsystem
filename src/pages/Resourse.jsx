@@ -9,6 +9,7 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 import Navbar from "../components/Navbar";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 import { useSearchParams } from "react-router-dom";
+import { Footer } from "../components/Footer";
 
 export const Resourse = () => {
   const [searchParams] = useSearchParams();
@@ -34,7 +35,7 @@ export const Resourse = () => {
       const params = {};
       if (status && status !== "all") params.status = status;
 
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources", {
+      const response = await axios.get("http://localhost:5000/api/resources", {
         params: {
           ...params,
           populate: "resourceType",
@@ -57,7 +58,7 @@ export const Resourse = () => {
   const fetchResourceTypes = async () => {
     try {
       const response = await axios.get(
-        "https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"
+        "http://localhost:5000/api/resourcestype"
       );
       setResourceTypes(response.data.data || []);
     } catch (error) {
@@ -147,7 +148,7 @@ export const Resourse = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/deleteresourse/${resourceToDelete._id}`
+        `http://localhost:5000/api/resources/deleteresourse/${resourceToDelete._id}`
       );
       fetchResources(ActiveFilter === "all" ? null : ActiveFilter);
       setDeleteModalOpen(false);
@@ -387,6 +388,7 @@ export const Resourse = () => {
           title="Resource Details"
         />
       </div>
+      <Footer/>
     </>
   );
 };

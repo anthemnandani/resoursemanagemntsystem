@@ -8,6 +8,7 @@ import { IoMdEye } from "react-icons/io";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import Navbar from "../components/Navbar";
 import ViewDetailsModal from "../components/ViewDetailsModal";
+import { Footer } from "../components/Footer";
 
 export const AllocatedResouses = () => {
   const [allocations, setAllocations] = useState([]);
@@ -33,7 +34,7 @@ export const AllocatedResouses = () => {
   const fetchAllocations = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/allocations");
+      const response = await axios.get("http://localhost:5000/api/allocations");
       setAllocations(response.data);
     } catch (error) {
       console.error("Error fetching allocations:", error);
@@ -65,7 +66,7 @@ export const AllocatedResouses = () => {
     if (!allocationToDelete) return;
     try {
       await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/return/${allocationToDelete._id}`
+        `http://localhost:5000/api/allocations/return/${allocationToDelete._id}`
       );
       setAllocations((prev) =>
         prev.filter((item) => item._id !== allocationToDelete._id)
@@ -154,7 +155,7 @@ export const AllocatedResouses = () => {
                       </td>
                       <td className="px-6 py-2 whitespace-nowrap">
                         {new Date(
-                          allocation.allocatedDate
+                          allocation.AllocatedDate
                         ).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-2 whitespace-nowrap">
@@ -243,6 +244,7 @@ export const AllocatedResouses = () => {
           title="Allocated Resource Details"
         />
       </div>
+      <Footer/>
     </>
   );
 };

@@ -1,0 +1,121 @@
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const ResetPassword = () => {
+  const formik = useFormik({
+    initialValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
+    validationSchema: Yup.object({
+      newPassword: Yup.string()
+        .required("New password is required")
+        .min(6, "Password must be at least 6 characters"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
+        .required("Please confirm your password"),
+    }),
+    onSubmit: (values) => {
+      const { newPassword } = values;
+      const token = window.location.pathname.split("/").pop();
+
+      axios
+        .post(`users/reset-password/${token}`, { newPassword })
+        .then((response) => {
+          toast.success(response.data.message);
+          setTimeout(() => {
+            window.location.href = "/signin";
+          }, 3000);
+        })
+        .catch((error) => {
+          toast.error(
+            error?.response?.data?.message || "Your link has expired"
+          );
+        });
+    },
+  });
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm"
+      >
+        <h2 className="text-2xl font-bold mb-4 text-center text-blue-800">
+          Reset Password
+        </h2>
+
+        <div className="mb-4">
+          <label
+            htmlFor="newPassword"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            New Password
+          </label>
+          <input
+            id="newPassword"
+            name="newPassword"
+            type="password"
+            placeholder="Enter new password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.newPassword}
+            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+              formik.touched.newPassword && formik.errors.newPassword
+                ? "border-red-500 focus:ring-red-400"
+                : "border-gray-300 focus:ring-blue-400"
+            }`}
+          />
+          {formik.touched.newPassword && formik.errors.newPassword && (
+            <p className="text-sm text-red-600 mt-1">
+              {formik.errors.newPassword}
+            </p>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label
+            htmlFor="confirmPassword"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Confirm Password
+          </label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            placeholder="Confirm new password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.confirmPassword}
+            className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+                ? "border-red-500 focus:ring-red-400"
+                : "border-gray-300 focus:ring-blue-400"
+            }`}
+          />
+          {formik.touched.confirmPassword &&
+            formik.errors.confirmPassword && (
+              <p className="text-sm text-red-600 mt-1">
+                {formik.errors.confirmPassword}
+              </p>
+            )}
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-blue-700 text-white py-2 rounded-md hover:bg-blue-800 transition"
+        >
+          Reset Password
+        </button>
+      </form>
+
+      <ToastContainer position="top-right" autoClose={3000} />
+    </div>
+  );
+};
+
+export default ResetPassword;
