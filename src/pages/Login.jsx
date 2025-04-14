@@ -89,12 +89,12 @@ export const Login = () => {
           >
             Login
           </button>
+        </form>
           <div
-            className="text-center flex items-center justify-center"
+            className="text-center flex items-center justify-center mt-2"
           >
             <button onClick={()=>navigate("/fogotpasword")}  className="text-blue-600 text-center flex items-center justify-center cursor-pointer">Forgot password?</button>
           </div>
-        </form>
       </div>
       <ToastContainer
         position="top-right"
