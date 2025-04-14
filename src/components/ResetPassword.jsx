@@ -104,13 +104,13 @@ const ResetPassword = () => {
           >
             Reset Password
           </button>
+        </form>
           <button
             type="submit"
             className="w-full bg-blue-50 text-blue-500 hover:text-white py-2 rounded-4xl hover:bg-blue-500 transition" onClick={()=>navigate("/login")}
           >
             Back to login
           </button>
-        </form>
       </div>
       <ToastContainer
         position="top-right"
