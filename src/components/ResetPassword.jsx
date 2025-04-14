@@ -25,7 +25,7 @@ const ResetPassword = () => {
       const token = window.location.pathname.split("/").pop();
 
       axios
-        .post(`https://resoursemanagemntsystem-bksn.vercel.app/api/admin/resetpassword/${token}`, {
+        .post(`http://localhost:5000/api/admin/resetpassword/${token}`, {
           newPassword,
         })
         .then((response) => {

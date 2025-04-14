@@ -38,7 +38,7 @@ export const Employee = () => {
   const fetchAllocations = async (employeeId) => {
     try {
       const response = await axios.get(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/employee/${employeeId}`
+        `http://localhost:5000/api/allocations/employee/${employeeId}`
       );
       setActiveAllocations((prev) => ({
         ...prev,
@@ -79,7 +79,7 @@ export const Employee = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees");
+      const response = await axios.get("http://localhost:5000/api/employees");
       const data = response.data;
       setEmployees(data);
       updateCounts(data);
@@ -127,7 +127,7 @@ export const Employee = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employeeToDelete._id}`
+        `http://localhost:5000/api/employees/${employeeToDelete._id}`
       );
       fetchEmployees();
       setDeleteModalOpen(false);
@@ -139,7 +139,7 @@ export const Employee = () => {
   const toggleEmployeeStatus = async (employee) => {
     try {
       const newStatus = employee.status === "Active" ? "Inactive" : "Active";
-      await axios.patch(`https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employee._id}`, {
+      await axios.patch(`http://localhost:5000/api/employees/${employee._id}`, {
         status: newStatus,
       });
       fetchEmployees();
@@ -155,7 +155,7 @@ export const Employee = () => {
         <div className="flex justify-between items-center py-2">
           <h2 className="text-2xl font-semibold text-center">Employees</h2>
           <button
-            className="bg-[#003cb3] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
+            className="bg-[#4361ee] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentEmployee(null);
               setIsModalOpen(true);
@@ -173,7 +173,7 @@ export const Employee = () => {
         <div className="flex gap-4 mb-4">
           <button
             className={`py-1 px-3 rounded ${
-              ActiveFilter === "all" ? "bg-[#003cb3] text-white" : ""
+              ActiveFilter === "all" ? "bg-[#4361ee] text-white" : ""
             }`}
             onClick={() => setActiveFilter("all")}
           >
@@ -181,7 +181,7 @@ export const Employee = () => {
           </button>
           <button
             className={`py-1 px-3 rounded ${
-              ActiveFilter === "Active" ? "bg-[#003cb3] text-white" : ""
+              ActiveFilter === "Active" ? "bg-[#4361ee] text-white" : ""
             }`}
             onClick={() => setActiveFilter("Active")}
           >
@@ -189,7 +189,7 @@ export const Employee = () => {
           </button>
           <button
             className={`py-1 px-3 rounded ${
-              ActiveFilter === "Inactive" ? "bg-[#003cb3] text-white" : ""
+              ActiveFilter === "Inactive" ? "bg-[#4361ee] text-white" : ""
             }`}
             onClick={() => setActiveFilter("Inactive")}
           >
@@ -334,7 +334,7 @@ export const Employee = () => {
                         <>
                           <button
                             onClick={() => handleEditClick(employee)}
-                            className="text-[#003cb3] cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded"
+                            className="text-[#4361ee] cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded"
                             title="Edit Employee"
                           >
                             <CiEdit className="w-5 h-5" />

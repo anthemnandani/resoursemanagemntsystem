@@ -41,7 +41,7 @@ export const ResourseType = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"
+        "http://localhost:5000/api/resourcestype"
       );
       setResources(response.data.data);
     } catch (error) {
@@ -64,7 +64,7 @@ export const ResourseType = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype/${resourceToDelete._id}`
+        `http://localhost:5000/api/resourcestype/${resourceToDelete._id}`
       );
       fetchResources();
       setDeleteModalOpen(false);
@@ -80,7 +80,7 @@ export const ResourseType = () => {
         <div className="flex justify-between items-center py-4">
           <h2 className="text-2xl font-semibold text-center">Resource Types</h2>
           <button
-            className="bg-[#003cb3] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
+            className="bg-[#4361ee] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentResource(null);
               setIsModalOpen(true);
@@ -97,7 +97,7 @@ export const ResourseType = () => {
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#003cb3]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4361ee]"></div>
           </div>
         ) : (
           <div className="relative shadow-sm border border-gray-200 overflow-visible">
@@ -159,7 +159,7 @@ export const ResourseType = () => {
 
                         <button
                           onClick={() => handleEditClick(resource)}
-                          className="text-[#003cb3] hover:text-[#003cb3] cursor-pointer transition-colors p-1.5 rounded hover:bg-blue-50"
+                          className="text-[#4361ee] hover:text-[#4361ee] cursor-pointer transition-colors p-1.5 rounded hover:bg-blue-50"
                           title="Edit"
                         >
                           <CiEdit className="w-5 h-5" />

@@ -35,7 +35,7 @@ export const Resourse = () => {
       const params = {};
       if (status && status !== "all") params.status = status;
 
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources", {
+      const response = await axios.get("http://localhost:5000/api/resources", {
         params: {
           ...params,
           populate: "resourceType",
@@ -58,7 +58,7 @@ export const Resourse = () => {
   const fetchResourceTypes = async () => {
     try {
       const response = await axios.get(
-        "https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"
+        "http://localhost:5000/api/resourcestype"
       );
       setResourceTypes(response.data.data || []);
     } catch (error) {
@@ -148,7 +148,7 @@ export const Resourse = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/deleteresourse/${resourceToDelete._id}`
+        `http://localhost:5000/api/resources/deleteresourse/${resourceToDelete._id}`
       );
       fetchResources(ActiveFilter === "all" ? null : ActiveFilter);
       setDeleteModalOpen(false);
@@ -178,7 +178,7 @@ export const Resourse = () => {
             </select>
           </div>
           <button
-            className="bg-[#003cb3] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
+            className="bg-[#4361ee] text-white px-4 py-2 rounded cursor-pointer flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentResource(null);
               setIsModalOpen(true);
@@ -197,7 +197,7 @@ export const Resourse = () => {
           <div className="flex gap-4">
             <button
               className={`py-2 px-3 rounded ${
-                ActiveFilter === "all" ? "bg-[#003cb3] text-white" : ""
+                ActiveFilter === "all" ? "bg-[#4361ee] text-white" : ""
               }`}
               onClick={() => setActiveFilter("all")}
             >
@@ -205,7 +205,7 @@ export const Resourse = () => {
             </button>
             <button
               className={`py-2 px-3 rounded ${
-                ActiveFilter === "Available" ? "bg-[#003cb3] text-white" : ""
+                ActiveFilter === "Available" ? "bg-[#4361ee] text-white" : ""
               }`}
               onClick={() => setActiveFilter("Available")}
             >
@@ -213,7 +213,7 @@ export const Resourse = () => {
             </button>
             <button
               className={`py-2 px-3 rounded ${
-                ActiveFilter === "Allocated" ? "bg-[#003cb3] text-white" : ""
+                ActiveFilter === "Allocated" ? "bg-[#4361ee] text-white" : ""
               }`}
               onClick={() => setActiveFilter("Allocated")}
             >
@@ -224,7 +224,7 @@ export const Resourse = () => {
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#003cb3]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4361ee]"></div>
           </div>
         ) : (
           <div className="relative shadow-sm border border-gray-200">
@@ -327,7 +327,7 @@ export const Resourse = () => {
                         </button>
                         <button
                           onClick={() => handleEditClick(resource)}
-                          className="text-[#003cb3] cursor-pointer hover:text-[#003cb3] transition-colors p-2 rounded hover:bg-blue-50"
+                          className="text-[#4361ee] cursor-pointer hover:text-[#4361ee] transition-colors p-2 rounded hover:bg-blue-50"
                           title="Edit"
                         >
                           <CiEdit className="w-5 h-5" />

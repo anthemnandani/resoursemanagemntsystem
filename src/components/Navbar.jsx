@@ -34,9 +34,9 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="flex justify-between fixed top-0 w-full z-50 pl-2 pr-8 h-18 items-center text-white bg-[#003cb3] shadow-md">
+    <nav className="flex justify-between fixed top-0 w-full z-50 pl-2 pr-8 h-18 items-center text-white bg-[#4361ee] shadow-md">
       <div className="p-4">
-        <img src="./logoo.png" alt="Logo" className="h-15 cursor-pointer" onClick={() => navigate('/')} />
+        <img src="./newlogo.png" alt="Logo" className="h-15 cursor-pointer" onClick={() => navigate('/')} />
       </div>
       <div className="hidden lg:flex gap-10">
         <ul className="flex gap-6">
@@ -56,7 +56,7 @@ export const Navbar = () => {
                 {item.name}
               </span>
               {item.submenu && dropdownOpen === index && (
-                <ul className="absolute left-0 top-10 w-44 bg-white text-[#003cb3] shadow-md rounded-md z-50">
+                <ul className="absolute left-0 top-10 w-44 bg-white text-[#4361ee] shadow-md rounded-md z-50">
                   {item.submenu.map((sub) => (
                     <li
                       key={sub.path}
@@ -74,7 +74,7 @@ export const Navbar = () => {
 
         {/* Logout Button */}
         <button
-          className="px-4 py-2 bg-white text-[#003cb3] font-semibold rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+          className="px-4 py-2 bg-white text-[#4361ee] font-semibold rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
           onClick={handleLogout}
         >
           Logout
@@ -88,7 +88,7 @@ export const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="absolute top-14 left-0 w-full bg-[#003cb3] shadow-md flex flex-col items-center gap-4 py-4 lg:hidden">
+        <div className="absolute top-14 left-0 w-full bg-[#4361ee] shadow-md flex flex-col items-center gap-4 py-4 lg:hidden">
           <ul className="flex flex-col gap-3 text-lg w-full">
             {navItems.map((item, index) => (
               <li key={index} className="w-full text-center">
@@ -126,7 +126,7 @@ export const Navbar = () => {
 
           {/* Logout Button */}
           <button
-            className="px-6 py-2 bg-white text-[#003cb3] font-semibold rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+            className="px-6 py-2 bg-white text-[#4361ee] font-semibold rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
             onClick={() => {
               handleLogout();
               setMenuOpen(false);

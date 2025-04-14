@@ -24,10 +24,10 @@ const AllocationFormModal = ({
       try {
         const [employeesRes, resourcesRes] = await Promise.all([
           axios.get(
-            "https://resoursemanagemntsystem-bksn.vercel.app/api/employees"
+            "http://localhost:5000/api/employees"
           ),
           axios.get(
-            "https://resoursemanagemntsystem-bksn.vercel.app/api/resources/getAvaliableResources"
+            "http://localhost:5000/api/resources/getAvaliableResources"
           ),
         ]);
 
@@ -59,7 +59,7 @@ const AllocationFormModal = ({
 
     try {
       const response = await axios.post(
-        "https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/allocate",
+        "http://localhost:5000/api/allocations/allocate",
         {
           employeeId: formData.employeeId,
           resourceId: formData.resourceId,
@@ -158,7 +158,7 @@ const AllocationFormModal = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#003cb3] text-white rounded-full hover:bg-blue-900 flex items-center gap-2"
+              className="px-4 py-2 bg-[#4361ee] text-white rounded-full hover:bg-blue-900 flex items-center gap-2"
               disabled={loading}
             >
               {loading ? (

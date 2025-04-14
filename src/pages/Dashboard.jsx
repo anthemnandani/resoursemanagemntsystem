@@ -25,7 +25,7 @@ const Dashboard = () => {
 
     const fetchDashboardData = async () => {
       try {
-        const res = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/dashboard", {
+        const res = await axios.get("http://localhost:5000/api/dashboard", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -96,7 +96,7 @@ const Dashboard = () => {
                 key={index}
                 className={`p-6 w-full rounded-lg border-l-4 ${
                   card.color === "blue"
-                    ? "border-[#003cb3] bg-blue-50 text-blue-600"
+                    ? "border-[#4361ee] bg-blue-50 text-blue-600"
                     : card.color === "green"
                     ? "border-green-800 bg-blue-50 text-green-600"
                     : card.color === "yellow"

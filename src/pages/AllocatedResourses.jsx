@@ -34,7 +34,7 @@ export const AllocatedResouses = () => {
   const fetchAllocations = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/allocations");
+      const response = await axios.get("http://localhost:5000/api/allocations");
       setAllocations(response.data);
     } catch (error) {
       console.error("Error fetching allocations:", error);
@@ -66,7 +66,7 @@ export const AllocatedResouses = () => {
     if (!allocationToDelete) return;
     try {
       await axios.delete(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/return/${allocationToDelete._id}`
+        `http://localhost:5000/api/allocations/return/${allocationToDelete._id}`
       );
       setAllocations((prev) =>
         prev.filter((item) => item._id !== allocationToDelete._id)
@@ -86,7 +86,7 @@ export const AllocatedResouses = () => {
             Allocated Resources
           </h2>
           <button
-            className="bg-[#003cb3] text-white px-4 py-2 rounded flex items-center gap-2 relative group"
+            className="bg-[#4361ee] text-white px-4 py-2 rounded flex items-center gap-2 relative group"
             onClick={() => {
               setCurrentAllocation(null);
               setIsModalOpen(true);
@@ -105,7 +105,7 @@ export const AllocatedResouses = () => {
             <button
               key={filter}
               className={`py-1 px-3 rounded ${
-                ActiveFilter === filter ? "bg-[#003cb3] text-white" : ""
+                ActiveFilter === filter ? "bg-[#4361ee] text-white" : ""
               }`}
               onClick={() => setActiveFilter(filter)}
             >
@@ -118,7 +118,7 @@ export const AllocatedResouses = () => {
         {/* Loading Indicator */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#003cb3]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4361ee]"></div>
           </div>
         ) : (
           <div className="relative shadow-sm border border-gray-200 overflow-visible">
@@ -184,7 +184,7 @@ export const AllocatedResouses = () => {
                         </button>
                         <button
                           onClick={() => setCurrentAllocation(allocation)}
-                          className="text-[#003cb3] hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
+                          className="text-[#4361ee] hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
                         >
                           <CiEdit className="w-5 h-5" />
                         </button>

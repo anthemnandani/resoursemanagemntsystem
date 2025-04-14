@@ -23,7 +23,7 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://resoursemanagemntsystem-bksn.vercel.app/api/admin/register", formData);
+      await axios.post("http://localhost:5000/api/admin/register", formData);
       navigate("/login");
     } catch (error) {
       console.error(error.response?.data?.error);
@@ -86,11 +86,11 @@ export const Register = () => {
           </select>
           <button
             type="submit"
-            className="w-full bg-[#003cb3] cursor-pointer text-white p-2 rounded-md hover:bg-blue-700"
+            className="w-full bg-[#4361ee] cursor-pointer text-white p-2 rounded-md hover:bg-blue-700"
           >
             Register
           </button>
-          <a href="#" className="text-[#003cb3] cursor-pointer text-center m-auto">
+          <a href="#" className="text-[#4361ee] cursor-pointer text-center m-auto">
             Forgot Password?
           </a>
         </form>
