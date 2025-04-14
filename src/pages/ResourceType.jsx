@@ -159,7 +159,7 @@ export const ResourseType = () => {
 
                         <button
                           onClick={() => handleEditClick(resource)}
-                          className="text-[#4361ee] hover:text-[#4361ee] cursor-pointer transition-colors p-1.5 rounded hover:bg-blue-50"
+                          className="text-blue-900 hover:text-blue-700 cursor-pointer transition-colors p-1.5 rounded hover:bg-blue-50"
                           title="Edit"
                         >
                           <CiEdit className="w-5 h-5" />

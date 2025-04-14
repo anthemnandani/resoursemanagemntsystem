@@ -312,10 +312,10 @@ export const Employee = () => {
                     <td className="px-4 py-2">
                       <button
                         onClick={() => toggleEmployeeStatus(employee)}
-                        className={`inline-flex items-center px-4.5 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
+                        className={`inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
                           employee.status === "Active"
-                            ? "bg-green-50 text-green-800 hover:bg-green-100"
-                            : "bg-red-50 text-red-800 hover:bg-red-100"
+                            ? "bg-green-100 text-green-800 hover:bg-green-50"
+                            : "bg-red-100 text-red-800 hover:bg-red-50"
                         }`}
                       >
                         {employee.status}
@@ -334,7 +334,7 @@ export const Employee = () => {
                         <>
                           <button
                             onClick={() => handleEditClick(employee)}
-                            className="text-[#4361ee] cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded"
+                            className="text-blue-900 cursor-pointer hover:text-blue-700 transition-colors p-1.5 rounded"
                             title="Edit Employee"
                           >
                             <CiEdit className="w-5 h-5" />

@@ -168,8 +168,8 @@ export const AllocatedResouses = () => {
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             allocation.status === "Active"
-                              ? "bg-green-50 text-green-800"
-                              : "bg-yellow-50 text-yellow-800"
+                              ? "bg-green-100 hover:bg-green-50 text-green-800"
+                              : "bg-yellow-100 hover:bg-yellow-50 text-yellow-800"
                           }`}
                         >
                           {allocation.status}
@@ -185,7 +185,7 @@ export const AllocatedResouses = () => {
                         </button>
                         {/* <button
                           onClick={() => setCurrentAllocation(allocation)}
-                          className="text-[#4361ee] hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
+                          className="text-blue-900 hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
                         >
                           <CiEdit className="w-5 h-5" />
                         </button> */}

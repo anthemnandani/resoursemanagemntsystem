@@ -308,10 +308,10 @@ export const Resourse = () => {
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${
                             resource.status === "Available"
-                              ? "bg-green-50 text-green-800 hover:bg-green-100"
+                              ? "hover:bg-green-50 text-green-800 bg-green-100"
                               : resource.status === "Allocated"
-                              ? "bg-yellow-50 text-yellow-800 hover:bg-yellow-100"
-                              : "bg-red-50 text-red-800 hover:bg-red-100"
+                              ? "hover:bg-yellow-50 text-yellow-800 bg-yellow-100"
+                              : "hover:bg-red-50 text-red-800 bg-red-100"
                           }`}
                         >
                           {resource.status}
@@ -327,7 +327,7 @@ export const Resourse = () => {
                         </button>
                         <button
                           onClick={() => handleEditClick(resource)}
-                          className="text-[#4361ee] cursor-pointer hover:text-[#4361ee] transition-colors p-2 rounded hover:bg-blue-50"
+                          className="text-blue-900 cursor-pointer hover:text-700 transition-colors p-2 rounded hover:bg-blue-50"
                           title="Edit"
                         >
                           <CiEdit className="w-5 h-5" />
