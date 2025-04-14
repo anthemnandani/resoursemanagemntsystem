@@ -10,9 +10,14 @@ export const Login = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
+    const token = Cookies.get("token");
     e.preventDefault();
 
     try {
+      if (token) {
+        navigate("/dashboard");
+        return;
+      }
       const { data } = await axios.post(
         "https://resoursemanagemntsystem-bksn.vercel.app/api/admin/login",
         {
