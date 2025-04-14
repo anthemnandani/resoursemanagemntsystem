@@ -18,7 +18,7 @@ const ForgetPassword = () => {
     }),
     onSubmit: (values, { resetForm }) => {
       axios
-        .post("http://localhost:5000/api/admin/fogotpassword", values)
+        .post("https://resoursemanagemntsystem-bksn.vercel.app/api/admin/fogotpassword", values)
         .then(() => {
           toast.success("Password reset email sent!");
           resetForm();

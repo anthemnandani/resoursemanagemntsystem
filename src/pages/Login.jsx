@@ -19,7 +19,7 @@ export const Login = () => {
         return;
       }
       const { data } = await axios.post(
-        "http://localhost:5000/api/admin/login",
+        "https://resoursemanagemntsystem-bksn.vercel.app/api/admin/login",
         {
           email,
           password,
