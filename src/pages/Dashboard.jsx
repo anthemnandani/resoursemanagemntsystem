@@ -90,7 +90,7 @@ const Dashboard = () => {
       <div className="px-6 py-4 min-h-[90vh]">
         <h2 className="text-3xl font-bold text-gray-800 mb-6 pt-18">Dashboard</h2>
         <div className="">
-          <div className="flex justify-between gap-4 mb-4">
+          <div className="flex justify-between lg:flex-row max-sm:flex-col gap-4 mb-4">
             {dashboardCards.map((card, index) => (
               <div
                 key={index}
