@@ -48,7 +48,7 @@ const ResourceFormModal = ({
     const fetchResourceTypes = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/resourcestype"
+          "https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"
         );
         setResourceTypes(response.data.data);
       } catch (error) {
@@ -136,14 +136,14 @@ const ResourceFormModal = ({
       if (resourceData) {
         // Update existing resource
         response = await axios.put(
-          `http://localhost:5000/api/resources/updateresourse/${resourceData._id}`,
+          `https://resoursemanagemntsystem-bksn.vercel.app/api/resources/updateresourse/${resourceData._id}`,
           payload,
           config
         );
       } else {
         // Create new resource
         response = await axios.post(
-          "http://localhost:5000/api/resources/createresourse",
+          "https://resoursemanagemntsystem-bksn.vercel.app/api/resources/createresourse",
           payload,
           config
         );

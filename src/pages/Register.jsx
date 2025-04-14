@@ -23,7 +23,7 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/admin/register", formData);
+      await axios.post("https://resoursemanagemntsystem-bksn.vercel.app/api/admin/register", formData);
       navigate("/login");
     } catch (error) {
       console.error(error.response?.data?.error);
@@ -32,6 +32,9 @@ export const Register = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
+       <div>
+        <img src="/logo1.png" className="h-14 w-auto" alt="" />
+      </div>
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center mb-4">Admin Register</h2>
         <form onSubmit={handleSubmit} className="space-y-4">

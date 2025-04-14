@@ -41,7 +41,7 @@ export const ResourseType = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/resourcestype"
+        "https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"
       );
       setResources(response.data.data);
     } catch (error) {
@@ -64,7 +64,7 @@ export const ResourseType = () => {
   const handleDeleteConfirm = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/resourcestype/${resourceToDelete._id}`
+        `https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype/${resourceToDelete._id}`
       );
       fetchResources();
       setDeleteModalOpen(false);

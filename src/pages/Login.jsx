@@ -14,7 +14,7 @@ export const Login = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/admin/login",
+        "https://resoursemanagemntsystem-bksn.vercel.app/api/admin/login",
         {
           email,
           password,
@@ -42,15 +42,6 @@ export const Login = () => {
         <h2 className="text-2xl font-bold mb-4 text-center">Admin Login</h2>
 
         <form onSubmit={handleLogin} className="space-y-4">
-          {/* <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            required
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
-          /> */}
-
           <div className="relative">
             <input
                type="email"
@@ -58,12 +49,12 @@ export const Login = () => {
                value={email}
                required
                onChange={(e) => setEmail(e.target.value)}
-              className="peer w-full px-4 pt-4 pb-2 text-sm font-semibold text-gray-900 bg-transparent border-2 border-blue-900 rounded outline-none focus:ring-0 focus:border-blue-800"
+              className="peer w-full px-4 pt-4 pb-2 text-sm font-semibold text-gray-900 bg-transparent border-2 border-gray-300 rounded-lg outline-none focus:ring-0 focus:border-blue-500"
             />
 
             <label
               htmlFor="email"
-              className="absolute -top-2 left-4 px-1 bg-gray-50 text-sm text-blue-800 font-semibold transform scale-100 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:font-normal peer-focus:-top-2 peer-focus:text-sm peer-focus:text-blue-800 peer-focus:font-semibold"
+              className="absolute -top-2 left-4 px-1 bg-gray-50 text-sm text-blue-500 font-semibold transform scale-100 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:font-normal peer-focus:-top-2 peer-focus:text-sm peer-focus:text-blue-500 peer-focus:font-semibold"
             >
               Email
             </label>
@@ -77,39 +68,27 @@ export const Login = () => {
                minLength={5}
                maxLength={20}
                onChange={(e) => setPassword(e.target.value)}
-              className="peer w-full px-4 pt-4 pb-2 text-sm font-semibold text-gray-900 bg-transparent border-2 border-blue-900 rounded outline-none focus:ring-0 focus:border-blue-800"
+              className="peer w-full px-4 pt-4 pb-2 text-sm font-semibold text-gray-900 bg-transparent border-2 border-gray-300 rounded-lg outline-none focus:ring-0 focus:border-blue-500"
             />
 
             <label
               htmlFor="password"
-              className="absolute -top-2 left-4 px-1 bg-gray-50 text-sm text-blue-800 font-semibold transform scale-100 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:font-normal peer-focus:-top-2 peer-focus:text-sm peer-focus:text-blue-800 peer-focus:font-semibold"
+              className="absolute -top-2 left-4 px-1 bg-gray-50 text-sm text-blue-500 font-semibold transform scale-100 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 peer-placeholder-shown:font-normal peer-focus:-top-2 peer-focus:text-sm peer-focus:text-blue-500 peer-focus:font-semibold"
             >
               Password
             </label>
           </div>
-
-          {/* <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            required
-            minLength={5}
-            maxLength={20}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-800"
-          /> */}
-
           <button
             type="submit"
-            className="w-full bg-[#003cb3] text-white cursor-pointer py-2 rounded-md hover:bg-blue-900 transition"
+            className="w-full bg-blue-500 text-white cursor-pointer py-2 rounded-4xl hover:bg-blue-700 transition"
           >
             Login
           </button>
           <a
             href=""
-            className="text-blue-600 text-center flex items-center justify-center"
+            className="text-center flex items-center justify-center"
           >
-            <button onClick={()=>navigate("/fogotpasword")}>Forgot password?</button>
+            <button onClick={()=>navigate("/fogotpasword")}  className="text-blue-600 text-center flex items-center justify-center cursor-pointer">Forgot password?</button>
           </a>
         </form>
       </div>

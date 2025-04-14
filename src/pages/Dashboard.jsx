@@ -25,7 +25,7 @@ const Dashboard = () => {
 
     const fetchDashboardData = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/dashboard", {
+        const res = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/dashboard", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -127,7 +127,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <div className="relative bottom-15"><Footer/></div>
     </>
   );
 };
