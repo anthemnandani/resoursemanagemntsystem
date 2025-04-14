@@ -56,7 +56,7 @@ const ViewDetailsModal = ({
                             href={fileObj.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 underline text-sm font-medium"
+                            className="text-blue-700 underline text-sm font-medium"
                           >
                             📄 View Document {idx + 1}
                           </a>
@@ -66,7 +66,7 @@ const ViewDetailsModal = ({
                             href={fileObj.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 underline text-sm font-medium"
+                            className="text-blue-700 underline text-sm font-medium"
                           >
                             🔗 Open File
                           </a>
@@ -95,7 +95,7 @@ const ViewDetailsModal = ({
                       href={value}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 underline text-sm font-medium"
+                      className="text-blue-700 underline text-sm font-medium"
                     >
                       📄 View PDF
                     </a>

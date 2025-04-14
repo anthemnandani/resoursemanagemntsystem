@@ -13,17 +13,16 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #00218dc8; /* Tailwind blue-900 */
+    background: #4361ee;
     border-radius: 8px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #00218dc8; /* Tailwind blue-800 */
+    background: #4361ee;
   }
 
-  /* Firefox scrollbar styles */
   * {
     scrollbar-width: thin;
-    scrollbar-color: #00218dc8 #f1f1f1;
+    scrollbar-color: #4361ee #f1f1f1;
   }
 }
