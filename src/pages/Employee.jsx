@@ -197,7 +197,7 @@ export const Employee = () => {
           </button>
         </div>
 
-        <div className="relative shadow-sm border border-gray-200">
+        <div className="relative border border-gray-200">
           <table className="w-full text-sm text-left text-gray-700">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
               <tr>

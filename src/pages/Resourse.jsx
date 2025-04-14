@@ -227,7 +227,7 @@ export const Resourse = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4361ee]"></div>
           </div>
         ) : (
-          <div className="relative shadow-sm border border-gray-200">
+          <div className="relative border border-gray-200">
             <table className="w-full text-sm text-left text-gray-700">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                 <tr>
