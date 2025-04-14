@@ -31,7 +31,7 @@ const ResetPassword = () => {
         .then((response) => {
           toast.success(response.data.message);
           setTimeout(() => {
-            window.location.href = "/signin";
+            window.location.href = "/login";
           }, 3000);
         })
         .catch((error) => {
