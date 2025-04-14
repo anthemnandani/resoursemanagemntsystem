@@ -197,7 +197,7 @@ export const Employee = () => {
           </button>
         </div>
 
-        <div className="relative border border-gray-200">
+        <div className="relative border border-gray-200 overflow-x-scroll">
           <table className="w-full text-sm text-left text-gray-700">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
               <tr>
@@ -235,7 +235,7 @@ export const Employee = () => {
                 filteredEmployees.map((employee) => (
                   <tr
                     key={employee._id}
-                    className="bg-white hover:bg-gray-50 transition-colors duration-150"
+                    className="bg-white hover:bg-blue-50/10 transition-colors duration-150"
                   >
                     <td className="px-4 py-2 flex justify-center">
                       <img

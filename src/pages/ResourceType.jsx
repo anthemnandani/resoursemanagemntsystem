@@ -100,7 +100,7 @@ export const ResourseType = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4361ee]"></div>
           </div>
         ) : (
-          <div className="relative border border-gray-200 overflow-visible">
+          <div className="relative border border-gray-200 overflow-x-scroll">
             <table className="w-full text-sm text-left text-gray-700">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                 <tr>
@@ -126,7 +126,7 @@ export const ResourseType = () => {
                   resources.map((resource) => (
                     <tr
                       key={resource._id}
-                      className="bg-white hover:bg-gray-50 transition-colors duration-150"
+                      className="bg-white hover:blue-50/10 transition-colors duration-150"
                     >
                       <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
                         {resource.name}

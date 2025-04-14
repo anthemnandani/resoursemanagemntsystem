@@ -121,9 +121,9 @@ export const AllocatedResouses = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4361ee]"></div>
           </div>
         ) : (
-          <div className="relative border border-gray-200 overflow-visible">
+          <div className="relative border border-gray-200 overflow-x-scroll">
             <table className="w-full text-sm text-left text-gray-700">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+              <thead className="text-xs text-gray-700 uppercase bg-blue-50/50 border-b border-gray-200">
                 <tr>
                   <th className="px-6 py-3.5 font-medium">Resource</th>
                   <th className="px-6 py-3.5 font-medium">Employee</th>
@@ -140,10 +140,11 @@ export const AllocatedResouses = () => {
                   filteredAllocations.map((allocation) => (
                     <tr
                       key={allocation._id}
-                      className="bg-white hover:bg-gray-50 transition-colors"
+                      className="bg-white hover:bg-blue-50/10 transition-colors"
                     >
                       <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                        {allocation.resource?.name || "N/A"}
+                        {allocation.resource?.name.charAt(0).toUpperCase() +
+                          allocation.resource?.name.slice(1) || "N/A"}
                       </td>
                       <td className="px-6 py-2">
                         <div className="font-medium">

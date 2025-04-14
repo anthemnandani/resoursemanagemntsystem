@@ -34,9 +34,9 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="flex justify-between fixed top-0 w-full z-50 pl-2 pr-8 h-18 items-center text-white bg-[#4361ee] shadow-md">
-      <div className="p-4">
-        <img src="./newlogo.png" alt="Logo" className="h-15 cursor-pointer" onClick={() => navigate('/')} />
+    <nav className="flex justify-between fixed top-0 w-full z-40 pl-2 pr-8 h-18 items-center text-white bg-[#4361ee] shadow-md">
+      <div className="p-4 z-50">
+        <img src="./newlogo.png" alt="Logo" className="h-15 z-50 cursor-pointer" onClick={() => navigate('/')} />
       </div>
       <div className="hidden lg:flex gap-10">
         <ul className="flex gap-6">
