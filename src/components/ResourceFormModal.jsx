@@ -68,12 +68,13 @@ const ResourceFormModal = ({
         totalResourceCount: resourceData.totalResourceCount || "",
         avaliableResourceCount: resourceData.avaliableResourceCount || "",
         purchaseDate: resourceData.purchaseDate?.split("T")[0] || "",
-        warrantyExpiryDate: resourceData.warrantyExpiryDate?.split("T")[0] || "",
+        warrantyExpiryDate:
+          resourceData.warrantyExpiryDate?.split("T")[0] || "",
         status: resourceData.status || "Available",
         images: null,
         documents: null,
       });
-  
+
       const existingImages = resourceData.images?.map((img) => img.url) || [];
       setImagePreviews(existingImages);
     } else {
@@ -89,10 +90,10 @@ const ResourceFormModal = ({
         images: null,
         documents: null,
       });
-  
+
       setImagePreviews([]);
     }
-  }, [resourceData, isOpen]);  
+  }, [resourceData, isOpen]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -176,7 +177,7 @@ const ResourceFormModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
+      <div className="bg-white rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-2xl font-semibold">
             {resourceData ? "Edit Resource" : "Add Resource"}
@@ -191,27 +192,6 @@ const ResourceFormModal = ({
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
             <div className="flex">
-              <label className="block text-gray-700 mb-1">Resource Type</label>{" "}
-              <span className="text-red-600">*</span>
-            </div>
-            <select
-              name="resourceTypeId"
-              value={formData.resourceTypeId}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded"
-              required
-            >
-              <option value="">-- Select Resource Type --</option>
-              {resourceTypes.map((type) => (
-                <option key={type._id} value={type._id}>
-                  {type.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="mb-2">
-            <div className="flex">
               <label className="block text-gray-700 mb-1">Resource Name</label>{" "}
               <span className="text-red-600">*</span>
             </div>
@@ -221,33 +201,58 @@ const ResourceFormModal = ({
               placeholder="Type resource name here..."
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full p-1 border rounded"
+              className="w-full p-2 border rounded border-gray-300"
               required
             />
           </div>
 
-          <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Total units</label>
-            <input
-              type="number"
-              name="totalResourceCount"
-              placeholder="e.g., 5"
-              min={1}
-              step={1}
-              value={formData.totalResourceCount}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (/^\d*$/.test(value)) {
-                  handleInputChange(e);
-                }
-              }}
-              onKeyDown={(e) => {
-                if (["e", "E", "+", "-", "."].includes(e.key)) {
-                  e.preventDefault();
-                }
-              }}
-              className="w-full p-1 border rounded"
-            />
+          <div className="flex gap-2">
+            <div className="mb-2 w-full">
+              <div className="flex">
+                <label className="block text-gray-700 mb-1">
+                  Resource Type
+                </label>{" "}
+                <span className="text-red-600">*</span>
+              </div>
+              <select
+                name="resourceTypeId"
+                value={formData.resourceTypeId}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded border-gray-300"
+                required
+              >
+                <option value="">-- Select Resource Type --</option>
+                {resourceTypes.map((type) => (
+                  <option key={type._id} value={type._id}>
+                    {type.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-2 w-full">
+              <label className="block text-gray-700 mb-1">Total units</label>
+              <input
+                type="number"
+                name="totalResourceCount"
+                placeholder="e.g., 5"
+                min={1}
+                step={1}
+                value={formData.totalResourceCount}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d*$/.test(value)) {
+                    handleInputChange(e);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (["e", "E", "+", "-", "."].includes(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                className="w-full p-2 border border-gray-300 rounded"
+              />
+            </div>
           </div>
 
           {/* <div className="mb-2">
@@ -257,32 +262,34 @@ const ResourceFormModal = ({
               name="avaliableResourceCount"
               value={formData.avaliableResourceCount}
               onChange={handleInputChange}
-              className="w-full p-1 border rounded"
+              className="w-full p-2 border rounded"
             />
           </div> */}
 
-          <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Purchase Date</label>
-            <input
-              type="date"
-              name="purchaseDate"
-              value={formData.purchaseDate}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded"
-            />
-          </div>
+          <div className="flex gap-2">
+            <div className="mb-2 w-full">
+              <label className="block text-gray-700 mb-1">Purchase Date</label>
+              <input
+                type="date"
+                name="purchaseDate"
+                value={formData.purchaseDate}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded border-gray-300"
+              />
+            </div>
 
-          <div className="mb-2">
-            <label className="block text-gray-700 mb-1">
-              Warranty Expiry Date
-            </label>
-            <input
-              type="date"
-              name="warrantyExpiryDate"
-              value={formData.warrantyExpiryDate}
-              onChange={handleInputChange}
-              className="w-full p-1 border rounded"
-            />
+            <div className="mb-2 w-full">
+              <label className="block text-gray-700 mb-1">
+                Warranty Expiry Date
+              </label>
+              <input
+                type="date"
+                name="warrantyExpiryDate"
+                value={formData.warrantyExpiryDate}
+                onChange={handleInputChange}
+                className="w-full p-2 border rounded border-gray-300"
+              />
+            </div>
           </div>
 
           <div className="mb-2">
@@ -295,7 +302,7 @@ const ResourceFormModal = ({
               value={formData.description}
               placeholder="Color, style, or appearance..."
               onChange={handleInputChange}
-              className="w-full p-1 border rounded"
+              className="w-full p-2 border rounded border-gray-300"
               rows="3"
             />
           </div>
@@ -322,7 +329,7 @@ const ResourceFormModal = ({
                 }}
                 className="w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4
                  file:rounded-full file:border-0 file:text-sm file:font-semibold
-                 file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                 file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 border-gray-300"
                 required={!resourceData}
               />
             </div>
@@ -386,7 +393,7 @@ const ResourceFormModal = ({
               name="status"
               value={formData.status}
               onChange={handleInputChange}
-              className="w-full p-1 border rounded"
+              className="w-full p-2 border rounded"
             >
               <option value="Available">Available</option>
               <option value="Allocated">Allocated</option>
@@ -398,14 +405,14 @@ const ResourceFormModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-300 rounded-full hover:bg-neutral-400"
+              className="px-4 py-2 bg-gray-200 w-full rounded-full hover:bg-neutral-300"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#4361ee] text-white rounded-full hover:bg-blue-900 flex items-center gap-1"
+              className="px-4 py-2 w-full bg-[#4361ee] text-white rounded-full hover:bg-blue-700"
               disabled={loading}
             >
               {loading ? (

@@ -117,7 +117,7 @@ const EmployeeFormModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
+      <div className="bg-white rounded-lg w-full max-w-xl max-h-[95vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-xl font-semibold">
             {employeeData ? "Edit Employee" : "Add Employee"}
@@ -180,7 +180,7 @@ const EmployeeFormModal = ({
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded border-gray-300"
               required
             />
           </div>
@@ -195,13 +195,14 @@ const EmployeeFormModal = ({
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded border-gray-300"
               required
               // disabled={!!employeeData} // Disable email field for edits
             />
           </div>
 
-          <div className="mb-1">
+         <div className="flex gap-2">
+         <div className="mb-1 w-full">
             <div className="flex">
               <label className="block text-gray-700 mb-1">Department</label>{" "}
               <span className="text-red-600">*</span>
@@ -210,7 +211,7 @@ const EmployeeFormModal = ({
               name="department"
               value={formData.department}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded border-gray-300"
               required
             >
               <option value="">--Select option--</option>
@@ -227,7 +228,7 @@ const EmployeeFormModal = ({
             </select>
           </div>
 
-          <div className="mb-1">
+          <div className="mb-1 w-full">
             <div className="flex">
               <label className="block text-gray-700 mb-1">Position</label>{" "}
               <span className="text-red-600">*</span>
@@ -236,7 +237,7 @@ const EmployeeFormModal = ({
               name="position"
               value={formData.position}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded border-gray-300"
               required
             >
               <option value="">--Select option--</option>
@@ -255,6 +256,7 @@ const EmployeeFormModal = ({
               <option value="Designer">Designer</option>
             </select>
           </div>
+         </div>
 
           <div className="mb-2">
             <label className="block text-gray-700 mb-1">Hire Date</label>
@@ -263,7 +265,7 @@ const EmployeeFormModal = ({
               name="hireDate"
               value={formData.hireDate}
               onChange={handleInputChange}
-              className="w-full p-1 border rounded"
+              className="w-full p-2 border rounded border-gray-300"
             />
           </div>
 
@@ -271,20 +273,20 @@ const EmployeeFormModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-300 rounded-full cursor-pointer"
+              className="px-4 py-2 bg-gray-200 w-full rounded-full hover:bg-neutral-300"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#4361ee] text-white rounded-full flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2 w-full bg-[#4361ee] text-white rounded-full hover:bg-blue-700"
               disabled={loading}
             >
               {loading ? (
                 <>
                   <svg
-                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    className="animate-spin h-5 w-5 text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -303,7 +305,7 @@ const EmployeeFormModal = ({
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  {employeeData ? "Updating..." : "Creating..."}
+                  Processing...
                 </>
               ) : employeeData ? (
                 "Update Employee"

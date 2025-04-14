@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       newPassword: "",
@@ -25,9 +25,12 @@ const ResetPassword = () => {
       const token = window.location.pathname.split("/").pop();
 
       axios
-        .post(`https://resoursemanagemntsystem-bksn.vercel.app/api/admin/resetpassword/${token}`, {
-          newPassword,
-        })
+        .post(
+          `https://resoursemanagemntsystem-bksn.vercel.app/api/admin/resetpassword/${token}`,
+          {
+            newPassword,
+          }
+        )
         .then((response) => {
           toast.success(response.data.message);
           setTimeout(() => {
@@ -74,16 +77,16 @@ const ResetPassword = () => {
           </div>
           <div className="relative">
             <input
-               id="confirmPassword"
-               name="confirmPassword"
-               type="password"
-               placeholder=" "
-               onChange={formik.handleChange}
-               onBlur={formik.handleBlur}
-               value={formik.values.confirmPassword}
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder=" "
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.confirmPassword}
               className="peer w-full mb-4 px-4 pt-4 pb-2 text-sm font-semibold text-gray-900 bg-transparent border-2 border-gray-300 rounded-lg outline-none focus:ring-0 focus:border-blue-500"
             />
-             {formik.touched.confirmPassword &&
+            {formik.touched.confirmPassword &&
               formik.errors.confirmPassword && (
                 <p className="text-sm text-red-600 mb-1">
                   {formik.errors.confirmPassword}
@@ -105,12 +108,13 @@ const ResetPassword = () => {
             Reset Password
           </button>
         </form>
-          <button
-            type="submit"
-            className="w-full bg-blue-50 text-blue-500 hover:text-white py-2 rounded-4xl hover:bg-blue-500 transition" onClick={()=>navigate("/login")}
-          >
-            Back to login
-          </button>
+        <button
+          type="submit"
+          className="w-full bg-blue-50 text-blue-500 hover:text-white py-2 rounded-4xl hover:bg-blue-500 transition"
+          onClick={() => navigate("/login")}
+        >
+          Back to login
+        </button>
       </div>
       <ToastContainer
         position="top-right"
@@ -122,85 +126,6 @@ const ResetPassword = () => {
         pauseOnHover
       />
     </div>
-    // <div className="min-h-screen flex items-center justify-center bg-gray-50">
-    //      <div>
-    //     <img src="/logo1.png" className="h-14 w-auto" alt="" />
-    //   </div>
-    //   <form
-    //     onSubmit={formik.handleSubmit}
-    //     className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm"
-    //   >
-    //     <h2 className="text-2xl font-bold mb-4 text-center text-blue-500">
-    //       Reset Password
-    //     </h2>
-
-    //     <div className="mb-4">
-    //       <label
-    //         htmlFor="newPassword"
-    //         className="block text-sm font-medium text-gray-700 mb-1"
-    //       >
-    //         New Password
-    //       </label>
-    //       <input
-    //         id="newPassword"
-    //         name="newPassword"
-    //         type="password"
-    //         placeholder="Enter new password"
-    //         onChange={formik.handleChange}
-    //         onBlur={formik.handleBlur}
-    //         value={formik.values.newPassword}
-    //         className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-    //           formik.touched.newPassword && formik.errors.newPassword
-    //             ? "border-red-500 focus:ring-red-400"
-    //             : "border-gray-300 focus:ring-blue-400"
-    //         }`}
-    //       />
-    //       {formik.touched.newPassword && formik.errors.newPassword && (
-    //         <p className="text-sm text-red-600 mt-1">
-    //           {formik.errors.newPassword}
-    //         </p>
-    //       )}
-    //     </div>
-
-    //     <div className="mb-4">
-    //       <label
-    //         htmlFor="confirmPassword"
-    //         className="block text-sm font-medium text-gray-700 mb-1"
-    //       >
-    //         Confirm Password
-    //       </label>
-    //       <input
-    //         id="confirmPassword"
-    //         name="confirmPassword"
-    //         type="password"
-    //         placeholder="Confirm new password"
-    //         onChange={formik.handleChange}
-    //         onBlur={formik.handleBlur}
-    //         value={formik.values.confirmPassword}
-    //         className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-    //           formik.touched.confirmPassword && formik.errors.confirmPassword
-    //             ? "border-red-500 focus:ring-red-400"
-    //             : "border-gray-300 focus:ring-blue-400"
-    //         }`}
-    //       />
-    //       {formik.touched.confirmPassword &&
-    //         formik.errors.confirmPassword && (
-    //           <p className="text-sm text-red-600 mt-1">
-    //             {formik.errors.confirmPassword}
-    //           </p>
-    //         )}
-    //     </div>
-
-    //     <button
-    //       type="submit"
-    //       className="w-full bg-blue-700 text-white py-2 rounded-md hover:bg-blue-500 transition"
-    //     >
-    //       Reset Password
-    //     </button>
-    //   </form>
-
-    //   <ToastContainer position="top-right" autoClose={3000} />
-    // </div>
   );
 };
 

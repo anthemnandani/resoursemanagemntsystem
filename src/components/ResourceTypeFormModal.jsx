@@ -99,7 +99,7 @@ const ResourceFormModal = ({
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full p-1 border rounded"
+              className="w-full p-2 border rounded border-gray-300"
               required
             />
           </div>
@@ -110,23 +110,23 @@ const ResourceFormModal = ({
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className="w-full p-1 border rounded"
+              className="w-full p-2 border rounded border-gray-300"
               rows="3"
             />
           </div>
 
-          <div className="flex justify-end gap-4 mt-6">
+          <div className="flex justify-end gap-2 mt-6">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-300 rounded-full hover:bg-neutral-400"
+              className="px-4 py-2 bg-gray-200 w-full rounded-full hover:bg-neutral-300"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#4361ee] text-white rounded-full hover:bg-blue-900 flex items-center gap-1"
+              className="px-4 py-2 w-full bg-[#4361ee] text-white rounded-full hover:bg-blue-700"
               disabled={loading}
             >
               {loading ? (
