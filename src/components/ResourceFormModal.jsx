@@ -68,10 +68,14 @@ const ResourceFormModal = ({
         totalResourceCount: resourceData.totalResourceCount || "",
         avaliableResourceCount: resourceData.avaliableResourceCount || "",
         purchaseDate: resourceData.purchaseDate?.split("T")[0] || "",
-        warrantyExpiryDate:
-          resourceData.warrantyExpiryDate?.split("T")[0] || "",
+        warrantyExpiryDate: resourceData.warrantyExpiryDate?.split("T")[0] || "",
         status: resourceData.status || "Available",
+        images: null,
+        documents: null,
       });
+  
+      const existingImages = resourceData.images?.map((img) => img.url) || [];
+      setImagePreviews(existingImages);
     } else {
       setFormData({
         name: "",
@@ -82,9 +86,13 @@ const ResourceFormModal = ({
         purchaseDate: "",
         warrantyExpiryDate: "",
         status: "Available",
+        images: null,
+        documents: null,
       });
+  
+      setImagePreviews([]);
     }
-  }, [resourceData, isOpen]);
+  }, [resourceData, isOpen]);  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
