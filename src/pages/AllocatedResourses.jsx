@@ -182,18 +182,18 @@ export const AllocatedResouses = () => {
                         >
                           <IoMdEye className="w-5 h-5" />
                         </button>
-                        <button
+                        {/* <button
                           onClick={() => setCurrentAllocation(allocation)}
                           className="text-[#4361ee] hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
                         >
                           <CiEdit className="w-5 h-5" />
-                        </button>
+                        </button> */}
                         <button
                           onClick={() => {
                             setAllocationToDelete(allocation);
                             setDeleteModalOpen(true);
                           }}
-                          className="text-red-800 hover:text-red-700 p-1.5 rounded hover:bg-red-50"
+                          className="text-red-800 hover:text-red-700 p-1.5 rounded hover:bg-red-50" title="Return Resource"
                         >
                           <MdOutlineDeleteForever className="w-5 h-5" />
                         </button>
