@@ -12,7 +12,7 @@ import ResetPassword from "./components/ResetPassword";
 
 function App() {
   return (
-      <div className="h-screen w-screen overflow-y-scroll">
+      <div className="h-screen w-screen overflow-y-scroll min-h-[90vh]">
         <Routes>
           <Route path="/login" element={<Login />}/>
           <Route path="/register" element={<Register />} /> 

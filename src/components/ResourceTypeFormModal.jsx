@@ -60,6 +60,7 @@ const ResourceFormModal = ({
         );
       }
       toast.success(response.data.message);
+      // console.log("sucess message: ", response.data.message);
 
       setTimeout(() => {
         onSuccess(response.data);
@@ -93,7 +94,10 @@ const ResourceFormModal = ({
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Resource Name</label>
+            <div className="flex items-center gap-1">
+              <label className="block text-gray-700">Resource Name</label>
+              <span className="text-red-600">*</span>
+            </div>
             <input
               type="text"
               name="name"
@@ -105,13 +109,23 @@ const ResourceFormModal = ({
           </div>
 
           <div className="mb-2">
-            <label className="block text-gray-700 mb-1">Description</label>
+            <div className="flex justify-between items-center mb-1">
+              <div className="flex items-center gap-1">
+                <label className="block text-gray-700">Description</label>
+                <span className="text-red-600">*</span>
+              </div>
+              <span className="text-sm text-gray-500">
+                {formData.description?.length || 0} / 500
+              </span>
+            </div>
             <textarea
               name="description"
-              value={formData.description}
+              placeholder="Enter description"
+              value={formData.description || ""}
               onChange={handleInputChange}
               className="w-full p-2 border rounded border-gray-300"
               rows="3"
+              maxLength={500}
             />
           </div>
 

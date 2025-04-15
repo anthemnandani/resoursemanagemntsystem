@@ -9,6 +9,8 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 import Navbar from "../components/Navbar";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 import { Footer } from "../components/Footer";
+import { toast, ToastContainer } from "react-toastify";
+import { IoSearchSharp } from "react-icons/io5";
 
 export const AllocatedResouses = () => {
   const [allocations, setAllocations] = useState([]);
@@ -21,6 +23,8 @@ export const AllocatedResouses = () => {
 
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [resourceToView, setResourceToView] = useState(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleViewClick = (resource) => {
     setResourceToView(resource);
@@ -35,7 +39,7 @@ export const AllocatedResouses = () => {
     setLoading(true);
     try {
       const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/allocations");
-      setAllocations(response.data);
+      setAllocations(response.data.reverse());
     } catch (error) {
       console.error("Error fetching allocations:", error);
     } finally {
@@ -56,11 +60,37 @@ export const AllocatedResouses = () => {
   }, [allocations]);
 
   const filteredAllocations = useMemo(() => {
-    if (ActiveFilter === "all") return allocations;
-    return allocations.filter(
-      (allocation) => allocation.status === ActiveFilter
-    );
-  }, [allocations, ActiveFilter]);
+    let filtered = allocations;
+
+    if (ActiveFilter !== "all") {
+      filtered = filtered.filter(
+        (allocation) => allocation.status === ActiveFilter
+      );
+    }
+
+    if (searchQuery.trim() !== "") {
+      const keyword = searchQuery.toLowerCase();
+
+      filtered = filtered.filter((allocation) => {
+        const employeeName = allocation?.employee?.name?.toLowerCase() || "";
+        const resourceName = allocation?.resource?.name?.toLowerCase() || "";
+
+        const dateObj = new Date(allocation?.AllocatedDate);
+        const day = String(dateObj.getDate()).padStart(2, "0");
+        const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+        const year = dateObj.getFullYear();
+        const allocationDate = `${day}/${month}/${year}`; // -> e.g. 10/04/2025
+
+        return (
+          employeeName.includes(keyword) ||
+          resourceName.includes(keyword) ||
+          allocationDate.includes(keyword)
+        );
+      });
+    }
+
+    return filtered;
+  }, [allocations, ActiveFilter, searchQuery]);
 
   const handleDeleteConfirm = async () => {
     if (!allocationToDelete) return;
@@ -71,17 +101,24 @@ export const AllocatedResouses = () => {
       setAllocations((prev) =>
         prev.filter((item) => item._id !== allocationToDelete._id)
       );
+      await fetchAllocations();
       setDeleteModalOpen(false);
+      toast.success("Resource Returned successfully");
     } catch (error) {
       console.error("Error deleting allocation:", error);
     }
   };
 
+  useEffect(() => {
+    // Whenever activeFilter changes, fetch fresh data
+    fetchAllocations();
+  }, [ActiveFilter]);
+
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-4 pt-14">
-        <div className="flex justify-between items-center py-2">
+      <div className="container mx-auto my-6 p-4 pt-14 min-h-[85vh]">
+        <div className="flex justify-between items-center mt-6">
           <h2 className="text-2xl font-semibold text-center">
             Allocated Resources
           </h2>
@@ -99,20 +136,32 @@ export const AllocatedResouses = () => {
           </button>
         </div>
 
-        {/* Filter Buttons */}
-        <div className="flex gap-4 mb-4">
-          {["all", "Active", "Returned"].map((filter) => (
-            <button
-              key={filter}
-              className={`py-1 px-3 rounded ${
-                ActiveFilter === filter ? "bg-[#4361ee] text-white" : ""
-              }`}
-              onClick={() => setActiveFilter(filter)}
-            >
-              {filter.charAt(0).toUpperCase() + filter.slice(1)} (
-              {counts[filter]})
-            </button>
-          ))}
+        <div className="flex justify-between mt-8 mb-4">
+          {/* Filter Buttons */}
+          <div className="flex gap-4">
+            {["all", "Active", "Returned"].map((filter) => (
+              <button
+                key={filter}
+                className={`py-1 px-3 rounded ${
+                  ActiveFilter === filter ? "bg-[#4361ee] text-white" : ""
+                }`}
+                onClick={() => setActiveFilter(filter)}
+              >
+                {filter.charAt(0).toUpperCase() + filter.slice(1)} (
+                {counts[filter]})
+              </button>
+            ))}
+          </div>
+          <div className="text-2xl flex items-center justify-center border border-gray-300 rounded p-2">
+            <IoSearchSharp className="mr-2" />
+            <input
+              type="search"
+              className="text-base w-full focus:outline-none placeholder:text-sm"
+              placeholder="Search allocations..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
 
         {/* Loading Indicator */}
@@ -155,13 +204,25 @@ export const AllocatedResouses = () => {
                         </div>
                       </td>
                       <td className="px-6 py-2 whitespace-nowrap">
-                        {new Date(
-                          allocation.AllocatedDate
-                        ).toLocaleDateString()}
+                        {new Date(allocation.AllocatedDate).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }
+                        )}
                       </td>
                       <td className="px-6 py-2 whitespace-nowrap">
                         {allocation.returnDate
-                          ? new Date(allocation.returnDate).toLocaleDateString()
+                          ? new Date(allocation.returnDate).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }
+                            )
                           : "Not Returned yet"}
                       </td>
                       <td className="px-6 py-2">
@@ -194,7 +255,8 @@ export const AllocatedResouses = () => {
                             setAllocationToDelete(allocation);
                             setDeleteModalOpen(true);
                           }}
-                          className="text-red-800 hover:text-red-700 p-1.5 rounded hover:bg-red-50" title="Return Resource"
+                          className="text-red-800 hover:text-red-700 p-1.5 rounded hover:bg-red-50"
+                          title="Return Resource"
                         >
                           <MdOutlineDeleteForever className="w-5 h-5" />
                         </button>
@@ -245,7 +307,16 @@ export const AllocatedResouses = () => {
           title="Allocated Resource Details"
         />
       </div>
-      <Footer/>
+      <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnHover
+      />
     </>
   );
 };

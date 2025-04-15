@@ -49,6 +49,7 @@ export const Employee = () => {
     }
   };
 
+  //for tooltip
   const handleClick = (employeeId) => {
     if (openTooltip === employeeId) {
       setOpenTooltip(null);
@@ -80,7 +81,7 @@ export const Employee = () => {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees");
-      const data = response.data;
+      const data = response.data.reverse();
       setEmployees(data);
       updateCounts(data);
     } catch (error) {
@@ -151,7 +152,7 @@ export const Employee = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-4 overflow-y-scroll pt-14">
+      <div className="container mx-auto my-6 p-4 pt-14 min-h-[85vh]">
         <div className="flex justify-between items-center py-2">
           <h2 className="text-2xl font-semibold text-center">Employees</h2>
           <button
@@ -259,7 +260,8 @@ export const Employee = () => {
                     <td className="px-4 py-2 flex justify-center">
                       <div className="relative inline-block tooltip-container">
                         <button
-                          className="text-black cursor-pointer font-bold hover:text-blue-950 transition-colors p-1.5 rounded relative" title="click to see all allocated resources to this employee"
+                          className="text-black cursor-pointer font-bold hover:text-blue-950 transition-colors p-1.5 rounded relative"
+                          title="click to see all allocated resources to this employee"
                           onClick={() => handleClick(employee._id)}
                         >
                           {employee.allocatedResourceCount}
@@ -288,14 +290,22 @@ export const Employee = () => {
                                         Status: {alloc.status} | Allocated on:{" "}
                                         {new Date(
                                           alloc.allocationDate
-                                        ).toLocaleDateString()}
+                                        ).toLocaleDateString("en-GB", {
+                                          day: "2-digit",
+                                          month: "2-digit",
+                                          year: "numeric",
+                                        })}
                                       </p>
                                       {alloc.returnDate && (
                                         <p className="text-gray-500 text-xs">
                                           Return Date:{" "}
                                           {new Date(
                                             alloc.returnDate
-                                          ).toLocaleDateString()}
+                                          ).toLocaleDateString("en-GB", {
+                                            day: "2-digit",
+                                            month: "2-digit",
+                                            year: "numeric",
+                                          })}
                                         </p>
                                       )}
                                     </div>
@@ -307,7 +317,11 @@ export const Employee = () => {
                       </div>
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap">
-                      {new Date(employee.hireDate).toLocaleDateString()}
+                      {new Date(employee.hireDate).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
                     </td>
                     <td className="px-4 py-2">
                       <button
@@ -418,7 +432,7 @@ export const Employee = () => {
           title="Employee Details"
         />
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

@@ -111,7 +111,7 @@ export const ResourseType = () => {
                     Description
                   </th>
                   <th scope="col" className="px-6 py-3.5 font-medium">
-                    Unit count
+                    Resources Available
                   </th>
                   <th
                     scope="col"

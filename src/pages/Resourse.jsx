@@ -10,6 +10,8 @@ import Navbar from "../components/Navbar";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 import { useSearchParams } from "react-router-dom";
 import { Footer } from "../components/Footer";
+import { SiTicktick } from "react-icons/si";
+import AllocationFormModal from "../components/AllocationFormModal";
 
 export const Resourse = () => {
   const [searchParams] = useSearchParams();
@@ -28,6 +30,10 @@ export const Resourse = () => {
 
   const [resourceTypes, setResourceTypes] = useState([]);
   const [selectedResourceType, setSelectedResourceType] = useState("all");
+
+  //for employee resource allocation
+  const [isAllocationModalOpen, setIsAllocationModalOpen] = useState(false);
+  const [currentResourceId, setCurrentResourceId] = useState("");
 
   const fetchResources = async (status = null) => {
     setLoading(true);
@@ -160,7 +166,7 @@ export const Resourse = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-4 pt-14">
+      <div className="container mx-auto my-6 p-4 pt-14 min-h-[85vh]">
         <div className="flex justify-between items-center py-5">
           <div className="flex">
             <h2 className="text-2xl font-semibold text-center">Resources - </h2>
@@ -241,17 +247,17 @@ export const Resourse = () => {
                     Description
                   </th>
                   <th scope="col" className="px-6 py-3.5 font-medium">
-                    Total units
+                    Total Resources
                   </th>
                   <th scope="col" className="px-6 py-3.5 font-medium">
-                    Available units
+                    Available Resources
                   </th>
                   <th scope="col" className="px-6 py-3.5 font-medium">
                     Purchase Date
                   </th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">
+                  {/* <th scope="col" className="px-6 py-3.5 font-medium">
                     Warranty Expiry Date
-                  </th>
+                  </th> */}
                   <th scope="col" className="px-6 py-3.5 font-medium">
                     Status
                   </th>
@@ -296,14 +302,27 @@ export const Resourse = () => {
                       </td>
                       <td className="px-6 py-2 whitespace-nowrap">
                         {resource.purchaseDate
-                          ? new Date(resource.purchaseDate).toLocaleDateString()
+                          ? new Date(resource.purchaseDate).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }
+                            )
                           : "N/A"}
                       </td>
-                      <td className="px-6 py-2 whitespace-nowrap">
+                      {/* <td className="px-6 py-2 whitespace-nowrap">
                         {resource.warrantyExpiryDate
-                          ? new Date(resource.warrantyExpiryDate).toLocaleDateString()
+                          ? new Date(
+                              resource.warrantyExpiryDate
+                            ).toLocaleDateString("en-GB", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                            })
                           : "N/A"}
-                      </td>
+                      </td> */}
                       <td className="px-6 py-2">
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -339,6 +358,22 @@ export const Resourse = () => {
                         >
                           <MdOutlineDeleteForever className="w-5 h-5" />
                         </button>
+                        <div className="relative group">
+                          <button
+                            className="text-black cursor-pointer transition-colors p-1.5 rounded"
+                            onClick={() => {
+                              setCurrentResourceId(resource._id); // assuming 'resource' is the current resource in the map
+                              setIsAllocationModalOpen(true);
+                            }}
+                          >
+                            <SiTicktick className="w-4 h-4" />
+                          </button>
+                          <div className="absolute z-50 hidden group-hover:block rounded-md shadow-md -top-10 right-1 -translate-x-1/5 transform translate-y-[-0%]">
+                            <button className="text-sm text-blue-950 px-4 py-2 bg-neutral-50 font-semibold min-h-10 min-w-48 overflow-y-auto">
+                              Allocate this resource to an employee
+                            </button>
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -366,6 +401,16 @@ export const Resourse = () => {
           resourceData={currentResource}
         />
 
+        <AllocationFormModal
+          isOpen={isAllocationModalOpen}
+          onClose={() => setIsAllocationModalOpen(false)}
+          onSuccess={() => {
+            fetchResources();
+            setIsAllocationModalOpen(false);
+          }}
+          selectedResourceId={currentResourceId}
+        />
+
         <DeleteConfirmationModal
           isOpen={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
@@ -388,7 +433,7 @@ export const Resourse = () => {
           title="Resource Details"
         />
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

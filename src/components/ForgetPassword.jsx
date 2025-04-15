@@ -26,7 +26,7 @@ const ForgetPassword = () => {
         .catch((error) => {
           console.log("error: ", error);
           if (error.response?.status === 404) {
-            toast.error("Email not found");
+            toast.error("No account found with this email");
           } else {
             toast.error("Something went wrong. Please try again later.");
           }
@@ -40,7 +40,7 @@ const ForgetPassword = () => {
         <img src="/logo1.png" className="h-14 w-auto" alt="" />
       </div>
       <div className="bg-white p-6 rounded-lg shadow w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-4 text-center">Forgot Password</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">Forgot Password !</h2>
         <p className="text-center text-gray-500">Please enter the email address associated with your account and We will email you a link to reset your password.</p>
         <form
           onSubmit={formik.handleSubmit}
@@ -77,7 +77,7 @@ const ForgetPassword = () => {
             type="submit"
             className="w-full bg-blue-50  text-blue-500 hover:text-white py-2 rounded-4xl hover:bg-blue-500 transition" onClick={()=>navigate("/login")}
           >
-            Back to login
+            Back To Login
           </button>
       </div>
       <ToastContainer

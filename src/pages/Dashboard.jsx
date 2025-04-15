@@ -65,7 +65,7 @@ const Dashboard = () => {
       path: "/resources",
     },
     {
-      title: "Total Resource Type",
+      title: "Total Resource Types",
       count: counts.resourceType,
       description: "Available resource types",
       icon: "🗂️",

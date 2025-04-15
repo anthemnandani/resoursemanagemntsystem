@@ -16,30 +16,43 @@ const AllocationFormModal = ({
   });
   const [employees, setEmployees] = useState([]);
   const [resources, setResources] = useState([]);
+
+  const [resourceTypes, setResourceTypes] = useState([]);
+  const [selectedResourceType, setSelectedResourceType] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   // Fetch employees and Available resources when component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [employeesRes, resourcesRes] = await Promise.all([
-          axios.get(
-            "https://resoursemanagemntsystem-bksn.vercel.app/api/employees"
-          ),
-          axios.get(
-            "https://resoursemanagemntsystem-bksn.vercel.app/api/resources/getAvaliableResources"
-          ),
-        ]);
+        const [employeesRes, resourcesRes, resourceTypesRes] =
+          await Promise.all([
+            axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees"),
+            axios.get(
+              "https://resoursemanagemntsystem-bksn.vercel.app/api/resources/getAvaliableResources"
+            ),
+            axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"),
+          ]);
 
         setEmployees(employeesRes.data);
-        setResources(resourcesRes.data.data);
-        console.log("employees result data: ", employeesRes.data);
-        console.log("resourse result data: ", resourcesRes.data.data);
+        setResources(
+          (resourcesRes.data.data || []).sort((a, b) =>
+            a.name.localeCompare(b.name)
+          )
+        );
+        
+        setResourceTypes(
+          (resourceTypesRes.data.data || []).sort((a, b) =>
+            a.name.localeCompare(b.name)
+          )
+        );
+
         if (selectedEmployeeId) {
           setFormData((prev) => ({ ...prev, employeeId: selectedEmployeeId }));
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data: ", error);
       }
     };
 
@@ -67,8 +80,12 @@ const AllocationFormModal = ({
         }
       );
 
-      onSuccess(response.data);
-      onClose();
+      toast.success(response.data.message);
+      // console.log("success: " ,response.data.message);
+      setTimeout(() => {
+        onSuccess(response.data);
+        onClose();
+      }, 2000);
     } catch (error) {
       console.error("Allocation error:", error);
       toast.error(
@@ -79,6 +96,10 @@ const AllocationFormModal = ({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    setFormData((prev) => ({ ...prev, resourceId: "" }));
+  }, [selectedResourceType]);
 
   if (!isOpen) return null;
 
@@ -116,6 +137,22 @@ const AllocationFormModal = ({
           </div>
 
           <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Resource Type</label>
+            <select
+              value={selectedResourceType}
+              onChange={(e) => setSelectedResourceType(e.target.value)}
+              className="w-full p-2 border rounded border-gray-300"
+            >
+              <option value="">All Types</option>
+              {resourceTypes.map((type) => (
+                <option key={type._id} value={type._id}>
+                  {type.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="mb-4">
             <label className="block text-gray-700 mb-2">
               Available Resources
             </label>
@@ -127,12 +164,18 @@ const AllocationFormModal = ({
               required
             >
               <option value="">Select Resource</option>
-              {resources.map((resource) => (
-                <option key={resource._id} value={resource._id}>
-                  {resource.name} (
-                  {resource.resourceType?.name || resource.type})
-                </option>
-              ))}
+              {resources
+                .filter((resource) =>
+                  selectedResourceType
+                    ? resource.resourceType?._id === selectedResourceType
+                    : true
+                )
+                .map((resource) => (
+                  <option key={resource._id} value={resource._id}>
+                    {resource.name} (
+                    {resource.resourceType?.name || resource.type})
+                  </option>
+                ))}
             </select>
           </div>
 
