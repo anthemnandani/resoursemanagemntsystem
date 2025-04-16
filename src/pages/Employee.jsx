@@ -81,7 +81,7 @@ export const Employee = () => {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees");
-      const data = response.data.reverse();
+      const data = response.data;
       setEmployees(data);
       updateCounts(data);
     } catch (error) {
@@ -267,7 +267,7 @@ export const Employee = () => {
                           {employee.allocatedResourceCount}
                         </button>
 
-                        {/* Tooltip (Shows on Click) */}
+                        {/* Tooltip */}
                         {openTooltip === employee._id &&
                           ActiveAllocations[employee._id]?.length > 0 && (
                             <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50">
