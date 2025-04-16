@@ -11,6 +11,7 @@ import { SiTicktick } from "react-icons/si";
 import { IoMdEye } from "react-icons/io";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 import { Footer } from "../components/Footer";
+import { toast } from "react-toastify";
 
 export const Employee = () => {
   const [employees, setEmployees] = useState([]);
@@ -80,7 +81,9 @@ export const Employee = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees");
+      const response = await axios.get(
+        "https://resoursemanagemntsystem-bksn.vercel.app/api/employees"
+      );
       const data = response.data;
       setEmployees(data);
       updateCounts(data);
@@ -132,17 +135,25 @@ export const Employee = () => {
       );
       fetchEmployees();
       setDeleteModalOpen(false);
+      toast.success("Employee deleted successfully");
     } catch (error) {
       console.error("Error deleting employee:", error);
+      setDeleteModalOpen(false);
+      toast.error(
+        error.response?.data?.error || "Failed to delete employee. Please try again.",
+      );
     }
   };
 
   const toggleEmployeeStatus = async (employee) => {
     try {
       const newStatus = employee.status === "Active" ? "Inactive" : "Active";
-      await axios.patch(`https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employee._id}`, {
-        status: newStatus,
-      });
+      await axios.patch(
+        `https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employee._id}`,
+        {
+          status: newStatus,
+        }
+      );
       fetchEmployees();
     } catch (error) {
       console.error("Error updating employee status:", error);

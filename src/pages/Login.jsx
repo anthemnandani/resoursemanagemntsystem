@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -96,15 +96,6 @@ export const Login = () => {
             <button onClick={()=>navigate("/fogotpasword")}  className="text-blue-600 text-center flex items-center justify-center cursor-pointer">Forgot password?</button>
           </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnHover
-      />
     </div>
   );
 };

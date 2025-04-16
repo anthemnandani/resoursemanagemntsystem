@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { RxCross1 } from "react-icons/rx";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const AllocationFormModal = ({
   isOpen,
@@ -238,15 +238,6 @@ const AllocationFormModal = ({
           </div>
         </form>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnHover
-      />
     </div>
   );
 };

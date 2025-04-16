@@ -3,13 +3,13 @@ import axios from "axios";
 import AllocationFormModal from "../components/AllocationFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import { FaPlus } from "react-icons/fa6";
-import { CiEdit } from "react-icons/ci";
+// import { CiEdit } from "react-icons/ci";
 import { IoMdEye } from "react-icons/io";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import Navbar from "../components/Navbar";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 import { Footer } from "../components/Footer";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { IoSearchSharp } from "react-icons/io5";
 
 export const AllocatedResouses = () => {
@@ -308,15 +308,6 @@ export const AllocatedResouses = () => {
         />
       </div>
       <Footer />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnHover
-      />
     </>
   );
 };
