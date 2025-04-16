@@ -25,7 +25,7 @@ function App() {
           <Route path="/fogotpasword" element={<ForgetPassword />} />
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
         </Routes>
-        <ToastContainer position="top-right" autoClose={3000} />
+        <ToastContainer position="top-right" autoClose={3000} pauseOnHover />
       </div>
   );
 }
