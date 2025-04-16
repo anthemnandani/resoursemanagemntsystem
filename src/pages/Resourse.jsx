@@ -35,6 +35,17 @@ export const Resourse = () => {
   const [isAllocationModalOpen, setIsAllocationModalOpen] = useState(false);
   const [currentResourceId, setCurrentResourceId] = useState("");
 
+  //paganation
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const paginatedResources = filteredResources.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(filteredResources.length / itemsPerPage);
+
   const fetchResources = async (status = null) => {
     setLoading(true);
     try {
@@ -166,7 +177,7 @@ export const Resourse = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-4 pt-14 min-h-[85vh]">
+      <div className="container mx-auto my-6 pt-20 min-h-[85vh]">
         <div className="flex justify-between items-center py-5">
           <div className="flex">
             <h2 className="text-2xl font-semibold text-center">Resources - </h2>
@@ -229,61 +240,109 @@ export const Resourse = () => {
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4361ee]"></div>
-          </div>
-        ) : (
-          <div className="relative border border-gray-200 overflow-x-scroll">
-            <table className="w-full text-sm text-left text-gray-700">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+          <div className="relative border border-gray-200 overflow-x-scroll bg-white rounded-2xl">
+            <table className="w-full text-sm text-left text-gray-700 animate-pulse">
+              <thead className="text-xs text-gray-700 uppercase border-b border-gray-200">
                 <tr>
-                  <th scope="col" className="px-6 py-3.5 font-medium">
-                    Resource
-                  </th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">
-                    Resource Type
-                  </th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">
-                    Description
-                  </th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">
+                  <th className="px-6 py-5 font-bold text-xs">Resource</th>
+                  <th className="px-6 py-5 font-bold text-xs">Description</th>
+                  <th className="px-6 py-5 font-bold text-xs">
                     Total Resources
                   </th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">
+                  <th className="px-6 py-5 font-bold text-xs">
                     Available Resources
                   </th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">
+                  <th className="px-6 py-5 font-bold text-xs">Purchase Date</th>
+                  <th className="px-6 py-5 font-bold text-xs">Status</th>
+                  <th className="px-6 py-5 font-bold text-xs text-center">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <tr key={index} className="bg-white border-b border-gray-100">
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-1"></div>
+                      <div className="h-3 bg-gray-100 rounded w-1/2"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-full"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="h-4 bg-gray-200 rounded w-8 mx-auto"></div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="relative border border-gray-200 overflow-x-scroll bg-white rounded-2xl">
+            <table className="w-full text-sm text-left text-gray-700">
+              <thead className="text-xs text-gray-700 uppercase border-b border-gray-200">
+                <tr>
+                  <th scope="col" className="px-6 py-5 font-bold text-xs">
+                    Resource
+                  </th>
+                  {/* <th scope="col" className="px-6 py-5 font-bold text-xs">
+                    Resource Type
+                  </th> */}
+                  <th scope="col" className="px-6 py-5 font-bold text-xs">
+                    Description
+                  </th>
+                  <th scope="col" className="px-6 py-5 font-bold text-xs">
+                    Total Resources
+                  </th>
+                  <th scope="col" className="px-6 py-5 font-bold text-xs">
+                    Available Resources
+                  </th>
+                  <th scope="col" className="px-6 py-5 font-bold text-xs">
                     Purchase Date
                   </th>
-                  {/* <th scope="col" className="px-6 py-3.5 font-medium">
+                  {/* <th scope="col" className="px-6 py-5 font-bold text-xs">
                     Warranty Expiry Date
                   </th> */}
-                  <th scope="col" className="px-6 py-3.5 font-medium">
+                  <th scope="col" className="px-6 py-5 font-bold text-xs">
                     Status
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3.5 font-medium text-center"
+                    className="px-6 py-5 font-bold text-xs text-center"
                   >
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
-                {filteredResources.length > 0 ? (
-                  filteredResources.map((resource) => (
-                    <tr
-                      key={resource._id}
-                      className="bg-white hover:bg-blue-50/10 transition-colors duration-150"
-                    >
-                      <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                        {resource.name.charAt(0).toUpperCase() +
-                          resource.name.slice(1)}
+              <tbody className="">
+                {paginatedResources.length > 0 ? (
+                  paginatedResources.map((resource) => (
+                    <tr key={resource._id} className="bg-white">
+                      <td className="px-6 py-2 min-w-[200px]">
+                        <div className="font-semibold">
+                          {resource.name.charAt(0).toUpperCase() +
+                            resource.name.slice(1)}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {resource.resourceType?.name || "N/A"}
+                        </div>
                       </td>
-                      <td className="px-6 py-2 whitespace-nowrap">
+                      {/* <td className="px-6 py-2 whitespace-nowrap">
                         {resource.resourceType?.name || "N/A"}
-                      </td>
-                      <td className="px-6 py-2 max-w-[200px] relative group">
+                      </td> */}
+                      <td className="px-6 py-2 max-w-[250px] relative group">
                         <div className="truncate cursor-help">
                           {resource.description.charAt(0).toUpperCase() +
                             resource.description.slice(1) || "No description"}
@@ -339,21 +398,21 @@ export const Resourse = () => {
                       <td className="px-6 py-2 flex justify-center">
                         <button
                           onClick={() => handleViewClick(resource)}
-                          className="text-black cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-900 transition-colors p-1.5 rounded relative"
                           title="View"
                         >
                           <IoMdEye className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => handleEditClick(resource)}
-                          className="text-blue-900 cursor-pointer hover:text-700 transition-colors p-2 rounded hover:bg-blue-50"
+                          className="text-blue-700 cursor-pointer hover:text-600 transition-colors p-2 rounded hover:bg-blue-50"
                           title="Edit"
                         >
                           <CiEdit className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(resource)}
-                          className="text-red-800 cursor-pointer hover:text-red-700 transition-colors p-2 rounded hover:bg-red-50"
+                          className="text-red-600 cursor-pointer hover:text-red-500 transition-colors p-2 rounded hover:bg-red-50"
                           title="Delete"
                         >
                           <MdOutlineDeleteForever className="w-5 h-5" />
@@ -389,6 +448,34 @@ export const Resourse = () => {
                 )}
               </tbody>
             </table>
+            {totalPages > 1 && (
+  <div className="flex justify-center mt-4 space-x-2">
+    <button
+      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+      disabled={currentPage === 1}
+      className={`px-3 py-1 border rounded ${currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"}`}
+    >
+      Previous
+    </button>
+    {[...Array(totalPages)].map((_, index) => (
+      <button
+        key={index}
+        onClick={() => setCurrentPage(index + 1)}
+        className={`px-3 py-1 border rounded ${currentPage === index + 1 ? "bg-blue-500 text-white" : "hover:bg-gray-100"}`}
+      >
+        {index + 1}
+      </button>
+    ))}
+    <button
+      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+      disabled={currentPage === totalPages}
+      className={`px-3 py-1 border rounded ${currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"}`}
+    >
+      Next
+    </button>
+  </div>
+)}
+
           </div>
         )}
 

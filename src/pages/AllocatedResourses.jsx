@@ -25,6 +25,9 @@ export const AllocatedResouses = () => {
   const [resourceToView, setResourceToView] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState("");
+  //paganitation
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const handleViewClick = (resource) => {
     setResourceToView(resource);
@@ -79,7 +82,7 @@ export const AllocatedResouses = () => {
         const day = String(dateObj.getDate()).padStart(2, "0");
         const month = String(dateObj.getMonth() + 1).padStart(2, "0");
         const year = dateObj.getFullYear();
-        const allocationDate = `${day}/${month}/${year}`; // -> e.g. 10/04/2025
+        const allocationDate = `${day}/${month}/${year}`;
 
         return (
           employeeName.includes(keyword) ||
@@ -91,6 +94,14 @@ export const AllocatedResouses = () => {
 
     return filtered;
   }, [allocations, ActiveFilter, searchQuery]);
+
+  const paginatedAllocations = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredAllocations.slice(startIndex, endIndex);
+  }, [filteredAllocations, currentPage, itemsPerPage]);
+
+  const totalPages = Math.ceil(filteredAllocations.length / itemsPerPage);
 
   const handleDeleteConfirm = async () => {
     if (!allocationToDelete) return;
@@ -117,7 +128,7 @@ export const AllocatedResouses = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-4 pt-14 min-h-[85vh]">
+      <div className="container mx-auto my-6 p-4 pt-20 min-h-[85vh]">
         <div className="flex justify-between items-center mt-6">
           <h2 className="text-2xl font-semibold text-center">
             Allocated Resources
@@ -164,36 +175,79 @@ export const AllocatedResouses = () => {
           </div>
         </div>
 
-        {/* Loading Indicator */}
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4361ee]"></div>
-          </div>
-        ) : (
-          <div className="relative border border-gray-200 overflow-x-scroll">
+          <div className="relative border border-gray-200 overflow-x-scroll bg-white rounded-2xl">
             <table className="w-full text-sm text-left text-gray-700">
-              <thead className="text-xs text-gray-700 uppercase bg-blue-50/50 border-b border-gray-200">
+              <thead className="text-xs text-gray-700 uppercase border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-3.5 font-medium">Resource</th>
-                  <th className="px-6 py-3.5 font-medium">Employee</th>
-                  <th className="px-6 py-3.5 font-medium">Allocation Date</th>
-                  <th className="px-6 py-3.5 font-medium">Return Date</th>
-                  <th className="px-6 py-3.5 font-medium">Status</th>
-                  <th className="px-6 py-3.5 font-medium text-center">
+                  <th className="px-6 py-5 font-bold text-xs">Resource</th>
+                  <th className="px-6 py-5 font-bold text-xs">Employee</th>
+                  <th className="px-6 py-5 font-bold text-xs">
+                    Allocation Date
+                  </th>
+                  <th className="px-6 py-5 font-bold text-xs">Return Date</th>
+                  <th className="px-6 py-5 font-bold text-xs">Status</th>
+                  <th className="px-6 py-5 font-bold text-xs text-center">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
-                {filteredAllocations.length > 0 ? (
-                  filteredAllocations.map((allocation) => (
-                    <tr
-                      key={allocation._id}
-                      className="bg-white hover:bg-blue-50/10 transition-colors"
-                    >
+              <tbody>
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <tr key={index} className="animate-pulse">
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-24"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-28 mb-1"></div>
+                      <div className="h-3 bg-gray-100 rounded w-16"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-20"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-24"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-16"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex justify-center space-x-2">
+                        <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                        <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="relative border border-gray-200 overflow-x-scroll bg-white rounded-2xl">
+            <table className="w-full text-sm text-left text-gray-700">
+              <thead className="text-xs text-gray-700 uppercase border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-5 font-bold text-xs">Resource</th>
+                  <th className="px-6 py-5 font-bold text-xs">Employee</th>
+                  <th className="px-6 py-5 font-bold text-xs">
+                    Allocation Date
+                  </th>
+                  <th className="px-6 py-5 font-bold text-xs">Return Date</th>
+                  <th className="px-6 py-5 font-bold text-xs">Status</th>
+                  <th className="px-6 py-5 font-bold text-xs text-center">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedAllocations.length > 0 ? (
+                  paginatedAllocations.map((allocation) => (
+                    <tr key={allocation._id} className="bg-white">
                       <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                        {allocation.resource?.name.charAt(0).toUpperCase() +
-                          allocation.resource?.name.slice(1) || "N/A"}
+                        {allocation.resource?.name
+                          ? allocation.resource.name.charAt(0).toUpperCase() +
+                            allocation.resource.name.slice(1)
+                          : "N/A"}
                       </td>
                       <td className="px-6 py-2">
                         <div className="font-medium">
@@ -229,8 +283,8 @@ export const AllocatedResouses = () => {
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             allocation.status === "Active"
-                              ? "bg-green-100 hover:bg-green-50 text-green-800"
-                              : "bg-yellow-100 hover:bg-yellow-50 text-yellow-800"
+                              ? "bg-green-100 hover:bg-green-50 text-green-600"
+                              : "bg-yellow-100 hover:bg-yellow-50 text-yellow-500"
                           }`}
                         >
                           {allocation.status}
@@ -239,23 +293,17 @@ export const AllocatedResouses = () => {
                       <td className="px-6 py-2 flex justify-center space-x-3">
                         <button
                           onClick={() => handleViewClick(allocation)}
-                          className="text-black cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-900 transition-colors p-1.5 rounded relative"
                           title="View"
                         >
                           <IoMdEye className="w-5 h-5" />
                         </button>
-                        {/* <button
-                          onClick={() => setCurrentAllocation(allocation)}
-                          className="text-blue-900 hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
-                        >
-                          <CiEdit className="w-5 h-5" />
-                        </button> */}
                         <button
                           onClick={() => {
                             setAllocationToDelete(allocation);
                             setDeleteModalOpen(true);
                           }}
-                          className="text-red-800 hover:text-red-700 p-1.5 rounded hover:bg-red-50"
+                          className="text-red-600 hover:text-red-500 p-1.5 rounded hover:bg-red-50"
                           title="Return Resource"
                         >
                           <MdOutlineDeleteForever className="w-5 h-5" />
@@ -275,6 +323,39 @@ export const AllocatedResouses = () => {
                 )}
               </tbody>
             </table>
+            <div className="flex justify-center items-center mt-4 space-x-2">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
+              >
+                Previous
+              </button>
+
+              {[...Array(totalPages)].map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`px-3 py-1 rounded ${
+                    currentPage === index + 1
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 hover:bg-gray-200"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
 

@@ -56,11 +56,11 @@ export const Navbar = () => {
                 {item.name}
               </span>
               {item.submenu && dropdownOpen === index && (
-                <ul className="absolute left-0 top-10 w-44 bg-white text-[#4361ee] shadow-md rounded-md z-50">
+                <ul className="absolute left-0 top-10 w-44 bg-white text-gray-600 shadow-md rounded-md z-50">
                   {item.submenu.map((sub) => (
                     <li
                       key={sub.path}
-                      className="px-4 py-2 hover:bg-gray-200 transition-colors cursor-pointer"
+                      className="px-4 py-2 hover:bg-blue-50 hover:rounded-md transition-colors cursor-pointer"
                       onClick={() => navigate(sub.path)}
                     >
                       {sub.name}

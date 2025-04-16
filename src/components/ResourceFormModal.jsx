@@ -201,7 +201,7 @@ const ResourceFormModal = ({
               placeholder="Type resource name here..."
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               required
             />
           </div>
@@ -218,7 +218,7 @@ const ResourceFormModal = ({
                 name="resourceTypeId"
                 value={formData.resourceTypeId}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded border-gray-300"
+                className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
                 required
               >
                 <option value="">-- Select Resource Type --</option>
@@ -274,7 +274,7 @@ const ResourceFormModal = ({
                 name="purchaseDate"
                 value={formData.purchaseDate}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded border-gray-300"
+                className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               />
             </div>
 
@@ -287,7 +287,7 @@ const ResourceFormModal = ({
                 name="warrantyExpiryDate"
                 value={formData.warrantyExpiryDate}
                 onChange={handleInputChange}
-                className="w-full p-2 border rounded border-gray-300"
+                className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               />
             </div>
           </div>
@@ -307,7 +307,7 @@ const ResourceFormModal = ({
               value={formData.description || ""}
               placeholder="Color, style, or appearance..."
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               rows="3"
               maxLength={500}
               required

@@ -24,6 +24,7 @@ export const Employee = () => {
   const [ActiveFilter, setActiveFilter] = useState("all");
   const [counts, setCounts] = useState({ all: 0, Active: 0, Inactive: 0 });
   const [currentEmployeeId, setCurrentEmployeeId] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [ActiveAllocations, setActiveAllocations] = useState({});
   const [openTooltip, setOpenTooltip] = useState(null);
@@ -80,6 +81,7 @@ export const Employee = () => {
   }, [employees, ActiveFilter]);
 
   const fetchEmployees = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         "https://resoursemanagemntsystem-bksn.vercel.app/api/employees"
@@ -89,6 +91,8 @@ export const Employee = () => {
       updateCounts(data);
     } catch (error) {
       console.error("Error fetching employees:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -140,7 +144,8 @@ export const Employee = () => {
       console.error("Error deleting employee:", error);
       setDeleteModalOpen(false);
       toast.error(
-        error.response?.data?.error || "Failed to delete employee. Please try again.",
+        error.response?.data?.error ||
+          "Failed to delete employee. Please try again."
       );
     }
   };
@@ -163,7 +168,7 @@ export const Employee = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-4 pt-14 min-h-[85vh]">
+      <div className="container mx-auto my-6 p-4 pt-20 min-h-[85vh]">
         <div className="flex justify-between items-center py-2">
           <h2 className="text-2xl font-semibold text-center">Employees</h2>
           <button
@@ -209,202 +214,262 @@ export const Employee = () => {
           </button>
         </div>
 
-        <div className="relative border border-gray-200 overflow-x-scroll">
+        {/* Loading Indicator */}
+        {loading ? (
+          <div className="relative border border-gray-200 overflow-x-scroll bg-white rounded-2xl">
           <table className="w-full text-sm text-left text-gray-700">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+            <thead className="text-xs text-gray-700 uppercase border-b border-gray-200">
               <tr>
-                <th scope="col" className="px-4 py-3.5 font-medium">
-                  Profile
-                </th>
-                <th scope="col" className="px-4 py-3.5 font-medium">
-                  Name
-                </th>
-                <th scope="col" className="px-4 py-3.5 font-medium">
-                  Email
-                </th>
-                <th scope="col" className="px-4 py-3.5 font-medium">
-                  Department
-                </th>
-                <th scope="col" className="px-4 py-3.5 font-medium">
-                  Position
-                </th>
-                <th scope="col" className="px-4 py-3.5 font-medium">
-                  Allocated resources
-                </th>
-                <th scope="col" className="px-4 py-3.5 font-medium">
-                  Hire Date
-                </th>
-                <th scope="col" className="px-4 py-3.5 font-medium">
-                  Status
-                </th>
-                <th scope="col" className="px-4 py-3.5 font-medium text-center">
-                  Actions
-                </th>
+                <th className="px-4 py-5 font-bold text-xs">Profile</th>
+                <th className="px-4 py-5 font-bold text-xs">Employee</th>
+                <th className="px-4 py-5 font-bold text-xs">Email</th>
+                <th className="px-4 py-5 font-bold text-xs">Department</th>
+                <th className="px-4 py-5 font-bold text-xs max-w-[100px]">Allocated resources</th>
+                <th className="px-4 py-5 font-bold text-xs">Hire Date</th>
+                <th className="px-4 py-5 font-bold text-xs">Status</th>
+                <th className="px-4 py-5 font-bold text-xs text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
-              {filteredEmployees.length > 0 ? (
-                filteredEmployees.map((employee) => (
-                  <tr
-                    key={employee._id}
-                    className="bg-white hover:bg-blue-50/10 transition-colors duration-150"
+            <tbody>
+              {Array.from({ length: 6 }).map((_, index) => (
+                <tr key={index} className="bg-white animate-pulse">
+                  <td className="px-4 py-4">
+                    <div className="h-10 w-10 bg-gray-200 rounded-full mx-auto" />
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                    <div className="h-3 bg-gray-100 rounded w-16"></div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 bg-gray-200 rounded w-28"></div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 bg-gray-200 rounded w-10"></div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 bg-gray-200 rounded w-20"></div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="flex justify-center space-x-2">
+                      <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                      <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                      <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        ) : (
+          <div className="relative border border-gray-200 overflow-x-scroll bg-white rounded-2xl">
+            <table className="w-full text-sm text-left text-gray-700">
+              <thead className="text-xs text-gray-700 uppercase border-b border-gray-200">
+                <tr>
+                  <th scope="col" className="px-4 py-5 font-bold text-xs">
+                    Profile
+                  </th>
+                  <th scope="col" className="px-4 py-5 font-bold text-xs">
+                    Employee
+                  </th>
+                  <th scope="col" className="px-4 py-5 font-bold text-xs">
+                    Email
+                  </th>
+                  <th scope="col" className="px-4 py-5 font-bold text-xs">
+                    Department
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-5 font-bold text-xs max-w-[100px]"
                   >
-                    <td className="px-4 py-2 flex justify-center">
-                      <img
-                        src={employee.profilePicture.url || "/user.png"}
-                        alt={employee.name}
-                        className="h-10 w-10 rounded-full object-cover"
-                      />
-                    </td>
-                    <td className="px-4 py-2 font-medium text-gray-900 whitespace-nowrap">
-                      {employee.name || "N/A"}
-                    </td>
-                    <td className="px-4 py-2 whitespace-nowrap">
-                      {employee.email}
-                    </td>
-                    <td className="px-4 py-2 whitespace-nowrap">
-                      {employee.department}
-                    </td>
-                    <td className="px-4 py-2 whitespace-nowrap">
-                      {employee.position}
-                    </td>
-                    <td className="px-4 py-2 flex justify-center">
-                      <div className="relative inline-block tooltip-container">
-                        <button
-                          className="text-black cursor-pointer font-bold hover:text-blue-950 transition-colors p-1.5 rounded relative"
-                          title="click to see all allocated resources to this employee"
-                          onClick={() => handleClick(employee._id)}
-                        >
-                          {employee.allocatedResourceCount}
-                        </button>
+                    Allocated resources
+                  </th>
+                  <th scope="col" className="px-4 py-5 font-bold text-xs">
+                    Hire Date
+                  </th>
+                  <th scope="col" className="px-4 py-5 font-bold text-xs">
+                    Status
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-5 font-bold text-xs text-center"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="">
+                {filteredEmployees.length > 0 ? (
+                  filteredEmployees.map((employee) => (
+                    <tr key={employee._id} className="bg-white">
+                      <td className="px-4 py-2 flex justify-center">
+                        <img
+                          src={employee.profilePicture.url || "/user.png"}
+                          alt={employee.name}
+                          className="h-10 w-10 rounded-full object-cover"
+                        />
+                      </td>
+                      <td className="px-4 py-2">
+                        <div className="font-medium">
+                          {employee?.name || "N/A"}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {employee?.position || ""}
+                        </div>
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {employee.email}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {employee.department}
+                      </td>
+                      <td className="px-4 py-2 flex justify-start max-w-[100px]">
+                        <div className="relative inline-block tooltip-container">
+                          <button
+                            className="text-black cursor-pointer font-bold hover:text-blue-950 hover:bg-neutral-100 transition-colors p-1.5 rounded relative"
+                            title="click to see all allocated resources to this employee"
+                            onClick={() => handleClick(employee._id)}
+                          >
+                            {employee.allocatedResourceCount}
+                          </button>
 
-                        {/* Tooltip */}
-                        {openTooltip === employee._id &&
-                          ActiveAllocations[employee._id]?.length > 0 && (
-                            <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50">
-                              <div className="text-md mb-3 font-semibold">
-                                All Allocated Resources
-                              </div>
-                              <hr />
-                              <div>
-                                {ActiveAllocations[employee._id].map(
-                                  (alloc, index) => (
-                                    <div
-                                      key={index}
-                                      className="border-b pb-1 mb-1 last:border-none"
-                                    >
-                                      <p className="font-semibold">
-                                        {alloc.resourceName} (
-                                        {alloc.resourceType})
-                                      </p>
-                                      <p className="text-gray-500 text-xs">
-                                        Status: {alloc.status} | Allocated on:{" "}
-                                        {new Date(
-                                          alloc.allocationDate
-                                        ).toLocaleDateString("en-GB", {
-                                          day: "2-digit",
-                                          month: "2-digit",
-                                          year: "numeric",
-                                        })}
-                                      </p>
-                                      {alloc.returnDate && (
+                          {/* Tooltip */}
+                          {openTooltip === employee._id &&
+                            ActiveAllocations[employee._id]?.length > 0 && (
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50">
+                                <div className="text-md mb-3 font-semibold">
+                                  All Allocated Resources
+                                </div>
+                                <hr />
+                                <div>
+                                  {ActiveAllocations[employee._id].map(
+                                    (alloc, index) => (
+                                      <div
+                                        key={index}
+                                        className="border-b pb-1 mb-1 last:border-none"
+                                      >
+                                        <p className="font-semibold">
+                                          {alloc.resourceName} (
+                                          {alloc.resourceType})
+                                        </p>
                                         <p className="text-gray-500 text-xs">
-                                          Return Date:{" "}
+                                          Status: {alloc.status} | Allocated on:{" "}
                                           {new Date(
-                                            alloc.returnDate
+                                            alloc.allocationDate
                                           ).toLocaleDateString("en-GB", {
                                             day: "2-digit",
                                             month: "2-digit",
                                             year: "numeric",
                                           })}
                                         </p>
-                                      )}
-                                    </div>
-                                  )
-                                )}
+                                        {alloc.returnDate && (
+                                          <p className="text-gray-500 text-xs">
+                                            Return Date:{" "}
+                                            {new Date(
+                                              alloc.returnDate
+                                            ).toLocaleDateString("en-GB", {
+                                              day: "2-digit",
+                                              month: "2-digit",
+                                              year: "numeric",
+                                            })}
+                                          </p>
+                                        )}
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                        </div>
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap">
+                        {new Date(employee.hireDate).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }
+                        )}
+                      </td>
+                      <td className="px-4 py-2">
+                        <button
+                          onClick={() => toggleEmployeeStatus(employee)}
+                          className={`inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
+                            employee.status === "Active"
+                              ? "bg-green-100 text-green-800 hover:bg-green-50"
+                              : "bg-red-100 text-red-600 hover:bg-red-50"
+                          }`}
+                        >
+                          {employee.status}
+                        </button>
+                      </td>
+                      <td className="px-4 py-2 flex justify-center">
+                        <button
+                          onClick={() => handleViewClick(employee)}
+                          className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-950 transition-colors p-1.5 rounded"
+                          title="View"
+                        >
+                          <IoMdEye className="w-5 h-5" />
+                        </button>
+
+                        {employee.status === "Active" && (
+                          <>
+                            <button
+                              onClick={() => handleEditClick(employee)}
+                              className="text-blue-700 cursor-pointer hover:text-blue-600 transition-colors p-1.5 rounded"
+                              title="Edit Employee"
+                            >
+                              <CiEdit className="w-5 h-5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(employee)}
+                              className="text-red-600 cursor-pointer hover:text-red-500 transition-colors p-1.5 rounded"
+                              title="Delete"
+                            >
+                              <MdOutlineDeleteForever className="w-5 h-5" />
+                            </button>
+                            <div className="relative group">
+                              <button
+                                className="text-black cursor-pointer transition-colors p-1.5 rounded"
+                                onClick={() => {
+                                  setCurrentEmployeeId(employee._id);
+                                  setIsAllocationModalOpen(true);
+                                }}
+                              >
+                                <SiTicktick className="w-4 h-4" />
+                              </button>
+                              <div className="absolute z-50 hidden group-hover:block rounded-md shadow-md -top-10 right-1 -translate-x-1/5 transform translate-y-[-0%]">
+                                <button className="text-sm text-blue-950 px-4 py-2 bg-neutral-50 font-semibold min-h-10 min-w-48 overflow-y-auto">
+                                  Allocate new resource
+                                </button>
                               </div>
                             </div>
-                          )}
-                      </div>
-                    </td>
-                    <td className="px-4 py-2 whitespace-nowrap">
-                      {new Date(employee.hireDate).toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      })}
-                    </td>
-                    <td className="px-4 py-2">
-                      <button
-                        onClick={() => toggleEmployeeStatus(employee)}
-                        className={`inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium cursor-pointer ${
-                          employee.status === "Active"
-                            ? "bg-green-100 text-green-800 hover:bg-green-50"
-                            : "bg-red-100 text-red-800 hover:bg-red-50"
-                        }`}
-                      >
-                        {employee.status}
-                      </button>
-                    </td>
-                    <td className="px-4 py-2 flex justify-center">
-                      <button
-                        onClick={() => handleViewClick(employee)}
-                        className="text-black cursor-pointer hover:text-blue-950 transition-colors p-1.5 rounded"
-                        title="View"
-                      >
-                        <IoMdEye className="w-5 h-5" />
-                      </button>
-
-                      {employee.status === "Active" && (
-                        <>
-                          <button
-                            onClick={() => handleEditClick(employee)}
-                            className="text-blue-900 cursor-pointer hover:text-blue-700 transition-colors p-1.5 rounded"
-                            title="Edit Employee"
-                          >
-                            <CiEdit className="w-5 h-5" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteClick(employee)}
-                            className="text-red-800 cursor-pointer hover:text-red-700 transition-colors p-1.5 rounded"
-                            title="Delete"
-                          >
-                            <MdOutlineDeleteForever className="w-5 h-5" />
-                          </button>
-                          <div className="relative group">
-                            <button
-                              className="text-black cursor-pointer transition-colors p-1.5 rounded"
-                              onClick={() => {
-                                setCurrentEmployeeId(employee._id);
-                                setIsAllocationModalOpen(true);
-                              }}
-                            >
-                              <SiTicktick className="w-4 h-4" />
-                            </button>
-                            <div className="absolute z-50 hidden group-hover:block rounded-md shadow-md -top-10 right-1 -translate-x-1/5 transform translate-y-[-0%]">
-                              <button className="text-sm text-blue-950 px-4 py-2 bg-neutral-50 font-semibold min-h-10 min-w-48 overflow-y-auto">
-                                Allocate new resource
-                              </button>
-                            </div>
-                          </div>
-                        </>
-                      )}
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="8"
+                      className="px-4 py-2 text-center text-gray-500 italic"
+                    >
+                      No employees found
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="8"
-                    className="px-4 py-2 text-center text-gray-500 italic"
-                  >
-                    No employees found
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         <EmployeeFormModal
           isOpen={isModalOpen}

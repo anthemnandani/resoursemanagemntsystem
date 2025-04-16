@@ -24,6 +24,17 @@ export const ResourseType = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [resourceToView, setResourceToView] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+const itemsPerPage = 10;
+
+const paginatedResources = resources.slice(
+  (currentPage - 1) * itemsPerPage,
+  currentPage * itemsPerPage
+);
+
+const totalPages = Math.ceil(resources.length / itemsPerPage);
+
+
   const handleUnitClick = (resourceTypeName) => {
     navigate(`/resources?resourceType=${encodeURIComponent(resourceTypeName)}`);
   };
@@ -76,7 +87,7 @@ export const ResourseType = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-2 pt-14">
+      <div className="container mx-auto my-6 p-2 pt-20">
         <div className="flex justify-between items-center py-4">
           <h2 className="text-2xl font-semibold text-center">Resource Types</h2>
           <button
@@ -96,34 +107,70 @@ export const ResourseType = () => {
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4361ee]"></div>
+          <div className="relative border border-gray-200 overflow-x-scroll bg-white rounded-2xl">
+            <table className="w-full text-sm text-left text-gray-700">
+              <thead className="text-xs text-gray-700 uppercase border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-5 font-bold text-xs">Resource Type</th>
+                  <th className="px-6 py-5 font-bold text-xs">Description</th>
+                  <th className="px-6 py-5 font-bold text-xs">
+                    Resources Available
+                  </th>
+                  <th className="px-6 py-5 font-bold text-xs text-center">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <tr key={index} className="animate-pulse">
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-32"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-60 mb-1"></div>
+                      <div className="h-3 bg-gray-100 rounded w-40"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-16 mx-auto"></div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex justify-center space-x-2">
+                        <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                        <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                        <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : (
-          <div className="relative border border-gray-200 overflow-x-scroll">
+          <div className="relative border border-gray-200 overflow-x-scroll bg-white rounded-2xl">
             <table className="w-full text-sm text-left text-gray-700">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+              <thead className="text-xs text-gray-700 uppercase border-b border-gray-200">
                 <tr>
-                  <th scope="col" className="px-6 py-3.5 font-medium">
+                  <th scope="col" className="px-6 py-5 font-bold text-xs">
                     Resource Type
                   </th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">
+                  <th scope="col" className="px-6 py-5 font-bold text-xs">
                     Description
                   </th>
-                  <th scope="col" className="px-6 py-3.5 font-medium">
+                  <th scope="col" className="px-6 py-5 font-bold text-xs">
                     Resources Available
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3.5 font-medium text-center"
+                    className="px-6 py-5 font-bold text-xs text-center"
                   >
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
-                {resources.length > 0 ? (
-                  resources.map((resource) => (
+              <tbody className="">
+              {paginatedResources.length > 0 ? (
+        paginatedResources.map((resource) => (
                     <tr
                       key={resource._id}
                       className="bg-white hover:blue-50/10 transition-colors duration-150"
@@ -143,7 +190,8 @@ export const ResourseType = () => {
                       </td>
                       <td
                         className="px-6 py-2 font-bold text-black cursor-pointer hover:underline"
-                        onClick={() => handleUnitClick(resource.name)} title="Click to view related resources"
+                        onClick={() => handleUnitClick(resource.name)}
+                        title="Click to view related resources"
                       >
                         {resource.resourceCount}
                       </td>
@@ -151,7 +199,7 @@ export const ResourseType = () => {
                       <td className="px-6 py-2 flex justify-center space-x-3">
                         <button
                           onClick={() => handleViewClick(resource)}
-                          className="text-black cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          className="text-black cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative hover:bg-neutral-100"
                           title="View"
                         >
                           <IoMdEye className="w-5 h-5" />
@@ -159,7 +207,7 @@ export const ResourseType = () => {
 
                         <button
                           onClick={() => handleEditClick(resource)}
-                          className="text-blue-900 hover:text-blue-700 cursor-pointer transition-colors p-1.5 rounded hover:bg-blue-50"
+                          className="text-blue-700 hover:text-blue-600 cursor-pointer transition-colors p-1.5 rounded hover:bg-blue-50"
                           title="Edit"
                         >
                           <CiEdit className="w-5 h-5" />
@@ -186,6 +234,28 @@ export const ResourseType = () => {
                 )}
               </tbody>
             </table>
+            {/* Pagination */}
+{totalPages > 1 && (
+  <div className="mt-4 flex justify-center items-center gap-2">
+    <button
+      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+      disabled={currentPage === 1}
+      className="px-3 py-1 border rounded disabled:opacity-50"
+    >
+      Previous
+    </button>
+    <span className="text-sm font-semibold">
+      Page {currentPage} of {totalPages}
+    </span>
+    <button
+      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+      disabled={currentPage === totalPages}
+      className="px-3 py-1 border rounded disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
+)}
           </div>
         )}
 
@@ -211,7 +281,7 @@ export const ResourseType = () => {
           title="Resource Type Details"
         />
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

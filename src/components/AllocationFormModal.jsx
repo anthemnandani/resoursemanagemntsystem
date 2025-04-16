@@ -23,32 +23,36 @@ const AllocationFormModal = ({
 
   const [loading, setLoading] = useState(false);
 
-  // Fetch employees and Available resources when component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [employeesRes, resourcesRes, resourceTypesRes] =
-          await Promise.all([
-            axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees"),
-            axios.get(
-              "https://resoursemanagemntsystem-bksn.vercel.app/api/resources/getAvaliableResources"
-            ),
-            axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"),
-          ]);
-
-        setEmployees(employeesRes.data);
+        const [employeesRes, resourcesRes, resourceTypesRes] = await Promise.all([
+          axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees"),
+          axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources/getAvaliableResources"),
+          axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"),
+        ]);
+  
+        // Only active employees
+        setEmployees(
+          (employeesRes.data || []).filter(
+            (emp) => emp.status === "Active" && !emp.isDeleted
+          )
+        );
+  
+        // Sort available resources alphabetically
         setResources(
           (resourcesRes.data.data || []).sort((a, b) =>
             a.name.localeCompare(b.name)
           )
         );
-        
+  
+        // Sort resource types alphabetically
         setResourceTypes(
           (resourceTypesRes.data.data || []).sort((a, b) =>
             a.name.localeCompare(b.name)
           )
         );
-
+  
         if (selectedEmployeeId) {
           setFormData((prev) => ({ ...prev, employeeId: selectedEmployeeId }));
         }
@@ -59,12 +63,12 @@ const AllocationFormModal = ({
         console.error("Error fetching data: ", error);
       }
     };
-
+  
     if (isOpen) {
       fetchData();
     }
   }, [isOpen, selectedEmployeeId, selectedResourceId]);
-
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -128,15 +132,18 @@ const AllocationFormModal = ({
               name="employeeId"
               value={formData.employeeId}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               required
             >
               <option value="">Select Employee</option>
-              {employees.map((employee) => (
-                <option key={employee._id} value={employee._id}>
-                  {employee.name} ({employee.position} - {employee.department})
-                </option>
-              ))}
+              {[...employees]
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((employee) => (
+                  <option key={employee._id} value={employee._id}>
+                    {employee.name} ({employee.position} - {employee.department}
+                    )
+                  </option>
+                ))}
             </select>
           </div>
 
@@ -145,14 +152,16 @@ const AllocationFormModal = ({
             <select
               value={selectedResourceType}
               onChange={(e) => setSelectedResourceType(e.target.value)}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
             >
               <option value="">All Types</option>
-              {resourceTypes.map((type) => (
-                <option key={type._id} value={type._id}>
-                  {type.name}
-                </option>
-              ))}
+              {[...resourceTypes]
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((type) => (
+                  <option key={type._id} value={type._id}>
+                    {type.name}
+                  </option>
+                ))}
             </select>
           </div>
 
@@ -164,22 +173,28 @@ const AllocationFormModal = ({
               name="resourceId"
               value={formData.resourceId}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               required
             >
               <option value="">Select Resource</option>
-              {resources
+              {[...resources]
                 .filter((resource) =>
                   selectedResourceType
                     ? resource.resourceType?._id === selectedResourceType
                     : true
                 )
-                .map((resource) => (
-                  <option key={resource._id} value={resource._id}>
-                    {resource.name} (
-                    {resource.resourceType?.name || resource.type})
-                  </option>
-                ))}
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((resource) => {
+                  const capitalizedName =
+                    resource.name.charAt(0).toUpperCase() +
+                    resource.name.slice(1);
+                  return (
+                    <option key={resource._id} value={resource._id}>
+                      {capitalizedName} (
+                      {resource.resourceType?.name || resource.type})
+                    </option>
+                  );
+                })}
             </select>
           </div>
 
@@ -190,7 +205,7 @@ const AllocationFormModal = ({
               name="AllocatedDate"
               value={formData.AllocatedDate}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
             />
           </div>
 

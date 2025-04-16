@@ -26,3 +26,27 @@
     scrollbar-color: #4362ee37 #f1f1f1;
   }
 }
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg, #caf0f838, #90e1ef2b, #0076b629, #023d8a28);
+  background-size: 400% 400%;
+  animation: gradientFlow 10s ease infinite;
+}
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}

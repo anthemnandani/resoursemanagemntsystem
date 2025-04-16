@@ -88,7 +88,7 @@ const Dashboard = () => {
     <>
       <Navbar />
       <div className="px-6 py-4 min-h-[90vh]">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 pt-18">Dashboard</h2>
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 pt-20">Dashboard</h2>
         <div className="">
           <div className="flex justify-between lg:flex-row max-sm:flex-col gap-4 mb-4">
             {dashboardCards.map((card, index) => (
@@ -96,12 +96,12 @@ const Dashboard = () => {
                 key={index}
                 className={`p-6 w-full rounded-lg border-l-4 ${
                   card.color === "blue"
-                    ? "border-[#4361ee] bg-blue-50 text-blue-600"
+                    ? "border-[#4361ee] bg-white text-blue-600"
                     : card.color === "green"
-                    ? "border-green-800 bg-blue-50 text-green-600"
+                    ? "border-green-800 bg-white text-green-600"
                     : card.color === "yellow"
-                    ? "border-yellow-400 bg-blue-50 text-yellow-300"
-                    : "border-orange-700 bg-blue-50 text-purple-600"
+                    ? "border-yellow-400 bg-white text-yellow-300"
+                    : "border-orange-700 bg-white text-purple-600"
                 } hover:shadow-md transition-shadow cursor-pointer`}
                 onClick={() => navigate(card.path)}
               >

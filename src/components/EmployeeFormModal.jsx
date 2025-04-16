@@ -180,7 +180,7 @@ const EmployeeFormModal = ({
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               required
             />
           </div>
@@ -195,7 +195,7 @@ const EmployeeFormModal = ({
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               required
               // disabled={!!employeeData} // Disable email field for edits
             />
@@ -211,20 +211,20 @@ const EmployeeFormModal = ({
               name="department"
               value={formData.department}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               required
             >
               <option value="">--Select option--</option>
-              <option value="Software Development">Software Development</option>
-              <option value="Recruitment">Recruitment</option>
+              <option value="Administration">Administration</option>
               <option value="Business Development">Business Development</option>
-              <option value="Sales">Sales</option>
-              <option value="Marketing">Marketing</option>
+              <option value="Customer Support">Customer Support</option>
+              <option value="Design">Design</option>
               <option value="Finance">Finance</option>
               <option value="Management">Management</option>
-              <option value="Administration">Administration</option>
-              <option value="Design">Design</option>
-              <option value="Customer Support">Customer Support</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Recruitment">Recruitment</option>
+              <option value="Sales">Sales</option>
+              <option value="Software Development">Software Development</option>
             </select>
           </div>
 
@@ -237,23 +237,23 @@ const EmployeeFormModal = ({
               name="position"
               value={formData.position}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               required
             >
               <option value="">--Select option--</option>
-              <option value="Developer">Developer</option>
-              <option value="Senior Developer">Senior Developer</option>
-              <option value="Team Lead">Team Lead</option>
-              <option value="HR Manager">HR Manager</option>
-              <option value="Recruiter">Recruiter</option>
               <option value="Business Development Manager">
                 Business Development Manager
               </option>
-              <option value="Sales Manager">Sales Manager</option>
-              <option value="Project Manager">Project Manager</option>
-              <option value="Admin">Admin</option>
               <option value="Accountant">Accountant</option>
+              <option value="Admin">Admin</option>
+              <option value="Developer">Developer</option>
               <option value="Designer">Designer</option>
+              <option value="HR Manager">HR Manager</option>
+              <option value="Project Manager">Project Manager</option>
+              <option value="Recruiter">Recruiter</option>
+              <option value="Sales Manager">Sales Manager</option>
+              <option value="Senior Developer">Senior Developer</option>
+              <option value="Team Lead">Team Lead</option>
             </select>
           </div>
          </div>
@@ -265,7 +265,7 @@ const EmployeeFormModal = ({
               name="hireDate"
               value={formData.hireDate}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
             />
           </div>
 

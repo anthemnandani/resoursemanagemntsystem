@@ -80,7 +80,7 @@ const ResourceFormModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
+      <div className="bg-white rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-2xl font-semibold">
             {resourceData ? "Edit Resource" : "Add Resource"}
@@ -103,7 +103,7 @@ const ResourceFormModal = ({
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               required
             />
           </div>
@@ -123,8 +123,8 @@ const ResourceFormModal = ({
               placeholder="Enter description"
               value={formData.description || ""}
               onChange={handleInputChange}
-              className="w-full p-2 border rounded border-gray-300"
-              rows="3"
+              className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
+              rows="4"
               maxLength={500}
             />
           </div>
@@ -133,14 +133,14 @@ const ResourceFormModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-200 w-full rounded-full hover:bg-neutral-300"
+              className="px-4 py-3 bg-gray-200 w-full rounded-full hover:bg-neutral-300"
               disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 w-full flex items-center justify-center bg-[#4361ee] text-white rounded-full hover:bg-blue-700"
+              className="px-4 py-3 w-full flex items-center justify-center bg-[#4361ee] text-white rounded-full hover:bg-blue-700"
               disabled={loading}
             >
               {loading ? (
@@ -167,9 +167,9 @@ const ResourceFormModal = ({
                   </svg>
                 </>
               ) : resourceData ? (
-                "Update Resource Type"
+                "Update ResourceType"
               ) : (
-                "Create Resource Type"
+                "Create ResourceType"
               )}
             </button>
           </div>

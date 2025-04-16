@@ -103,14 +103,14 @@ const ResetPassword = () => {
 
           <button
             type="submit"
-            className="w-full mb-3 bg-blue-500 text-white py-2 rounded-4xl hover:bg-blue-700 transition"
+            className="w-full mb-3 bg-blue-500 text-white py-2 rounded-3xl hover:bg-blue-700 transition"
           >
             Reset Password
           </button>
         </form>
         <button
           type="submit"
-          className="w-full bg-blue-50 text-blue-500 hover:text-white py-2 rounded-4xl hover:bg-blue-500 transition"
+          className="w-full bg-blue-50 text-blue-500 hover:text-white py-2 rounded-3xl hover:bg-blue-500 transition"
           onClick={() => navigate("/login")}
         >
           Back to login
