@@ -293,27 +293,26 @@ const ResourceFormModal = ({
           </div>
 
           <div className="mb-2">
-  <div className="flex justify-between items-center mb-1">
-    <div className="flex items-center gap-1">
-      <label className="block text-gray-700">Description</label>
-      <span className="text-red-600">*</span>
-    </div>
-    <span className="text-sm text-gray-500">
-      {formData.description?.length || 0} / 500
-    </span>
-  </div>
-  <textarea
-    name="description"
-    value={formData.description || ""}
-    placeholder="Color, style, or appearance..."
-    onChange={handleInputChange}
-    className="w-full p-2 border rounded border-gray-300"
-    rows="3"
-    maxLength={500}
-    required
-  />
-</div>
-
+            <div className="flex justify-between items-center mb-1">
+              <div className="flex items-center gap-1">
+                <label className="block text-gray-700">Description</label>
+                <span className="text-red-600">*</span>
+              </div>
+              <span className="text-sm text-gray-500">
+                {formData.description?.length || 0} / 500
+              </span>
+            </div>
+            <textarea
+              name="description"
+              value={formData.description || ""}
+              placeholder="Color, style, or appearance..."
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded border-gray-300"
+              rows="3"
+              maxLength={500}
+              required
+            />
+          </div>
 
           <div className="mb-4">
             <div className="flex">

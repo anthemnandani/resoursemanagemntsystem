@@ -9,6 +9,7 @@ const AllocationFormModal = ({
   onSuccess,
   allocationData = null,
   selectedEmployeeId = "",
+  selectedResourceId = "",
 }) => {
   const [formData, setFormData] = useState({
     employeeId: "",
@@ -51,6 +52,9 @@ const AllocationFormModal = ({
         if (selectedEmployeeId) {
           setFormData((prev) => ({ ...prev, employeeId: selectedEmployeeId }));
         }
+        if (selectedResourceId) {
+          setFormData((prev) => ({ ...prev, resourceId: selectedResourceId }));
+        }
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
@@ -59,7 +63,7 @@ const AllocationFormModal = ({
     if (isOpen) {
       fetchData();
     }
-  }, [isOpen, selectedEmployeeId]);
+  }, [isOpen, selectedEmployeeId, selectedResourceId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
