@@ -83,7 +83,7 @@ const ResourceFormModal = ({
       <div className="bg-white rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-2xl font-semibold">
-            {resourceData ? "Edit Resource" : "Add Resource"}
+            {resourceData ? "Edit Resource Type" : "Add Resource Type"}
           </h2>
           <button
             onClick={onClose}
@@ -95,13 +95,14 @@ const ResourceFormModal = ({
         <form onSubmit={handleSubmit}>
           <div className="mb-2">
             <div className="flex items-center gap-1">
-              <label className="block text-gray-700">Resource Name</label>
+              <label className="block text-gray-700">Name</label>
               <span className="text-red-600">*</span>
             </div>
             <input
               type="text"
               name="name"
               value={formData.name}
+              placeholder="Enter resource type name"
               onChange={handleInputChange}
               className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
               required
@@ -120,7 +121,7 @@ const ResourceFormModal = ({
             </div>
             <textarea
               name="description"
-              placeholder="Enter description"
+              placeholder="Enter a brief description"
               value={formData.description || ""}
               onChange={handleInputChange}
               className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"

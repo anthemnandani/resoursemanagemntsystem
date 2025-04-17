@@ -12,6 +12,7 @@ import { IoMdEye } from "react-icons/io";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 import { Footer } from "../components/Footer";
 import { toast } from "react-toastify";
+import CustomPagination from "../components/CustomPagination";
 
 export const Employee = () => {
   const [employees, setEmployees] = useState([]);
@@ -31,6 +32,14 @@ export const Employee = () => {
 
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [resourceToView, setResourceToView] = useState(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const paginatedData = filteredEmployees.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
 
   const handleViewClick = (resource) => {
     setResourceToView(resource);
@@ -83,9 +92,7 @@ export const Employee = () => {
   const fetchEmployees = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "https://resoursemanagemntsystem-bksn.vercel.app/api/employees"
-      );
+      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees");
       const data = response.data;
       setEmployees(data);
       updateCounts(data);
@@ -153,12 +160,9 @@ export const Employee = () => {
   const toggleEmployeeStatus = async (employee) => {
     try {
       const newStatus = employee.status === "Active" ? "Inactive" : "Active";
-      await axios.patch(
-        `https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employee._id}`,
-        {
-          status: newStatus,
-        }
-      );
+      await axios.patch(`https://resoursemanagemntsystem-bksn.vercel.app/api/employees/${employee._id}`, {
+        status: newStatus,
+      });
       fetchEmployees();
     } catch (error) {
       console.error("Error updating employee status:", error);
@@ -217,56 +221,60 @@ export const Employee = () => {
         {/* Loading Indicator */}
         {loading ? (
           <div className="relative border border-gray-200 overflow-x-scroll bg-white rounded-2xl">
-          <table className="w-full text-sm text-left text-gray-700">
-            <thead className="text-xs text-gray-700 uppercase border-b border-gray-200">
-              <tr>
-                <th className="px-4 py-5 font-bold text-xs">Profile</th>
-                <th className="px-4 py-5 font-bold text-xs">Employee</th>
-                <th className="px-4 py-5 font-bold text-xs">Email</th>
-                <th className="px-4 py-5 font-bold text-xs">Department</th>
-                <th className="px-4 py-5 font-bold text-xs max-w-[100px]">Allocated resources</th>
-                <th className="px-4 py-5 font-bold text-xs">Hire Date</th>
-                <th className="px-4 py-5 font-bold text-xs">Status</th>
-                <th className="px-4 py-5 font-bold text-xs text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: 6 }).map((_, index) => (
-                <tr key={index} className="bg-white animate-pulse">
-                  <td className="px-4 py-4">
-                    <div className="h-10 w-10 bg-gray-200 rounded-full mx-auto" />
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
-                    <div className="h-3 bg-gray-100 rounded w-16"></div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="h-4 bg-gray-200 rounded w-28"></div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="h-4 bg-gray-200 rounded w-20"></div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="h-4 bg-gray-200 rounded w-10"></div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="h-4 bg-gray-200 rounded w-20"></div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="h-4 bg-gray-200 rounded w-16"></div>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="flex justify-center space-x-2">
-                      <div className="h-6 w-6 bg-gray-200 rounded"></div>
-                      <div className="h-6 w-6 bg-gray-200 rounded"></div>
-                      <div className="h-6 w-6 bg-gray-200 rounded"></div>
-                    </div>
-                  </td>
+            <table className="w-full text-sm text-left text-gray-700">
+              <thead className="text-xs text-gray-700 uppercase border-b border-gray-200">
+                <tr>
+                  <th className="px-4 py-5 font-bold text-xs">Profile</th>
+                  <th className="px-4 py-5 font-bold text-xs">Employee</th>
+                  <th className="px-4 py-5 font-bold text-xs">Email</th>
+                  <th className="px-4 py-5 font-bold text-xs">Department</th>
+                  <th className="px-4 py-5 font-bold text-xs max-w-[100px]">
+                    Allocated resources
+                  </th>
+                  <th className="px-4 py-5 font-bold text-xs">Hire Date</th>
+                  <th className="px-4 py-5 font-bold text-xs">Status</th>
+                  <th className="px-4 py-5 font-bold text-xs text-center">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <tr key={index} className="bg-white animate-pulse">
+                    <td className="px-4 py-4">
+                      <div className="h-10 w-10 bg-gray-200 rounded-full mx-auto" />
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-24 mb-2"></div>
+                      <div className="h-3 bg-gray-100 rounded w-16"></div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-28"></div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-20"></div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-10"></div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-20"></div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="h-4 bg-gray-200 rounded w-16"></div>
+                    </td>
+                    <td className="px-4 py-4">
+                      <div className="flex justify-center space-x-2">
+                        <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                        <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                        <div className="h-6 w-6 bg-gray-200 rounded"></div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <div className="relative border border-gray-200 overflow-x-scroll bg-white rounded-2xl">
             <table className="w-full text-sm text-left text-gray-700">
@@ -413,7 +421,7 @@ export const Employee = () => {
                       <td className="px-4 py-2 flex justify-center">
                         <button
                           onClick={() => handleViewClick(employee)}
-                          className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-950 transition-colors p-1.5 rounded"
+                          className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-950 transition-colors p-2 rounded"
                           title="View"
                         >
                           <IoMdEye className="w-5 h-5" />
@@ -468,6 +476,13 @@ export const Employee = () => {
                 )}
               </tbody>
             </table>
+            <CustomPagination
+              totalItems={filteredEmployees.length}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         )}
 
@@ -490,6 +505,7 @@ export const Employee = () => {
           onClose={() => setDeleteModalOpen(false)}
           onConfirm={handleDeleteConfirm}
           itemName={employeeToDelete?.name || "this employee"}
+          title={"Employee"}
         />
 
         <ViewDetailsModal

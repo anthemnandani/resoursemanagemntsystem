@@ -11,6 +11,7 @@ import ViewDetailsModal from "../components/ViewDetailsModal";
 
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer";
+import CustomPagination from "../components/CustomPagination";
 
 export const ResourseType = () => {
   const navigate = useNavigate();
@@ -24,16 +25,14 @@ export const ResourseType = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [resourceToView, setResourceToView] = useState(null);
 
+  //paganation states
   const [currentPage, setCurrentPage] = useState(1);
-const itemsPerPage = 10;
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-const paginatedResources = resources.slice(
-  (currentPage - 1) * itemsPerPage,
-  currentPage * itemsPerPage
-);
-
-const totalPages = Math.ceil(resources.length / itemsPerPage);
-
+  const paginatedResources = resources.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
 
   const handleUnitClick = (resourceTypeName) => {
     navigate(`/resources?resourceType=${encodeURIComponent(resourceTypeName)}`);
@@ -87,7 +86,7 @@ const totalPages = Math.ceil(resources.length / itemsPerPage);
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-2 pt-20">
+      <div className="container mx-auto my-6 p-2 pt-20 min-h-[85vh]">
         <div className="flex justify-between items-center py-4">
           <h2 className="text-2xl font-semibold text-center">Resource Types</h2>
           <button
@@ -169,8 +168,8 @@ const totalPages = Math.ceil(resources.length / itemsPerPage);
                 </tr>
               </thead>
               <tbody className="">
-              {paginatedResources.length > 0 ? (
-        paginatedResources.map((resource) => (
+                {resources.length > 0 ? (
+                  paginatedResources.map((resource) => (
                     <tr
                       key={resource._id}
                       className="bg-white hover:blue-50/10 transition-colors duration-150"
@@ -199,7 +198,7 @@ const totalPages = Math.ceil(resources.length / itemsPerPage);
                       <td className="px-6 py-2 flex justify-center space-x-3">
                         <button
                           onClick={() => handleViewClick(resource)}
-                          className="text-black cursor-pointer hover:text-blue-900 transition-colors p-1.5 rounded relative hover:bg-neutral-100"
+                          className="text-black cursor-pointer hover:text-blue-900 transition-colors p-2 rounded relative hover:bg-neutral-100"
                           title="View"
                         >
                           <IoMdEye className="w-5 h-5" />
@@ -234,28 +233,13 @@ const totalPages = Math.ceil(resources.length / itemsPerPage);
                 )}
               </tbody>
             </table>
-            {/* Pagination */}
-{totalPages > 1 && (
-  <div className="mt-4 flex justify-center items-center gap-2">
-    <button
-      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-      disabled={currentPage === 1}
-      className="px-3 py-1 border rounded disabled:opacity-50"
-    >
-      Previous
-    </button>
-    <span className="text-sm font-semibold">
-      Page {currentPage} of {totalPages}
-    </span>
-    <button
-      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-      disabled={currentPage === totalPages}
-      className="px-3 py-1 border rounded disabled:opacity-50"
-    >
-      Next
-    </button>
-  </div>
-)}
+            <CustomPagination
+              totalItems={resources.length}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         )}
 
@@ -271,6 +255,7 @@ const totalPages = Math.ceil(resources.length / itemsPerPage);
           onClose={() => setDeleteModalOpen(false)}
           onConfirm={handleDeleteConfirm}
           itemName={resourceToDelete?.name || "this resource"}
+          title={"Resource Type"}
         />
 
         <ViewDetailsModal

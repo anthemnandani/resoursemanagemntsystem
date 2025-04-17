@@ -44,7 +44,9 @@ export const Login = () => {
         <div className="mb-3">
           <img src="/logo1.png" className="h-14 w-auto" alt="" />
         </div>
-        <p className="text-md text-gray-400 mb-6 text-center">Authorized entry for system administrators only.</p>
+        <p className="text-md text-gray-400 mb-6 text-center">
+          Authorized entry for system administrators only.
+        </p>
 
         <form onSubmit={handleLogin} className="space-y-6 w-full">
           <div className="relative">
@@ -99,7 +101,7 @@ export const Login = () => {
             onClick={() => navigate("/fogotpasword")}
             className="text-blue-600 font-semibold text-center flex items-center justify-center cursor-pointer"
           >
-            Forgot password?
+            Forgot Password ?
           </button>
         </div>
       </div>

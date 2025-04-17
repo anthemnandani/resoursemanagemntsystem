@@ -11,6 +11,7 @@ import ViewDetailsModal from "../components/ViewDetailsModal";
 import { Footer } from "../components/Footer";
 import { toast } from "react-toastify";
 import { IoSearchSharp } from "react-icons/io5";
+import CustomPagination from "../components/CustomPagination";
 
 export const AllocatedResouses = () => {
   const [allocations, setAllocations] = useState([]);
@@ -25,9 +26,10 @@ export const AllocatedResouses = () => {
   const [resourceToView, setResourceToView] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState("");
-  //paganitation
+
+  //paganation states
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleViewClick = (resource) => {
     setResourceToView(resource);
@@ -82,7 +84,7 @@ export const AllocatedResouses = () => {
         const day = String(dateObj.getDate()).padStart(2, "0");
         const month = String(dateObj.getMonth() + 1).padStart(2, "0");
         const year = dateObj.getFullYear();
-        const allocationDate = `${day}/${month}/${year}`;
+        const allocationDate = `${day}/${month}/${year}`; // -> e.g. 10/04/2025
 
         return (
           employeeName.includes(keyword) ||
@@ -94,14 +96,6 @@ export const AllocatedResouses = () => {
 
     return filtered;
   }, [allocations, ActiveFilter, searchQuery]);
-
-  const paginatedAllocations = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return filteredAllocations.slice(startIndex, endIndex);
-  }, [filteredAllocations, currentPage, itemsPerPage]);
-
-  const totalPages = Math.ceil(filteredAllocations.length / itemsPerPage);
 
   const handleDeleteConfirm = async () => {
     if (!allocationToDelete) return;
@@ -124,6 +118,14 @@ export const AllocatedResouses = () => {
     // Whenever activeFilter changes, fetch fresh data
     fetchAllocations();
   }, [ActiveFilter]);
+
+  //paganation allocation function
+  const paginatedAllocations = useMemo(() => {
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    return filteredAllocations.slice(startIndex, endIndex);
+  }, [filteredAllocations, currentPage, rowsPerPage]);
+
 
   return (
     <>
@@ -240,14 +242,12 @@ export const AllocatedResouses = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginatedAllocations.length > 0 ? (
+                {filteredAllocations.length > 0 ? (
                   paginatedAllocations.map((allocation) => (
                     <tr key={allocation._id} className="bg-white">
                       <td className="px-6 py-2 font-medium text-gray-900 whitespace-nowrap">
-                        {allocation.resource?.name
-                          ? allocation.resource.name.charAt(0).toUpperCase() +
-                            allocation.resource.name.slice(1)
-                          : "N/A"}
+                        {allocation.resource?.name.charAt(0).toUpperCase() +
+                          allocation.resource?.name.slice(1) || "N/A"}
                       </td>
                       <td className="px-6 py-2">
                         <div className="font-medium">
@@ -293,11 +293,17 @@ export const AllocatedResouses = () => {
                       <td className="px-6 py-2 flex justify-center space-x-3">
                         <button
                           onClick={() => handleViewClick(allocation)}
-                          className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-900 transition-colors p-2 rounded relative"
                           title="View"
                         >
                           <IoMdEye className="w-5 h-5" />
                         </button>
+                        {/* <button
+                          onClick={() => setCurrentAllocation(allocation)}
+                          className="text-blue-900 hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
+                        >
+                          <CiEdit className="w-5 h-5" />
+                        </button> */}
                         <button
                           onClick={() => {
                             setAllocationToDelete(allocation);
@@ -323,39 +329,13 @@ export const AllocatedResouses = () => {
                 )}
               </tbody>
             </table>
-            <div className="flex justify-center items-center mt-4 space-x-2">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
-              >
-                Previous
-              </button>
-
-              {[...Array(totalPages)].map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentPage(index + 1)}
-                  className={`px-3 py-1 rounded ${
-                    currentPage === index + 1
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 hover:bg-gray-200"
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-
-              <button
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
-              >
-                Next
-              </button>
-            </div>
+            <CustomPagination
+              totalItems={filteredAllocations.length}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         )}
 
@@ -370,6 +350,7 @@ export const AllocatedResouses = () => {
           onClose={() => setDeleteModalOpen(false)}
           onConfirm={handleDeleteConfirm}
           itemName={allocationToDelete?.resource?.name || "this allocation"}
+          title={"Allocated Resource"}
         />
 
         <ViewDetailsModal

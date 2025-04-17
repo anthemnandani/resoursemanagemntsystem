@@ -12,6 +12,7 @@ import { useSearchParams } from "react-router-dom";
 import { Footer } from "../components/Footer";
 import { SiTicktick } from "react-icons/si";
 import AllocationFormModal from "../components/AllocationFormModal";
+import CustomPagination from "../components/CustomPagination";
 
 export const Resourse = () => {
   const [searchParams] = useSearchParams();
@@ -35,16 +36,14 @@ export const Resourse = () => {
   const [isAllocationModalOpen, setIsAllocationModalOpen] = useState(false);
   const [currentResourceId, setCurrentResourceId] = useState("");
 
-  //paganation
+  //paganation state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const paginatedResources = filteredResources.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
   );
-
-  const totalPages = Math.ceil(filteredResources.length / itemsPerPage);
 
   const fetchResources = async (status = null) => {
     setLoading(true);
@@ -398,7 +397,7 @@ export const Resourse = () => {
                       <td className="px-6 py-2 flex justify-center">
                         <button
                           onClick={() => handleViewClick(resource)}
-                          className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-900 transition-colors p-1.5 rounded relative"
+                          className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-900 transition-colors p-2 rounded relative"
                           title="View"
                         >
                           <IoMdEye className="w-5 h-5" />
@@ -448,34 +447,13 @@ export const Resourse = () => {
                 )}
               </tbody>
             </table>
-            {totalPages > 1 && (
-  <div className="flex justify-center mt-4 space-x-2">
-    <button
-      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-      disabled={currentPage === 1}
-      className={`px-3 py-1 border rounded ${currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"}`}
-    >
-      Previous
-    </button>
-    {[...Array(totalPages)].map((_, index) => (
-      <button
-        key={index}
-        onClick={() => setCurrentPage(index + 1)}
-        className={`px-3 py-1 border rounded ${currentPage === index + 1 ? "bg-blue-500 text-white" : "hover:bg-gray-100"}`}
-      >
-        {index + 1}
-      </button>
-    ))}
-    <button
-      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-      disabled={currentPage === totalPages}
-      className={`px-3 py-1 border rounded ${currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"}`}
-    >
-      Next
-    </button>
-  </div>
-)}
-
+            <CustomPagination
+              totalItems={filteredResources.length}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         )}
 
@@ -503,6 +481,7 @@ export const Resourse = () => {
           onClose={() => setDeleteModalOpen(false)}
           onConfirm={handleDeleteConfirm}
           itemName={resourceToDelete?.name || "this resource"}
+          title={"Resource"}
         />
 
         <ViewDetailsModal

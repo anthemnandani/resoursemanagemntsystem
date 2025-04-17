@@ -177,7 +177,7 @@ const ResourceFormModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg w-full max-w-xl max-h-[90vh] overflow-y-auto p-6">
+      <div className="bg-white rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-2xl font-semibold">
             {resourceData ? "Edit Resource" : "Add Resource"}
@@ -206,8 +206,8 @@ const ResourceFormModal = ({
             />
           </div>
 
-          <div className="flex gap-2">
-            <div className="mb-2 w-full">
+          <div className="flex gap-2 mb-2">
+            <div className="w-full">
               <div className="flex">
                 <label className="block text-gray-700 mb-1">
                   Resource Type
@@ -266,7 +266,7 @@ const ResourceFormModal = ({
             />
           </div> */}
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-2">
             <div className="mb-2 w-full">
               <label className="block text-gray-700 mb-1">Purchase Date</label>
               <input

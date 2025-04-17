@@ -32,7 +32,7 @@ export const Register = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
-       <div>
+      <div>
         <img src="/logo1.png" className="h-14 w-auto" alt="" />
       </div>
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
@@ -90,7 +90,10 @@ export const Register = () => {
           >
             Register
           </button>
-          <a href="#" className="text-[#4361ee] cursor-pointer text-center m-auto">
+          <a
+            href="#"
+            className="text-[#4361ee] cursor-pointer text-center m-auto"
+          >
             Forgot Password?
           </a>
         </form>

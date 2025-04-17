@@ -117,7 +117,7 @@ const EmployeeFormModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg w-full max-w-xl max-h-[95vh] overflow-y-auto p-6">
+      <div className="bg-white rounded-lg w-full max-w-lg max-h-[95vh] overflow-y-auto p-6">
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-xl font-semibold">
             {employeeData ? "Edit Employee" : "Add Employee"}
