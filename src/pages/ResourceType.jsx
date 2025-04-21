@@ -195,7 +195,7 @@ export const ResourseType = () => {
                         {resource.resourceCount}
                       </td>
 
-                      <td className="px-6 py-2 flex justify-center space-x-3">
+                      <td className="px-6 py-2 flex justify-start space-x-3">
                         <button
                           onClick={() => handleViewClick(resource)}
                           className="text-black cursor-pointer hover:text-blue-900 transition-colors p-2 rounded relative hover:bg-neutral-100"
@@ -213,7 +213,7 @@ export const ResourseType = () => {
                         </button>
                         <button
                           onClick={() => handleDeleteClick(resource)}
-                          className="text-red-800 hover:text-red-700 cursor-pointer transition-colors p-1.5 rounded hover:bg-red-50"
+                          className="text-red-600 hover:text-red-500 cursor-pointer transition-colors p-1.5 rounded hover:bg-red-50"
                           title="Delete"
                         >
                           <MdDelete className="w-5 h-5"  />

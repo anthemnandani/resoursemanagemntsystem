@@ -418,7 +418,7 @@ export const Employee = () => {
                           {employee.status}
                         </button>
                       </td>
-                      <td className="px-4 py-2 flex items-center justify-center">
+                      <td className="px-4 py-2 flex items-center justify-start">
                         <button
                           onClick={() => handleViewClick(employee)}
                           className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-950 transition-colors p-2 rounded"

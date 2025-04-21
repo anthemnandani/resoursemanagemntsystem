@@ -14,7 +14,7 @@ const ViewDetailsModal = ({
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 bg-opacity-40 z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold mb-4 text-[#4361ee]">{title}</h2>
+          <h2 className="text-xl font-bold mb-4 text-black">{title}</h2>
           <button
             onClick={onClose}
             className="text-gray-500 text-xl hover:text-gray-700"

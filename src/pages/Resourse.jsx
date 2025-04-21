@@ -484,7 +484,7 @@ export const Resourse = () => {
                           {resource.status}
                         </span>
                       </td>
-                      <td className="px-6 py-2 flex items-center justify-center">
+                      <td className="px-6 py-2 flex items-center justify-start">
                         <button
                           onClick={() => handleViewClick(resource)}
                           className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-900 transition-colors p-2 rounded relative"
@@ -506,7 +506,9 @@ export const Resourse = () => {
                         >
                           <MdDelete className="w-5 h-5"  />
                         </button>
-                        <div className="relative group">
+                        {resource.status === "Available" && (
+                          <>
+                          <div className="relative group">
                           <button
                             className="text-black cursor-pointer transition-colors p-1.5 rounded"
                             onClick={() => {
@@ -521,7 +523,8 @@ export const Resourse = () => {
                               Allocate this resource to an employee
                             </button>
                           </div>
-                        </div>
+                        </div></>
+                        )}
                       </td>
                     </tr>
                   ))

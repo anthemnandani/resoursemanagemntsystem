@@ -20,55 +20,67 @@ const AllocationFormModal = ({
 
   const [resourceTypes, setResourceTypes] = useState([]);
   const [selectedResourceType, setSelectedResourceType] = useState("");
+  const [isManualTypeChange, setIsManualTypeChange] = useState(false);
+
 
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [employeesRes, resourcesRes, resourceTypesRes] = await Promise.all([
-          axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees"),
-          axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources/getAvaliableResources"),
-          axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"),
-        ]);
-  
-        // Only active employees
-        setEmployees(
-          (employeesRes.data || []).filter(
-            (emp) => emp.status === "Active" && !emp.isDeleted
-          )
-        );
-  
-        // Sort available resources alphabetically
-        setResources(
-          (resourcesRes.data.data || []).sort((a, b) =>
-            a.name.localeCompare(b.name)
-          )
-        );
-  
-        // Sort resource types alphabetically
-        setResourceTypes(
-          (resourceTypesRes.data.data || []).sort((a, b) =>
-            a.name.localeCompare(b.name)
-          )
-        );
-  
-        if (selectedEmployeeId) {
-          setFormData((prev) => ({ ...prev, employeeId: selectedEmployeeId }));
-        }
-        if (selectedResourceId) {
-          setFormData((prev) => ({ ...prev, resourceId: selectedResourceId }));
-        }
-      } catch (error) {
-        console.error("Error fetching data: ", error);
+ useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const [employeesRes, resourcesRes, resourceTypesRes] = await Promise.all([
+        axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/employees"),
+        axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources/getAvaliableResources"),
+        axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resourcestype"),
+      ]);
+
+      // Only active employees
+      setEmployees(
+        (employeesRes.data || []).filter(
+          (emp) => emp.status === "Active" && !emp.isDeleted
+        )
+      );
+
+      // Sort resources alphabetically
+      const sortedResources = (resourcesRes.data.data || []).sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      setResources(sortedResources);
+
+      // Sort resource types alphabetically
+      setResourceTypes(
+        (resourceTypesRes.data.data || []).sort((a, b) =>
+          a.name.localeCompare(b.name)
+        )
+      );
+
+      if (selectedEmployeeId) {
+        setFormData((prev) => ({ ...prev, employeeId: selectedEmployeeId }));
       }
-    };
-  
-    if (isOpen) {
-      fetchData();
+
+      if (selectedResourceId) {
+        setFormData((prev) => ({ ...prev, resourceId: selectedResourceId }));
+
+        const matchedResource = sortedResources.find(
+          (res) => res._id === selectedResourceId
+        );
+
+        if (matchedResource && matchedResource.resourceType?._id) {
+          setSelectedResourceType(matchedResource.resourceType._id);
+        }
+      }
+      setIsManualTypeChange(false);
+
+    } catch (error) {
+      console.error("Error fetching data: ", error);
     }
-  }, [isOpen, selectedEmployeeId, selectedResourceId]);
-  
+  };
+
+  if (isOpen) {
+    fetchData();
+  }
+}, [isOpen, selectedEmployeeId, selectedResourceId]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -106,8 +118,11 @@ const AllocationFormModal = ({
   };
 
   useEffect(() => {
-    setFormData((prev) => ({ ...prev, resourceId: "" }));
-  }, [selectedResourceType]);
+    if (isManualTypeChange) {
+      setFormData((prev) => ({ ...prev, resourceId: "" }));
+    }
+  }, [selectedResourceType, isManualTypeChange]);
+  
 
   if (!isOpen) return null;
 
@@ -151,7 +166,10 @@ const AllocationFormModal = ({
             <label className="block text-gray-700 mb-2">Resource Type</label>
             <select
               value={selectedResourceType}
-              onChange={(e) => setSelectedResourceType(e.target.value)}
+              onChange={(e) => {
+                setSelectedResourceType(e.target.value);
+                setIsManualTypeChange(true);
+              }}
               className="w-full p-2 border rounded border-gray-300 outline-none focus:ring-0 focus:border-blue-500"
             >
               <option value="">All Types</option>
