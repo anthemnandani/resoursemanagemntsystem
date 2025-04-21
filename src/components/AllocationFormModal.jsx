@@ -101,6 +101,8 @@ const AllocationFormModal = ({
       );
 
       toast.success(response.data.message);
+      setFormData( {employeeId: "",
+        resourceId: ""} );
       // console.log("success: " ,response.data.message);
       setTimeout(() => {
         onSuccess(response.data);
