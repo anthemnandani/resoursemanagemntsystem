@@ -3,9 +3,9 @@ import axios from "axios";
 import AllocationFormModal from "../components/AllocationFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import { FaPlus } from "react-icons/fa6";
-// import { CiEdit } from "react-icons/ci";
+// import { MdEdit } from "react-icons/md";
 import { IoMdEye } from "react-icons/io";
-import { MdOutlineDeleteForever } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import Navbar from "../components/Navbar";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 import { Footer } from "../components/Footer";
@@ -302,7 +302,7 @@ export const AllocatedResouses = () => {
                           onClick={() => setCurrentAllocation(allocation)}
                           className="text-blue-900 hover:text-blue-700 p-1.5 rounded hover:bg-blue-50"
                         >
-                          <CiEdit className="w-5 h-5" />
+                          <MdEdit className="w-5 h-5" />
                         </button> */}
                         <button
                           onClick={() => {
@@ -312,7 +312,7 @@ export const AllocatedResouses = () => {
                           className="text-red-600 hover:text-red-500 p-1.5 rounded hover:bg-red-50"
                           title="Return Resource"
                         >
-                          <MdOutlineDeleteForever className="w-5 h-5" />
+                          <MdDelete className="w-5 h-5"  />
                         </button>
                       </td>
                     </tr>

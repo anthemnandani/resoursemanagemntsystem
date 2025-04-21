@@ -3,9 +3,9 @@ import axios from "axios";
 import ResourceFormModal from "../components/ResourceFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import { FaPlus } from "react-icons/fa6";
-import { CiEdit } from "react-icons/ci";
+import { MdEdit } from "react-icons/md";
 import { IoMdEye } from "react-icons/io";
-import { MdOutlineDeleteForever } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import Navbar from "../components/Navbar";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 import { useSearchParams } from "react-router-dom";
@@ -29,6 +29,9 @@ export const Resourse = () => {
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [resourceToView, setResourceToView] = useState(null);
 
+  const [openTooltip, setOpenTooltip] = useState(null);
+  const [resourceAllocations, setResourceAllocations] = useState({});
+
   const [resourceTypes, setResourceTypes] = useState([]);
   const [selectedResourceType, setSelectedResourceType] = useState("all");
 
@@ -51,12 +54,15 @@ export const Resourse = () => {
       const params = {};
       if (status && status !== "all") params.status = status;
 
-      const response = await axios.get("https://resoursemanagemntsystem-bksn.vercel.app/api/resources", {
-        params: {
-          ...params,
-          populate: "resourceType",
-        },
-      });
+      const response = await axios.get(
+        "https://resoursemanagemntsystem-bksn.vercel.app/api/resources",
+        {
+          params: {
+            ...params,
+            populate: "resourceType",
+          },
+        }
+      );
 
       if (status === null) {
         setFilteredResources(response.data.data);
@@ -79,6 +85,29 @@ export const Resourse = () => {
       setResourceTypes(response.data.data || []);
     } catch (error) {
       console.error("Error fetching resource types:", error);
+    }
+  };
+
+  const fetchAllocationsForResource = async (resourceId) => {
+    try {
+      const response = await axios.get(
+        `https://resoursemanagemntsystem-bksn.vercel.app/api/allocations/resource/${resourceId}`
+      );
+      setResourceAllocations((prev) => ({
+        ...prev,
+        [resourceId]: response.data.allocations,
+      }));
+    } catch (error) {
+      console.error("Error fetching resource allocations:", error);
+    }
+  };
+
+  const handleTooltipClick = (resourceId) => {
+    if (openTooltip === resourceId) {
+      setOpenTooltip(null);
+    } else {
+      fetchAllocationsForResource(resourceId);
+      setOpenTooltip(resourceId);
     }
   };
 
@@ -176,7 +205,7 @@ export const Resourse = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 pt-20 min-h-[85vh]">
+      <div className="container mx-auto my-6 p-4 pt-20 min-h-[85vh]">
         <div className="flex justify-between items-center py-5">
           <div className="flex">
             <h2 className="text-2xl font-semibold text-center">Resources - </h2>
@@ -303,10 +332,13 @@ export const Resourse = () => {
                     Description
                   </th>
                   <th scope="col" className="px-6 py-5 font-bold text-xs">
-                    Total Resources
+                    Total
                   </th>
                   <th scope="col" className="px-6 py-5 font-bold text-xs">
-                    Available Resources
+                    Available
+                  </th>
+                  <th scope="col" className="px-6 py-5 font-bold text-xs">
+                    Allocated
                   </th>
                   <th scope="col" className="px-6 py-5 font-bold text-xs">
                     Purchase Date
@@ -358,6 +390,64 @@ export const Resourse = () => {
                       <td className="px-6 py-2 whitespace-nowrap">
                         {resource.avaliableResourceCount}
                       </td>
+                      <td className="px-4 py-2 flex justify-start max-w-[100px]">
+                        <div className="relative inline-block tooltip-container">
+                          <button
+                            className="text-black cursor-pointer font-bold hover:text-blue-950 hover:bg-neutral-100 transition-colors p-1.5 rounded relative"
+                            title="Click to see all employees this resource is allocated to"
+                            onClick={() => handleTooltipClick(resource._id)}
+                          >
+                            {resource.allocatedResourceCount}
+                          </button>
+
+                          {/* Tooltip */}
+                          {openTooltip === resource._id &&
+                            resourceAllocations[resource._id]?.length > 0 && (
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white shadow-lg rounded p-2 text-sm border z-50">
+                                <div className="text-md mb-3 font-semibold">
+                                  Allocated to Employees
+                                </div>
+                                <hr />
+                                <div>
+                                  {resourceAllocations[resource._id].map(
+                                    (alloc, index) => (
+                                      <div
+                                        key={index}
+                                        className="border-b pb-1 mb-1 last:border-none"
+                                      >
+                                        <p className="font-semibold">
+                                          {alloc.employeeName}
+                                        </p>
+                                        <p className="text-gray-500 text-xs">
+                                          Status: {alloc.status} | Allocated on:{" "}
+                                          {new Date(
+                                            alloc.allocationDate
+                                          ).toLocaleDateString("en-GB", {
+                                            day: "2-digit",
+                                            month: "2-digit",
+                                            year: "numeric",
+                                          })}
+                                        </p>
+                                        {alloc.returnDate && (
+                                          <p className="text-gray-500 text-xs">
+                                            Return Date:{" "}
+                                            {new Date(
+                                              alloc.returnDate
+                                            ).toLocaleDateString("en-GB", {
+                                              day: "2-digit",
+                                              month: "2-digit",
+                                              year: "numeric",
+                                            })}
+                                          </p>
+                                        )}
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                        </div>
+                      </td>
                       <td className="px-6 py-2 whitespace-nowrap">
                         {resource.purchaseDate
                           ? new Date(resource.purchaseDate).toLocaleDateString(
@@ -394,7 +484,7 @@ export const Resourse = () => {
                           {resource.status}
                         </span>
                       </td>
-                      <td className="px-6 py-2 flex justify-center">
+                      <td className="px-6 py-2 flex items-center justify-center">
                         <button
                           onClick={() => handleViewClick(resource)}
                           className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-900 transition-colors p-2 rounded relative"
@@ -407,14 +497,14 @@ export const Resourse = () => {
                           className="text-blue-700 cursor-pointer hover:text-600 transition-colors p-2 rounded hover:bg-blue-50"
                           title="Edit"
                         >
-                          <CiEdit className="w-5 h-5" />
+                          <MdEdit className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(resource)}
                           className="text-red-600 cursor-pointer hover:text-red-500 transition-colors p-2 rounded hover:bg-red-50"
                           title="Delete"
                         >
-                          <MdOutlineDeleteForever className="w-5 h-5" />
+                          <MdDelete className="w-5 h-5"  />
                         </button>
                         <div className="relative group">
                           <button
@@ -427,7 +517,7 @@ export const Resourse = () => {
                             <SiTicktick className="w-4 h-4" />
                           </button>
                           <div className="absolute z-50 hidden group-hover:block rounded-md shadow-md -top-10 right-1 -translate-x-1/5 transform translate-y-[-0%]">
-                            <button className="text-sm text-blue-950 px-4 py-2 bg-neutral-50 font-semibold min-h-10 min-w-48 overflow-y-auto">
+                            <button className="text-sm text-blue-950 px-4 py-2 bg-neutral-50 min-h-10 min-w-48 overflow-y-auto">
                               Allocate this resource to an employee
                             </button>
                           </div>

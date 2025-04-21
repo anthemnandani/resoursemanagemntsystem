@@ -49,12 +49,12 @@ const Dashboard = () => {
 
   const dashboardCards = [
     {
-      title: "Total Employees",
-      count: counts.employees,
-      description: "Active employees in system",
-      icon: "👥",
-      color: "blue",
-      path: "/employees",
+      title: "Total Resource Types",
+      count: counts.resourceType,
+      description: "Available resource types",
+      icon: "🗂️",
+      color: "yellow",
+      path: "/resourceType",
     },
     {
       title: "Total Resources",
@@ -65,12 +65,12 @@ const Dashboard = () => {
       path: "/resources",
     },
     {
-      title: "Total Resource Types",
-      count: counts.resourceType,
-      description: "Available resource types",
-      icon: "🗂️",
-      color: "yellow",
-      path: "/resourceType",
+      title: "Total Employees",
+      count: counts.employees,
+      description: "Active employees in system",
+      icon: "👥",
+      color: "blue",
+      path: "/employees",
     },
     {
       title: "Total Allocations",

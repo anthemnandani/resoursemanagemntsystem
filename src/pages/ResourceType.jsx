@@ -3,9 +3,9 @@ import axios from "axios";
 import ResourceFormModal from "../components/ResourceTypeFormModal";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import { FaPlus } from "react-icons/fa6";
-import { CiEdit } from "react-icons/ci";
+import { MdEdit } from "react-icons/md";
 import { IoMdEye } from "react-icons/io";
-import { MdOutlineDeleteForever } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import Navbar from "../components/Navbar";
 import ViewDetailsModal from "../components/ViewDetailsModal";
 
@@ -86,7 +86,7 @@ export const ResourseType = () => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto my-6 p-2 pt-20 min-h-[85vh]">
+      <div className="container mx-auto my-6 p-4 pt-20 min-h-[85vh]">
         <div className="flex justify-between items-center py-4">
           <h2 className="text-2xl font-semibold text-center">Resource Types</h2>
           <button
@@ -209,14 +209,14 @@ export const ResourseType = () => {
                           className="text-blue-700 hover:text-blue-600 cursor-pointer transition-colors p-1.5 rounded hover:bg-blue-50"
                           title="Edit"
                         >
-                          <CiEdit className="w-5 h-5" />
+                          <MdEdit className="w-5 h-5" />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(resource)}
                           className="text-red-800 hover:text-red-700 cursor-pointer transition-colors p-1.5 rounded hover:bg-red-50"
                           title="Delete"
                         >
-                          <MdOutlineDeleteForever className="w-5 h-5" />
+                          <MdDelete className="w-5 h-5"  />
                         </button>
                       </td>
                     </tr>

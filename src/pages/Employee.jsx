@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa6";
-import { CiEdit } from "react-icons/ci";
-import { MdOutlineDeleteForever } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import axios from "axios";
 import EmployeeFormModal from "../components/EmployeeFormModal";
 import AllocationFormModal from "../components/AllocationFormModal";
@@ -418,7 +418,7 @@ export const Employee = () => {
                           {employee.status}
                         </button>
                       </td>
-                      <td className="px-4 py-2 flex justify-center">
+                      <td className="px-4 py-2 flex items-center justify-center">
                         <button
                           onClick={() => handleViewClick(employee)}
                           className="text-black cursor-pointer hover:bg-neutral-100 hover:text-blue-950 transition-colors p-2 rounded"
@@ -434,14 +434,14 @@ export const Employee = () => {
                               className="text-blue-700 cursor-pointer hover:text-blue-600 transition-colors p-1.5 rounded"
                               title="Edit Employee"
                             >
-                              <CiEdit className="w-5 h-5" />
+                              <MdEdit className="w-5 h-5" />
                             </button>
                             <button
                               onClick={() => handleDeleteClick(employee)}
                               className="text-red-600 cursor-pointer hover:text-red-500 transition-colors p-1.5 rounded"
                               title="Delete"
                             >
-                              <MdOutlineDeleteForever className="w-5 h-5" />
+                              <MdDelete className="w-5 h-5"  />
                             </button>
                             <div className="relative group">
                               <button

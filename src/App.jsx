@@ -22,7 +22,7 @@ function App() {
           <Route path="/allocations" element={<AllocatedResouses />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/" element={<Dashboard />} />
-          <Route path="/fogotpasword" element={<ForgetPassword />} />
+          <Route path="/forgotpassword" element={<ForgetPassword />} />
           <Route path="/resetpassword/:token" element={<ResetPassword />} />
         </Routes>
         <ToastContainer position="top-right" autoClose={3000} pauseOnHover />

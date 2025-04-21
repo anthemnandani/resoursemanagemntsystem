@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -7,17 +7,21 @@ import { toast } from "react-toastify";
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  useEffect(() => {
     const token = Cookies.get("token");
-    e.preventDefault();
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, []);
+  
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     try {
-      if (token) {
-        navigate("/dashboard");
-        return;
-      }
       const { data } = await axios.post(
         "https://resoursemanagemntsystem-bksn.vercel.app/api/admin/login",
         {
@@ -32,9 +36,9 @@ export const Login = () => {
       navigate("/");
     } catch (err) {
       console.log("Login error: ", err);
-      toast.error(
-        err.response?.data?.error || "failded to create please try again"
-      );
+      toast.error(err.response?.data?.error || "Login failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,9 +91,32 @@ export const Login = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white cursor-pointer py-3 rounded-3xl hover:bg-blue-700 transition"
+            className="w-full flex items-center justify-center bg-blue-500 text-white cursor-pointer py-3 rounded-3xl hover:bg-blue-700 transition"
           >
-            Login
+            {loading ? (
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
         <div className="flex items-center justify-between w-full py-2 mt-2">
@@ -98,7 +125,7 @@ export const Login = () => {
             <p className="text-gray-600">Remeber this Device</p>
           </div>
           <button
-            onClick={() => navigate("/fogotpasword")}
+            onClick={() => navigate("/forgotpassword")}
             className="text-blue-600 font-semibold text-center flex items-center justify-center cursor-pointer"
           >
             Forgot Password ?
