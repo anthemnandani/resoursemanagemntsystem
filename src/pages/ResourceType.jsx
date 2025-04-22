@@ -27,7 +27,7 @@ export const ResourseType = () => {
 
   //paganation states
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const paginatedResources = resources.slice(
     (currentPage - 1) * rowsPerPage,
