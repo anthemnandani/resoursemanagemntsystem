@@ -12,8 +12,16 @@ import { Footer } from "../components/Footer";
 import { toast } from "react-toastify";
 import { IoSearchSharp } from "react-icons/io5";
 import CustomPagination from "../components/CustomPagination";
+import { FaFilter } from "react-icons/fa";
+
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+import AllocationFilterModal from "../components/AllocationFilterModal";
 
 export const AllocatedResouses = () => {
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState(null);
   const [allocations, setAllocations] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentAllocation, setCurrentAllocation] = useState(null);
@@ -29,7 +37,11 @@ export const AllocatedResouses = () => {
 
   //paganation states
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleApplyFilters = (filters) => {
+    setAppliedFilters(filters);
+  };
 
   const handleViewClick = (resource) => {
     setResourceToView(resource);
@@ -65,7 +77,7 @@ export const AllocatedResouses = () => {
   }, [allocations]);
 
   const filteredAllocations = useMemo(() => {
-    let filtered = allocations;
+    let filtered = [...allocations];
 
     if (ActiveFilter !== "all") {
       filtered = filtered.filter(
@@ -73,9 +85,57 @@ export const AllocatedResouses = () => {
       );
     }
 
+    if (appliedFilters) {
+      const {
+        allocationStartDate,
+        allocationEndDate,
+        returnStartDate,
+        returnEndDate,
+        employeeId,
+        resourceId,
+        resourceTypeId,
+      } = appliedFilters;
+
+      if (allocationStartDate) {
+        filtered = filtered.filter(
+          (a) => new Date(a.AllocatedDate) >= new Date(allocationStartDate)
+        );
+      }
+      if (allocationEndDate) {
+        filtered = filtered.filter(
+          (a) => new Date(a.AllocatedDate) <= new Date(allocationEndDate)
+        );
+      }
+      if (returnStartDate) {
+        filtered = filtered.filter(
+          (a) =>
+            a.returnDate && new Date(a.returnDate) >= new Date(returnStartDate)
+        );
+      }
+      if (returnEndDate) {
+        filtered = filtered.filter(
+          (a) =>
+            a.returnDate && new Date(a.returnDate) <= new Date(returnEndDate)
+        );
+      }
+      if (employeeId) {
+        filtered = filtered.filter((a) => a.employee?._id === employeeId);
+      }
+      if (resourceId) {
+        filtered = filtered.filter((a) => a.resource?._id === resourceId);
+      }
+      if (resourceTypeId) {
+        filtered = filtered.filter(
+          (a) => a.resource?.resourceType?._id === resourceTypeId
+        );
+      }
+      if (appliedFilters?.status) {
+        filtered = filtered.filter((a) => a.status === appliedFilters.status);
+      }
+    }
+
     if (searchQuery.trim() !== "") {
       const keyword = searchQuery.toLowerCase();
-
       filtered = filtered.filter((allocation) => {
         const employeeName = allocation?.employee?.name?.toLowerCase() || "";
         const resourceName = allocation?.resource?.name?.toLowerCase() || "";
@@ -84,7 +144,7 @@ export const AllocatedResouses = () => {
         const day = String(dateObj.getDate()).padStart(2, "0");
         const month = String(dateObj.getMonth() + 1).padStart(2, "0");
         const year = dateObj.getFullYear();
-        const allocationDate = `${day}/${month}/${year}`; // -> e.g. 10/04/2025
+        const allocationDate = `${day}/${month}/${year}`;
 
         return (
           employeeName.includes(keyword) ||
@@ -95,7 +155,7 @@ export const AllocatedResouses = () => {
     }
 
     return filtered;
-  }, [allocations, ActiveFilter, searchQuery]);
+  }, [allocations, ActiveFilter, searchQuery, appliedFilters]);
 
   const handleDeleteConfirm = async () => {
     if (!allocationToDelete) return;
@@ -126,6 +186,55 @@ export const AllocatedResouses = () => {
     return filteredAllocations.slice(startIndex, endIndex);
   }, [filteredAllocations, currentPage, rowsPerPage]);
 
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    const tableColumn = [
+      "Employee",
+      "Resource",
+      "Resource Type",
+      "Allocation Date",
+      "Return Date",
+      "Status",
+    ];
+
+    const tableRows = [];
+
+    filteredAllocations.forEach((allocation) => {
+      const employee = allocation?.employee?.name || "N/A";
+      const resource = allocation?.resource?.name || "N/A";
+      const resourceType = allocation?.resource?.resourceType?.name || "N/A"; // ✅ Safely get resource type
+
+      const allocationDate = new Date(
+        allocation?.AllocatedDate
+      ).toLocaleDateString("en-GB");
+      const returnDate = allocation?.returnDate
+        ? new Date(allocation.returnDate).toLocaleDateString("en-GB")
+        : "N/A";
+      const status = allocation.status || "N/A";
+
+      const rowData = [
+        employee,
+        resource,
+        resourceType,
+        allocationDate,
+        returnDate,
+        status,
+      ];
+      tableRows.push(rowData);
+    });
+
+    doc.text("Filtered Allocated Resources", 14, 15);
+
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [22, 160, 133] },
+    });
+
+    doc.save("allocated-resources.pdf");
+  };
 
   return (
     <>
@@ -165,15 +274,29 @@ export const AllocatedResouses = () => {
               </button>
             ))}
           </div>
-          <div className="text-2xl flex items-center justify-center border border-gray-300 rounded p-2">
-            <IoSearchSharp className="mr-2" />
-            <input
-              type="search"
-              className="text-base w-full focus:outline-none placeholder:text-sm"
-              placeholder="Search allocations..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+          <div className="flex gap-4 items-center">
+            <div className="text-2xl flex items-center justify-center border border-gray-300 rounded p-2">
+              <IoSearchSharp className="mr-2" />
+              <input
+                type="search"
+                className="text-base w-full focus:outline-none placeholder:text-sm"
+                placeholder="Search allocations..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <div
+              className="bg-[#4361ee] text-white px-4 py-2 rounded flex items-center gap-2"
+              onClick={handleDownloadPDF}
+            >
+              Download PDF
+            </div>
+            <div
+              className=" px-3 py-2 flex items-center gap-2 bg-[#4361ee] text-white rounded cursor-pointer"
+              onClick={() => setIsFilterModalOpen(true)}
+            >
+              <FaFilter /> Filter
+            </div>
           </div>
         </div>
 
@@ -312,7 +435,7 @@ export const AllocatedResouses = () => {
                           className="text-red-600 hover:text-red-500 p-1.5 rounded hover:bg-red-50"
                           title="Return Resource"
                         >
-                          <MdDelete className="w-5 h-5"  />
+                          <MdDelete className="w-5 h-5" />
                         </button>
                       </td>
                     </tr>
@@ -345,6 +468,13 @@ export const AllocatedResouses = () => {
           onSuccess={fetchAllocations}
           allocationData={currentAllocation}
         />
+
+        <AllocationFilterModal
+          isOpen={isFilterModalOpen}
+          onClose={() => setIsFilterModalOpen(false)}
+          onApply={handleApplyFilters}
+        />
+
         <DeleteConfirmationModal
           isOpen={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
