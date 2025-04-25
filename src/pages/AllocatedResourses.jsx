@@ -230,7 +230,7 @@ export const AllocatedResouses = () => {
       body: tableRows,
       startY: 20,
       styles: { fontSize: 10 },
-      headStyles: { fillColor: [22, 160, 133] },
+      headStyles: { fillColor: [0, 102, 204] },
     });
 
     doc.save("allocated-resources.pdf");
@@ -286,7 +286,7 @@ export const AllocatedResouses = () => {
               />
             </div>
             <div
-              className="bg-[#4361ee] text-white px-4 py-2 rounded flex items-center gap-2"
+              className="bg-[#4361ee] text-white px-4 py-2 rounded flex items-center gap-2 cursor-pointer"
               onClick={handleDownloadPDF}
             >
               Download PDF
