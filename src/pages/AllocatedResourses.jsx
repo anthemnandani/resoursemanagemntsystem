@@ -223,7 +223,7 @@ export const AllocatedResouses = () => {
       tableRows.push(rowData);
     });
 
-    doc.text("Filtered Allocated Resources", 14, 15);
+    doc.text("Allocated Resource Report", 14, 15);
 
     autoTable(doc, {
       head: [tableColumn],
